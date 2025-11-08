@@ -1,0 +1,12 @@
+<Project>
+  <ItemGroup Label="SiteContentItems">
+    <SiteStaticContent Include="index.html" />
+    <SiteStaticContent Include="dustloop-assets\**\*" />
+  </ItemGroup>
+
+  <ItemGroup Label="SiteReferenceItems">
+    <SiteReferenceContent Include="reference\**\*" />
+    <SiteReferenceContent Include="PROJECT_STATUS.md" />
+    <SiteReferenceContent Include="README.md" />
+  </ItemGroup>
+</Project>
