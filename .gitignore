@@ -2,6 +2,9 @@
 node_modules/
 dist/
 build/
+# .NET build artifacts
+bin/
+obj/
 
 # Visual Studio and VS Code
 .vs/
@@ -39,4 +42,3 @@ venv/
 *.swp
 *.swn
 *.swo
-*.swp
