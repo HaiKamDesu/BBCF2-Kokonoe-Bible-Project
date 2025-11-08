@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="..\\..\\index.html">
+      <Link>wwwroot\\index.html</Link>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\\..\\dustloop-assets\\**\\*">
+      <Link>wwwroot\\dustloop-assets\\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\\..\\reference\\**\\*">
+      <Link>reference\\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <None Include="..\\..\\README.md">
+      <Link>README.md</Link>
+    </None>
+    <None Include="..\\..\\PROJECT_STATUS.md">
+      <Link>PROJECT_STATUS.md</Link>
+    </None>
+  </ItemGroup>
+</Project>

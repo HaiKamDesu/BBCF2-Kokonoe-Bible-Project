@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>false</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <EnableDefaultItems>false</EnableDefaultItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\\..\\index.html">
+      <Link>wwwroot\\index.html</Link>
+    </None>
+    <None Include="..\\..\\dustloop-assets\\**\\*">
+      <Link>wwwroot\\dustloop-assets\\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </None>
+    <None Include="..\\..\\reference\\**\\*">
+      <Link>reference\\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </None>
+    <None Include="..\\..\\README.md">
+      <Link>README.md</Link>
+    </None>
+    <None Include="..\\..\\PROJECT_STATUS.md">
+      <Link>PROJECT_STATUS.md</Link>
+    </None>
+  </ItemGroup>
+</Project>

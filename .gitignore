@@ -1,0 +1,44 @@
+# Build outputs and dependencies
+node_modules/
+dist/
+build/
+# .NET build artifacts
+bin/
+obj/
+
+# Visual Studio and VS Code
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# IDE settings
+.vscode/
+.idea/
+
+# Cache and logs
+*.log
+*.cache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python virtual environments (if used for tooling)
+.venv/
+venv/
+
+# Local databases and secrets
+*.sqlite
+*.db
+.env
+
+# Temporary files
+*.tmp
+*.swp
+*.swn
+*.swo
