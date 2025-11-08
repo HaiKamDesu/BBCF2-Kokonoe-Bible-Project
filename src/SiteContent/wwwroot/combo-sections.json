@@ -1,0 +1,850 @@
+[
+  {
+    "anchor": "Meterless_Routes_.285A.2F5B.2F5C.2F2A.2F2B.2F6B.29",
+    "headline_id": "Meterless_Routes_(5A/5B/5C/2A/2B/6B)",
+    "title_html": "<b>Meterless Routes (<span class=\"colorful-text-4\">5A</span>/<span class=\"colorful-text-2\">5B</span>/<span class=\"colorful-text-3\">5C</span>/<span class=\"colorful-text-4\">2A</span>/<span class=\"colorful-text-2\">2B</span>/<span class=\"colorful-text-2\">6B</span>)</b>",
+    "descriptions_html": [],
+    "columns_html": [
+      "Combo",
+      "Damage",
+      "Heat Gain",
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ],
+    "rows_html": [
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236A</span>",
+        "<span class=\"colorful-text-2\">1783</span>",
+        "<span class=\"colorful-text-4\">12</span>",
+        "0",
+        "Very Basic BnB.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=293\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">8D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-3\">665C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-3\">665C</span> &gt; <span class=\"colorful-text-2\">22B</span>",
+        "<span class=\"colorful-text-2\">2618</span>",
+        "<span class=\"colorful-text-4\">20</span>",
+        "1",
+        "BnB Corner Carry Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=300\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">8D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-3\">66C</span> &gt; <span class=\"colorful-text-2\">j214B</span>~<span class=\"colorful-text-5\">D</span> &gt; 66 &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">22A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">2830</span>",
+        "<span class=\"colorful-text-4\">19</span>",
+        "2",
+        "Fireball Launch Route - Midscreen.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=309\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">8D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-3\">66C</span> &gt; <span class=\"colorful-text-2\">j214B</span>~<span class=\"colorful-text-5\">D</span> &gt; 66 &gt; <span class=\"colorful-text-2\">jB</span> &gt; [1]",
+        "<span class=\"colorful-text-2\">2556</span>",
+        "<span class=\"colorful-text-4\">19</span>",
+        "2",
+        "Fireball Launch Route - Fullscreen.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=321\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236[A]</span>~<span class=\"colorful-text-5\">D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">22B</span>",
+        "<span class=\"colorful-text-2\">2952</span>",
+        "<span class=\"colorful-text-4\">20</span>",
+        "2",
+        "Bunker Loop Corner Carry Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=330\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236[A]</span>~<span class=\"colorful-text-5\">D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-5\">6D</span> &gt; <span class=\"colorful-text-4\">214A</span>",
+        "<span class=\"colorful-text-2\">3084</span>",
+        "<span class=\"colorful-text-4\">21</span>",
+        "3",
+        "Bunker Loop Combo From <span class=\"colorful-text-2\">6B</span>.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=341\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; 6 &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">22A</span> &gt; <span class=\"colorful-text-4\">6[A]</span> &gt; <span class=\"colorful-text-5\">6D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">2641</span>",
+        "<span class=\"colorful-text-4\">18</span>",
+        "2",
+        "Meterless Side Swap Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=357\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">2A</span> / <span class=\"colorful-text-2\">2B</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-5\">8D</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-2\">jB</span> &gt; <span class=\"colorful-text-5\">236[D]</span>~<span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; 214X",
+        "<span class=\"colorful-text-2\">3099</span>",
+        "<span class=\"colorful-text-4\">22</span>",
+        "2",
+        "Anti Roll (OTG) Route (OTG) - Advanced.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=367\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">2A</span> / <span class=\"colorful-text-2\">2B</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-5\">8D</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-2\">jB</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">5AA</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; 214X",
+        "<span class=\"colorful-text-2\">2911</span>",
+        "<span class=\"colorful-text-4\">20</span>",
+        "2",
+        "Anti Roll (OTG) Route - Basic.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=380\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-5\">j3D</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-4\">j214A</span>",
+        "<span class=\"colorful-text-2\">2196</span>",
+        "<span class=\"colorful-text-4\">18</span>",
+        "1",
+        "<span class=\"colorful-text-5\">j3D</span> Fireball Corner Okizeme Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=392\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-5\">6D</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-5\">236[D]</span>~<span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; (superjump) tk <span class=\"colorful-text-4\">j214A</span>",
+        "<span class=\"colorful-text-2\">2544</span>",
+        "<span class=\"colorful-text-4\">17</span>",
+        "2",
+        "<span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">236A</span> Corner Okizeme route.",
+        ""
+      ],
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-5\">6D</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-5\">236[D]</span>~<span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; delay <span class=\"colorful-text-2\">6B</span> &gt; delay <span class=\"colorful-text-3\">5C</span> &gt; (Superjump) TK <span class=\"colorful-text-4\">214A</span>",
+        "<span class=\"colorful-text-2\">2668</span>",
+        "<span class=\"colorful-text-4\">18</span>",
+        "2",
+        "Delayed <span class=\"colorful-text-4\">236[A]</span> bomb Okizeme. Followups are the same as the above route.",
+        ""
+      ]
+    ]
+  },
+  {
+    "anchor": "Meterless_Routes.283C.2F6C.2Fj2C.29",
+    "headline_id": "Meterless_Routes(3C/6C/j2C)",
+    "title_html": "Meterless Routes(<span class=\"colorful-text-3\">3C</span>/<span class=\"colorful-text-3\">6C</span>/<span class=\"colorful-text-3\">j2C</span>)",
+    "descriptions_html": [],
+    "columns_html": [
+      "Combo",
+      "Damage",
+      "Heat Gain",
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ],
+    "rows_html": [
+      [
+        "<span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-2\">jB</span>(2) &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">j2D</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236A</span>",
+        "<span class=\"colorful-text-2\">2309</span>",
+        "<span class=\"colorful-text-4\">16</span>",
+        "2",
+        "Very Basic <span class=\"colorful-text-3\">3C</span> Corner Carry Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=400\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; j9~<span class=\"colorful-text-3\">j2C</span> &gt; { <span class=\"colorful-text-5\">6D</span> / <span class=\"colorful-text-5\">4D</span> } &gt; 66 &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; 66 &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">22B</span>",
+        "<span class=\"colorful-text-2\">2368</span>",
+        "<span class=\"colorful-text-4\">15</span>",
+        "1",
+        "<span class=\"colorful-text-3\">3C</span> Corner Carry / Side Swap Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=412\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt;~ <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C(1)</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">2271</span>",
+        "<span class=\"colorful-text-4\">15</span>",
+        "0",
+        "<span class=\"colorful-text-3\">3C</span> Gravitonless Bunker Loops.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=423\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt;~ <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-5\">4D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; Run Under &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236[A]</span>~<span class=\"colorful-text-5\">D</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">2681</span>",
+        "<span class=\"colorful-text-4\">18</span>",
+        "2",
+        "<span class=\"colorful-text-3\">3C</span> Side Swap Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=434\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt;~ <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; 66 &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; SJF &gt; <span class=\"colorful-text-2\">jB</span> &gt; [1]",
+        "<span class=\"colorful-text-2\">2190</span>",
+        "<span class=\"colorful-text-4\">15</span>",
+        "0",
+        "<span class=\"colorful-text-3\">3C</span> Safe Jump Route <br/> (Drops on Susanoo/Tager).",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=446\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt;~ <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; 66 &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; IADF &gt; ( <span class=\"colorful-text-2\">2B</span> / <span class=\"colorful-text-2\">6B</span> / Throw )",
+        "<span class=\"colorful-text-2\">2190</span>",
+        "<span class=\"colorful-text-4\">15</span>",
+        "0",
+        "<span class=\"colorful-text-3\">3C</span> Airdash Okizeme Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=456\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-5\">j9D</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; 66 &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C(1)</span> &gt; <span class=\"colorful-text-5\">4D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-3\">665C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">22B</span>",
+        "<span class=\"colorful-text-2\">3348</span>",
+        "<span class=\"colorful-text-4\">23</span>",
+        "3",
+        "<span class=\"colorful-text-3\">6C</span> Corner Carry Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=467\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-5\">4D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-3\">665C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-3\">665C</span> &gt; <span class=\"colorful-text-2\">22B</span>",
+        "<span class=\"colorful-text-2\">2998</span>",
+        "<span class=\"colorful-text-4\">21</span>",
+        "1",
+        "Cheaper <span class=\"colorful-text-3\">6C</span> Carry Route",
+        ""
+      ],
+      [
+        "<span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; double jump forward, Delay <span class=\"colorful-text-2\">jB</span> &gt; (run below or stay put) <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">22A</span> &gt; 66 <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span>",
+        "<span class=\"colorful-text-2\">2458</span>",
+        "<span class=\"colorful-text-4\">17</span>",
+        "0",
+        "Grav-less <span class=\"colorful-text-3\">3C</span> Route that lets you sideswap or keep sides",
+        ""
+      ],
+      [
+        "<span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">j5D</span> &gt; <span class=\"colorful-text-4\">jA</span>(1) &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">5VB</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">22A</span> &gt; 66 <span class=\"colorful-text-3\">5c</span> &gt; <span class=\"colorful-text-4\">236A</span>",
+        "<span class=\"colorful-text-2\">2805</span>",
+        "<span class=\"colorful-text-4\">21</span>",
+        "2",
+        "TK <span class=\"colorful-text-3\">j2C</span> Corner Carry Route (Character specific)",
+        ""
+      ],
+      [
+        "<span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236[a]</span> &gt; <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; (superjump) tk<span class=\"colorful-text-4\">2147A</span>",
+        "<span class=\"colorful-text-2\">2358</span>",
+        "<span class=\"colorful-text-4\">16</span>",
+        "0",
+        "<span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">236A</span>&gt;tk <span class=\"colorful-text-4\">j214A</span> okizeme in the corner",
+        ""
+      ],
+      [
+        "<span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">j5D</span> &gt; <span class=\"colorful-text-4\">jA</span>(1) &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-5\">6D</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-5\">236[D]</span>~<span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">236A</span>&gt;(superjump) tk<span class=\"colorful-text-4\">2147A</span>",
+        "<span class=\"colorful-text-2\">2823</span>",
+        "<span class=\"colorful-text-4\">19</span>",
+        "4",
+        "<span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">236A</span>&gt;tk<span class=\"colorful-text-4\">j214A</span> setup off of TK <span class=\"colorful-text-3\">j2C</span> in the corner (Character specific)",
+        ""
+      ]
+    ]
+  },
+  {
+    "anchor": "Metered_Routes_.285A.2F5B.2F5C.2F2A.2F2B.2F6B.29",
+    "headline_id": "Metered_Routes_(5A/5B/5C/2A/2B/6B)",
+    "title_html": "<b>Metered Routes (<span class=\"colorful-text-4\">5A</span>/<span class=\"colorful-text-2\">5B</span>/<span class=\"colorful-text-3\">5C</span>/<span class=\"colorful-text-4\">2A</span>/<span class=\"colorful-text-2\">2B</span>/<span class=\"colorful-text-2\">6B</span>)</b>",
+    "descriptions_html": [],
+    "columns_html": [
+      "Combo",
+      "Damage",
+      "Heat Gain",
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ],
+    "rows_html": [
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">214214A</span> &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; 214X",
+        "<span class=\"colorful-text-2\">3585</span>",
+        "Needs <span class=\"colorful-text-4\">41</span>",
+        "2",
+        "Superball Corner Carry Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=479\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">8D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-5\">jD</span> &gt; <span class=\"colorful-text-2\">jB</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">66[B]</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-3\">236C</span>",
+        "<span class=\"colorful-text-2\">3899</span>",
+        "Needs <span class=\"colorful-text-4\">30</span>",
+        "3",
+        "50 Meter Damage Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=491\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">8D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-3\">66C</span> &gt; <span class=\"colorful-text-5\">jD</span> &gt; <span class=\"colorful-text-2\">jB</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">66[B]</span> &gt; <span class=\"colorful-text-4\">214214A</span> &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-3\">236C</span>",
+        "<span class=\"colorful-text-2\">4567</span>",
+        "Needs <span class=\"colorful-text-4\">81</span>",
+        "3",
+        "100 Meter Damage Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=505\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-5\">j3D</span> &gt; <span class=\"colorful-text-2\">jB</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">j236[D]</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-3\">236C</span> &gt; RC~j9~<span class=\"colorful-text-5\">1D</span>~<span class=\"colorful-text-5\">236[D]</span> &gt; <span class=\"colorful-text-2\">22B</span>",
+        "<span class=\"colorful-text-2\">2569</span>",
+        "Needs <span class=\"colorful-text-4\">32</span>",
+        "4",
+        "<span class=\"colorful-text-5\">j5D</span> Ice Reset Corner Okizeme Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=520\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-5\">6D</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-5\">236[D]</span>~<span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; (<span class=\"colorful-text-2\">22B</span> hits) &gt; <span class=\"colorful-text-3\">6C</span> &gt; delay <span class=\"colorful-text-3\">j2C</span> &gt; delay <span class=\"colorful-text-3\">j214214C</span> &gt; walk back, bomb hits &gt; <span class=\"colorful-text-5\">3D</span> &gt; set <span class=\"colorful-text-2\">22B</span>",
+        "<span class=\"colorful-text-2\">2993 </span> (Damage varies per character)",
+        "Needs <span class=\"colorful-text-4\">31</span>",
+        "3",
+        "Basic Corner Superball Okizeme Route",
+        "<a class=\"external text\" href=\"https://youtu.be/6iLrhcBYKfo\" rel=\"nofollow\">Video</a>"
+      ],
+      [
+        "<span class=\"colorful-text-4\">5A</span> / <span class=\"colorful-text-4\">2A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">9D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">236[D]</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; (<span class=\"colorful-text-2\">22B</span> hits) &gt; <span class=\"colorful-text-2\">66B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">214214C</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-5\">3D</span> &gt; set <span class=\"colorful-text-2\">22B</span>",
+        "<span class=\"colorful-text-2\">3275</span> (Damage varies per character)",
+        "Needs <span class=\"colorful-text-4\">?</span>",
+        "3",
+        "More Damaging Corner Superball Okizeme Route",
+        "<a class=\"external text\" href=\"https://twitter.com/BananaKen/status/1492604552578801671\" rel=\"nofollow\">Video</a>"
+      ]
+    ]
+  },
+  {
+    "anchor": "Metered_Routes_.283C.2F6C.2Fj2C.29",
+    "headline_id": "Metered_Routes_(3C/6C/j2C)",
+    "title_html": "<b>Metered Routes (<span class=\"colorful-text-3\">3C</span>/<span class=\"colorful-text-3\">6C</span>/<span class=\"colorful-text-3\">j2C</span>)</b>",
+    "descriptions_html": [],
+    "columns_html": [
+      "Combo",
+      "Damage",
+      "Heat Gain",
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ],
+    "rows_html": [
+      [
+        "<span class=\"colorful-text-3\">j2C</span> &gt; RC &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-5\">j9D</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; 66 &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">22A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">3003</span>",
+        "Needs <span class=\"colorful-text-4\">43</span>",
+        "2",
+        "<span class=\"colorful-text-3\">j2C</span> RC Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=534\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-4\">214214A</span> &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236[A]</span>~<span class=\"colorful-text-5\">D</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">22B</span>",
+        "<span class=\"colorful-text-2\">4219</span>",
+        "Needs <span class=\"colorful-text-4\">43</span>",
+        "2",
+        "<span class=\"colorful-text-3\">j2C</span> Superball Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=543\" rel=\"nofollow\">Video</a>."
+      ]
+    ]
+  },
+  {
+    "anchor": "Followups_.28j3D_Fireball_Okizeme.29",
+    "headline_id": "Followups_(j3D_Fireball_Okizeme)",
+    "title_html": "<b>Followups (<span class=\"colorful-text-5\">j3D</span> Fireball Okizeme)</b>",
+    "descriptions_html": [],
+    "columns_html": [
+      "Combo",
+      "Damage",
+      "Heat Gain",
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ],
+    "rows_html": [
+      [
+        "_____ &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-2\">2B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-5\">j3D</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-4\">j214A</span>",
+        "<span class=\"colorful-text-2\">2448</span>",
+        "<span class=\"colorful-text-4\">11</span>",
+        "1",
+        "Low Starter.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=556\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "_____ &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-5\">j3D</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-4\">j214A</span>",
+        "<span class=\"colorful-text-2\">2809</span>",
+        "<span class=\"colorful-text-4\">15</span>",
+        "1",
+        "High Starter.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=566\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "_____ &gt; <span class=\"colorful-text-3\">22C</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-2\">22B</span>~<span class=\"colorful-text-5\">D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; j9 &gt; <span class=\"colorful-text-2\">665B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-5\">j3D</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-4\">j214A</span>",
+        "<span class=\"colorful-text-2\">2710</span>",
+        "<span class=\"colorful-text-4\">12</span>",
+        "2",
+        "Crossup Starter.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=575\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "_____ &gt; (<span class=\"colorful-text-2\">6B</span> or <span class=\"colorful-text-2\">2B</span> &gt; <span class=\"colorful-text-2\">5B</span>) &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236[A]</span>~<span class=\"colorful-text-5\">D</span> &gt; <span class=\"colorful-text-4\">6[A]</span> &gt; Jump back, <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; (<span class=\"colorful-text-2\">22B</span> Hits) &gt; <span class=\"colorful-text-4\">236A</span> &gt; (superjump) TK<span class=\"colorful-text-4\">j214A</span>",
+        "<span class=\"colorful-text-2\">3702</span>/<span class=\"colorful-text-2\">3078</span>",
+        "<span class=\"colorful-text-4\">28</span>/<span class=\"colorful-text-4\">23</span>",
+        "1",
+        "High/Low into <span class=\"colorful-text-4\">236[A]</span>&gt;<span class=\"colorful-text-4\">236a</span>&gt;tk <span class=\"colorful-text-4\">j214A</span> oki",
+        ""
+      ]
+    ]
+  },
+  {
+    "anchor": "Followups_.28236.5BA.5D.3E236a.3Etk_j214A_oki.29",
+    "headline_id": "Followups_(236[A]>236a>tk_j214A_oki)",
+    "title_html": "<b>Followups (<span class=\"colorful-text-4\">236[A]</span>&gt;<span class=\"colorful-text-4\">236a</span>&gt;tk <span class=\"colorful-text-4\">j214A</span> oki)</b>",
+    "descriptions_html": [],
+    "columns_html": [
+      "Combo",
+      "Damage",
+      "Heat Gain",
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ],
+    "rows_html": [
+      [
+        "<span class=\"colorful-text-4\">j214A</span> &gt; (<span class=\"colorful-text-2\">6B</span> / <span class=\"colorful-text-2\">2B</span> &gt; <span class=\"colorful-text-2\">5B</span>) &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; (Fireball Hits) &gt; <span class=\"colorful-text-4\">6[A]</span> &gt; Jump back &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-2\">5b</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; (superjump) TK<span class=\"colorful-text-4\">j214A</span>",
+        "<span class=\"colorful-text-2\">3091</span>/<span class=\"colorful-text-2\">2590</span>",
+        "<span class=\"colorful-text-4\">21</span>/<span class=\"colorful-text-4\">18</span>",
+        "0",
+        "Loop back into the setup",
+        ""
+      ],
+      [
+        "<span class=\"colorful-text-4\">j214A</span> &gt; (<span class=\"colorful-text-2\">6B</span> or <span class=\"colorful-text-2\">2B</span> &gt; <span class=\"colorful-text-2\">5B</span>) &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; (Fireball Hits) &gt; <span class=\"colorful-text-4\">6[A]</span> &gt; delay <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">5A</span> &gt; (Bomb Hits) &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; (superjump) TK<span class=\"colorful-text-4\">j214A</span>",
+        "<span class=\"colorful-text-2\">2469</span>/<span class=\"colorful-text-2\">2201</span>",
+        "<span class=\"colorful-text-4\">17</span>/<span class=\"colorful-text-4\">15</span>",
+        "0",
+        "Bomb Pickup Version of loop in case it launches",
+        ""
+      ],
+      [
+        "<span class=\"colorful-text-4\">j214A</span> &gt; (<span class=\"colorful-text-2\">6B</span> or <span class=\"colorful-text-2\">2B</span> &gt; <span class=\"colorful-text-2\">5B</span>) &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; (Fireball Hits) &gt; <span class=\"colorful-text-4\">6[A]</span> &gt; Jump back &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-2\">5b</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; Delay <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-3\">j214214c</span> &gt; (Bomb Hits), Walk Back <span class=\"colorful-text-5\">3D</span>",
+        "<span class=\"colorful-text-2\">3523</span>/<span class=\"colorful-text-2\">3339</span>",
+        "Needs <span class=\"colorful-text-4\">28</span>/<span class=\"colorful-text-4\">31</span>",
+        "1",
+        "Route into Superball setup",
+        ""
+      ],
+      [
+        "<span class=\"colorful-text-4\">j214A</span> &gt; (<span class=\"colorful-text-2\">6B</span> or <span class=\"colorful-text-2\">2B</span> &gt; <span class=\"colorful-text-2\">5B</span>) &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; (Fireball Hits) &gt; <span class=\"colorful-text-4\">6[A]</span> &gt; Superjump &gt; Delay <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-5\">j5D</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-2\">jB</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; (<span class=\"colorful-text-2\">22B</span> Hits) &gt; <span class=\"colorful-text-3\">236C</span>",
+        "<span class=\"colorful-text-2\">4665</span>/<span class=\"colorful-text-2\">4008</span>",
+        "Needs <span class=\"colorful-text-4\">25</span>/<span class=\"colorful-text-4\">29</span>",
+        "2",
+        "Damaging <span class=\"colorful-text-3\">236c</span> ender",
+        ""
+      ]
+    ]
+  },
+  {
+    "anchor": "Followups_.28j5D_Ice_Reset_Okizeme.29",
+    "headline_id": "Followups_(j5D_Ice_Reset_Okizeme)",
+    "title_html": "<b>Followups (<span class=\"colorful-text-5\">j5D</span> Ice Reset Okizeme)</b>",
+    "descriptions_html": [],
+    "columns_html": [
+      "Combo",
+      "Damage",
+      "Heat Gain",
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ],
+    "rows_html": [
+      [
+        "_____~<span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-5\">j9D</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-5\">j236[D]</span> &gt;~ <span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">22A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">4459</span>",
+        "<span class=\"colorful-text-4\">25</span>",
+        "2",
+        "Crossup High Starter.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=602\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "_____~<span class=\"colorful-text-5\">]D[</span> &gt; 6 &gt; <span class=\"colorful-text-2\">2B</span> &gt; <span class=\"colorful-text-4\">6[A]</span> &gt; <span class=\"colorful-text-2\">jB</span> &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">jD</span> &gt; <span class=\"colorful-text-2\">jB</span>~<span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">6[B]</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">22A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">3066</span>",
+        "<span class=\"colorful-text-4\">16</span>",
+        "2",
+        "Crossup Low Starter.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=613\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "_____~<span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-2\">2B</span> &gt; <span class=\"colorful-text-4\">6[A]</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-5\">j7D</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">22B</span> =&gt; <span class=\"colorful-text-4\">5AA</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">3568</span>",
+        "<span class=\"colorful-text-4\">17</span>",
+        "2",
+        "Low Starter.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=622\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "_____~<span class=\"colorful-text-5\">]D[</span> &gt;~ 4BC &gt;~ <span class=\"colorful-text-5\">9D</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">236D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt;~ <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">j3D</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; j214X",
+        "<span class=\"colorful-text-2\">3284</span>",
+        "<span class=\"colorful-text-4\">19</span>",
+        "2",
+        "Throw Starter.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=634\" rel=\"nofollow\">Video</a>."
+      ]
+    ]
+  },
+  {
+    "anchor": "Aerial_Routes_.286A.2FjA.2FjB.2FjC.2Fj2C.29",
+    "headline_id": "Aerial_Routes_(6A/jA/jB/jC/j2C)",
+    "title_html": "<b>Aerial Routes (<span class=\"colorful-text-4\">6A</span>/<span class=\"colorful-text-4\">jA</span>/<span class=\"colorful-text-2\">jB</span>/<span class=\"colorful-text-3\">jC</span>/<span class=\"colorful-text-3\">j2C</span>)</b>",
+    "descriptions_html": [],
+    "columns_html": [
+      "Combo",
+      "Damage",
+      "Heat Gain",
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ],
+    "rows_html": [
+      [
+        "<span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-5\">8D</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-5\">236[D]</span>~<span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; 214X",
+        "<span class=\"colorful-text-2\">4019</span>",
+        "<span class=\"colorful-text-4\">28</span>",
+        "2",
+        "<span class=\"colorful-text-4\">6A</span> Anti Air Route - Advanced.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=643\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-5\">8D</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">5AA</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; 214X",
+        "<span class=\"colorful-text-2\">3685</span>",
+        "<span class=\"colorful-text-4\">26</span>",
+        "2",
+        "<span class=\"colorful-text-4\">6A</span> Anti Air Route - Basic.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=654\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">jA(5)</span> &gt; Double Jump &gt; <span class=\"colorful-text-4\">jA(1)</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">jD</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">5AA</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; 214X",
+        "<span class=\"colorful-text-2\">2181</span>",
+        "<span class=\"colorful-text-4\">15</span>",
+        "2",
+        "<span class=\"colorful-text-4\">jA</span> Air to Air Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=664\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-5\">j9D</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; 66 &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">22A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">2574</span>",
+        "<span class=\"colorful-text-4\">19</span>",
+        "2",
+        "<span class=\"colorful-text-2\">jB</span>/<span class=\"colorful-text-3\">jC</span> Air to Air Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=675\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-5\">236D</span> &gt; 66 &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">22A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">2889</span>",
+        "<span class=\"colorful-text-4\">20</span>",
+        "2",
+        "<span class=\"colorful-text-3\">j2C</span> Air to Air Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=683\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-5\">jD</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-5\">j236[D]</span> ~ <span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">22B</span>",
+        "<span class=\"colorful-text-2\">2964</span>",
+        "<span class=\"colorful-text-4\">21</span>",
+        "2",
+        "<span class=\"colorful-text-2\">jB</span>/<span class=\"colorful-text-3\">jC</span> Air to Air Corner Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=690\" rel=\"nofollow\">Video</a>."
+      ]
+    ]
+  },
+  {
+    "anchor": "Throw_Routes_.28BC.2F4BC.2FjBC.29",
+    "headline_id": "Throw_Routes_(BC/4BC/jBC)",
+    "title_html": "Throw Routes (BC/4BC/jBC)",
+    "descriptions_html": [],
+    "columns_html": [
+      "Combo",
+      "Damage",
+      "Heat Gain",
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ],
+    "rows_html": [
+      [
+        "BC &gt; <span class=\"colorful-text-5\">6D</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-5\">236D</span>~<span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">2881</span>",
+        "<span class=\"colorful-text-4\">20</span>",
+        "2",
+        "Forward Throw Bunker Loops Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=699\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "4BC &gt; <span class=\"colorful-text-5\">9D</span> &gt; <span class=\"colorful-text-5\">236D</span> &gt; 66 &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236A</span>",
+        "<span class=\"colorful-text-2\">2983</span>",
+        "<span class=\"colorful-text-4\">21</span>",
+        "2",
+        "Very Basic Back Throw Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=710\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "4BC &gt; <span class=\"colorful-text-5\">5D</span> &gt;~ <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-5\">236D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">2866</span>",
+        "<span class=\"colorful-text-4\">20</span>",
+        "2",
+        "Back Throw Bunker Loops Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=718\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "jBC &gt; <span class=\"colorful-text-5\">j9D</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-2\">jB</span>(1) &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236A</span>",
+        "<span class=\"colorful-text-2\">2760</span>",
+        "<span class=\"colorful-text-4\">19</span>",
+        "2",
+        "Very Basic Air Throw Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=728\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "jBC &gt; <span class=\"colorful-text-5\">j3D</span> &gt; <span class=\"colorful-text-3\">663C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span>~<span class=\"colorful-text-5\">D</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">2760</span>",
+        "<span class=\"colorful-text-4\">19</span>",
+        "2",
+        "Air Throw Bunker Loops Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=738\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "BC &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">22B</span>~<span class=\"colorful-text-5\">D</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">22B</span>",
+        "<span class=\"colorful-text-2\">3317</span>",
+        "<span class=\"colorful-text-4\">23</span>",
+        "2",
+        "Corner Throw Bunker Loops Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=749\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "BC &gt; <span class=\"colorful-text-5\">9D</span> &gt;~ <span class=\"colorful-text-3\">2C</span> &gt;~ <span class=\"colorful-text-5\">236D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt;~ <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">j3D</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; j214X",
+        "<span class=\"colorful-text-2\">3284</span>",
+        "<span class=\"colorful-text-4\">23</span>",
+        "2",
+        "Corner Throw Okizeme Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=761\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "BC &gt; <span class=\"colorful-text-5\">9D</span> &gt; <span class=\"colorful-text-2\">236B</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-5\">236[D]</span> &gt;~ <span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">22A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">3393</span>",
+        "<span class=\"colorful-text-4\">23</span>",
+        "2",
+        "Corner Throw Damage Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=769\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "jBC &gt; <span class=\"colorful-text-5\">j9D</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">236D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt;~ <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">j3D</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; j214X",
+        "<span class=\"colorful-text-2\">3284</span>",
+        "<span class=\"colorful-text-4\">23</span>",
+        "2",
+        "Corner Air Throw Okizeme Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=779\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "4BC &gt; <span class=\"colorful-text-5\">9D</span> &gt;~ <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">236D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">22B</span>",
+        "<span class=\"colorful-text-2\">3284</span>",
+        "<span class=\"colorful-text-4\">23</span>",
+        "2",
+        "Cornered Back Throw Okizeme Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=788\" rel=\"nofollow\">Video</a>."
+      ]
+    ]
+  },
+  {
+    "anchor": "Special_Routes_.28236A.2F22B.29",
+    "headline_id": "Special_Routes_(236A/22B)",
+    "title_html": "<b>Special Routes (<span class=\"colorful-text-4\">236A</span>/<span class=\"colorful-text-2\">22B</span>)</b>",
+    "descriptions_html": [],
+    "columns_html": [
+      "Combo",
+      "Damage",
+      "Heat Gain",
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ],
+    "rows_html": [
+      [
+        "<span class=\"colorful-text-4\">236[A]</span> &gt; RC &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-4\">236[A]</span>~<span class=\"colorful-text-5\">D</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">3672</span>",
+        "Needs <span class=\"colorful-text-4\">46</span>",
+        "1",
+        "<span class=\"colorful-text-4\">236[A]</span> RC Route",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=799\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "[ Lightning Hit ] &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-5\">4D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; 66 &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">22B</span>",
+        "<span class=\"colorful-text-2\">3362</span>",
+        "<span class=\"colorful-text-4\">23</span>",
+        "1",
+        "22X Corner Carry Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=811\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "[ Lightning Hit ] &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-5\">8D</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-2\">jB</span> &gt; <span class=\"colorful-text-5\">236[D]</span>~<span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; 214X",
+        "<span class=\"colorful-text-2\">3855</span>",
+        "<span class=\"colorful-text-4\">26</span>",
+        "2",
+        "22X Damage Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=821\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "[ Lightning Hit ] &gt; <span class=\"colorful-text-2\">jB</span> &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">j5D</span> &gt; <span class=\"colorful-text-2\">jB</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; Run Under &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">22A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">2951</span>",
+        "<span class=\"colorful-text-4\">21</span>",
+        "2",
+        "22X Side Swap Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=831\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "[ Lightning Hit ] &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-5\">7D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-2\">j214B</span>~<span class=\"colorful-text-5\">D</span> &gt; 66 &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">22A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">3897</span>",
+        "<span class=\"colorful-text-4\">27</span>",
+        "2",
+        "22X Fireball Launch Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=839\" rel=\"nofollow\">Video</a>."
+      ]
+    ]
+  },
+  {
+    "anchor": "Distortion_Routes_.28214214X.29",
+    "headline_id": "Distortion_Routes_(214214X)",
+    "title_html": "Distortion Routes (214214X)",
+    "descriptions_html": [],
+    "columns_html": [
+      "Combo",
+      "Damage",
+      "Heat Gain",
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ],
+    "rows_html": [
+      [
+        "<span class=\"colorful-text-4\">214214A</span> &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-5\">236D</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">22A</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">3157</span>",
+        "Needs <span class=\"colorful-text-4\">50</span>",
+        "2",
+        "Superball Corner Carry Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=849\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-4\">214214A</span> &gt; <span class=\"colorful-text-5\">6D</span> &gt; <span class=\"colorful-text-5\">236D</span>~<span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">j3D</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; j214X",
+        "<span class=\"colorful-text-2\">3425</span>",
+        "Needs <span class=\"colorful-text-4\">50</span>",
+        "2",
+        "Cornered Superball Sideswap Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=858\" rel=\"nofollow\">Video</a>."
+      ]
+    ]
+  },
+  {
+    "anchor": "Counter_Hit_Routes",
+    "headline_id": "Counter_Hit_Routes",
+    "title_html": "Counter Hit Routes",
+    "descriptions_html": [],
+    "columns_html": [
+      "Combo",
+      "Damage",
+      "Heat Gain",
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ],
+    "rows_html": [
+      [
+        "<span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">22C</span> &gt; <span class=\"colorful-text-4\">6[A]</span> &gt; AB &gt;~ <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-5\">j8D</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">5AA</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-3\">236C</span>",
+        "<span class=\"colorful-text-2\">6952</span>",
+        "Needs <span class=\"colorful-text-4\">47</span>",
+        "2",
+        "<span class=\"colorful-text-3\">5C</span> CH Damage Route - Crush Trigger.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=875\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">22C</span> &gt; <span class=\"colorful-text-4\">6[A]</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-5\">j8D</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-5\">236[D]</span>~<span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-3\">236C</span>",
+        "<span class=\"colorful-text-2\">6404</span>",
+        "Needs <span class=\"colorful-text-4\">12</span>",
+        "2",
+        "<span class=\"colorful-text-3\">5C</span> CH Damage Route - Advanced.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=891\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">22C</span> &gt; <span class=\"colorful-text-4\">6[A]</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-5\">j8D</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">5AA</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-3\">236C</span>",
+        "<span class=\"colorful-text-2\">5953</span>",
+        "Needs <span class=\"colorful-text-4\">15</span>",
+        "2",
+        "<span class=\"colorful-text-3\">5C</span> CH Route - Basic.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=905\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; (<span class=\"colorful-text-2\">22B</span> hits) &gt; <span class=\"colorful-text-2\">66[B]</span> &gt; <span class=\"colorful-text-5\">9D</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">236B</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-5\">236[D]</span> &gt; <span class=\"colorful-text-3\">jC</span> &gt; <span class=\"colorful-text-3\">j2C</span> ~ <span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-3\">236C</span>",
+        "<span class=\"colorful-text-2\">7068</span>",
+        "Needs <span class=\"colorful-text-4\">7</span>",
+        "2",
+        "<span class=\"colorful-text-3\">5C</span> CH Route - Corner.",
+        ""
+      ],
+      [
+        "<span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-5\">j8D</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-5\">236[D]</span>~<span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-3\">236C</span>",
+        "<span class=\"colorful-text-2\">5553</span>",
+        "Needs <span class=\"colorful-text-4\">20</span>",
+        "2",
+        "<span class=\"colorful-text-3\">6C</span> Fatal CH Route - Advanced.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=919\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-5\">j8D</span> &gt; <span class=\"colorful-text-2\">j236B</span> &gt; <span class=\"colorful-text-2\">jB(1)</span> &gt; <span class=\"colorful-text-5\">j236D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">5AA</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-3\">236C</span>",
+        "<span class=\"colorful-text-2\">5254</span>",
+        "Needs <span class=\"colorful-text-4\">20</span>",
+        "2",
+        "<span class=\"colorful-text-3\">6C</span> Fatal CH Route - Basic.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=934\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; Microdash <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span> (1) &gt; <span class=\"colorful-text-4\">22a</span> &gt; Microdash <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-4\">236A</span>",
+        "<span class=\"colorful-text-2\">3547</span>",
+        "<span class=\"colorful-text-4\">25</span>",
+        "0",
+        "<span class=\"colorful-text-3\">6C</span> Fatal CH Route - Grav-less Carry.",
+        ""
+      ],
+      [
+        "<span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-4\">236[A]</span>~<span class=\"colorful-text-5\">D</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; 214X",
+        "<span class=\"colorful-text-2\">3695</span>",
+        "<span class=\"colorful-text-4\">26</span>",
+        "1",
+        "<span class=\"colorful-text-4\">236[A]</span> CH Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=948\" rel=\"nofollow\">Video</a>."
+      ]
+    ]
+  },
+  {
+    "anchor": "Overdrive_Routes",
+    "headline_id": "Overdrive_Routes",
+    "title_html": "Overdrive Routes",
+    "descriptions_html": [],
+    "columns_html": [
+      "Combo",
+      "Damage",
+      "Heat Gain",
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ],
+    "rows_html": [
+      [
+        "<span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">236B</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-5\">236D</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-3\">236C</span>",
+        "<span class=\"colorful-text-2\">5514</span>",
+        "Needs <span class=\"colorful-text-4\">21</span>",
+        "2",
+        "Overdrive Damage Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=971\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "<span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span> &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-4\">236[A]</span>~<span class=\"colorful-text-5\">D</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">22B</span>",
+        "<span class=\"colorful-text-2\">3242</span>",
+        "<span class=\"colorful-text-4\">22</span>",
+        "2",
+        "Overdrive Corner Carry Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=984\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "CH <span class=\"colorful-text-3\">5C</span> &gt; ODC &gt; <span class=\"colorful-text-2\">66[B]</span> &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-2\">236B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">j236[D]</span> &gt; <span class=\"colorful-text-2\">jB</span>(1) &gt; <span class=\"colorful-text-2\">22B</span> ~ <span class=\"colorful-text-5\">]D[</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; (<span class=\"colorful-text-2\">22B</span> hits) &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-3\">236C</span>",
+        "<span class=\"colorful-text-2\">6981</span>",
+        "Needs <span class=\"colorful-text-4\">8</span>",
+        "2",
+        "CH <span class=\"colorful-text-3\">5C</span> ODC Route",
+        ""
+      ],
+      [
+        "( <span class=\"colorful-text-3\">5C</span> &gt; ) <span class=\"colorful-text-3\">3C</span> &gt; ODC &gt; <span class=\"colorful-text-2\">5B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">3C</span>(1) &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-2\">236B</span> &gt; <span class=\"colorful-text-3\">5C</span> &gt; <span class=\"colorful-text-3\">2C</span> &gt; <span class=\"colorful-text-3\">6C</span> &gt; <span class=\"colorful-text-3\">j2C</span> &gt; <span class=\"colorful-text-5\">236[D]</span> &gt; <span class=\"colorful-text-2\">6B</span> &gt; <span class=\"colorful-text-4\">214214A</span> &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-3\">236C</span>",
+        "<span class=\"colorful-text-2\">5506</span>",
+        "<span class=\"colorful-text-4\">22</span>",
+        "2",
+        "100 Meter Overdrive Damage Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=999\" rel=\"nofollow\">Video</a>."
+      ],
+      [
+        "BC &gt; ODC &gt; <span class=\"colorful-text-5\">5D</span> &gt; <span class=\"colorful-text-4\">236[A]</span> &gt; <span class=\"colorful-text-4\">5A</span> &gt; <span class=\"colorful-text-5\">236D</span> &gt; <span class=\"colorful-text-2\">22B</span> &gt; <span class=\"colorful-text-4\">6A</span> &gt; <span class=\"colorful-text-3\">6461236[C]</span>~<span class=\"colorful-text-3\">]C[</span>",
+        "<span class=\"colorful-text-2\">7219</span>",
+        "Needs <span class=\"colorful-text-4\">85</span>",
+        "2",
+        "Learner's Golden Tager Route.",
+        "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=1028\" rel=\"nofollow\">Video</a>."
+      ]
+    ]
+  }
+]

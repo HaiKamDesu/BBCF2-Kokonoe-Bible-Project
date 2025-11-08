@@ -6,15 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\\..\\index.html">
-      <Link>wwwroot\\index.html</Link>
+    <Content Include="..\\SiteContent\\wwwroot\\**\\*">
+      <Link>wwwroot\\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\\..\\dustloop-assets\\**\\*">
-      <Link>wwwroot\\dustloop-assets\\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\\..\\reference\\**\\*">
+    <Content Include="..\\SiteContent\\reference\\**\\*">
       <Link>reference\\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>

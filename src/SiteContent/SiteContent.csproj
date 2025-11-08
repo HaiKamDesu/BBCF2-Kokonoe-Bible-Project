@@ -8,13 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\\..\\index.html">
-      <Link>wwwroot\\index.html</Link>
+    <None Include="wwwroot\\**\\*">
+      <Link>wwwroot\\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </None>
-    <None Include="..\\..\\dustloop-assets\\**\\*">
-      <Link>wwwroot\\dustloop-assets\\%(RecursiveDir)%(Filename)%(Extension)</Link>
-    </None>
-    <None Include="..\\..\\reference\\**\\*">
+    <None Include="reference\\**\\*">
       <Link>reference\\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </None>
     <None Include="..\\..\\README.md">
