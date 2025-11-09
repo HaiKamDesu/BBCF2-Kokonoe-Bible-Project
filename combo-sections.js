@@ -130,38 +130,46 @@ function createFormatter(config) {
     const style = document.createElement('style');
     style.id = 'combo-section-styles';
     style.textContent = `
-.combo-section__header,
-.citizen-section-heading[role="button"] {
+.citizen-section-heading[role="button"],
+.combo-section__header {
   cursor: pointer;
 }
 
 .citizen-section-heading {
-  margin-top: 3rem;
-  margin-bottom: 1.5rem;
+  margin-block-start: 4rem !important;
+  margin-block-end: 3rem !important;
 }
 
 .citizen-section-heading:first-of-type {
-  margin-top: 0;
+  margin-block-start: 0 !important;
+}
+
+.citizen-section-heading + .citizen-section {
+  padding-left: 2.5rem !important;
+  margin-block-end: 3.5rem;
 }
 
 .citizen-section-heading--collapsed {
-  margin-bottom: 3rem;
+  margin-block-end: 4rem !important;
+}
+
+.citizen-section-heading--collapsed .citizen-section-indicator {
+  transform: rotate(0deg);
 }
 
 .combo-section__header {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin: 1.75rem 0 0.5rem;
+  margin: 2.5rem 0 1rem;
 }
 
-.citizen-section .combo-section__header,
-.citizen-section .combo-section__content {
-  margin-left: 1.75rem;
+.combo-section__header--collapsed {
+  margin-bottom: 2rem;
 }
 
-.citizen-section .combo-section__content {
-  margin-bottom: 1.75rem;
+.combo-section__content {
+  margin-bottom: 3rem;
 }
 
 .combo-section__header:focus-visible,
@@ -178,6 +186,7 @@ function createFormatter(config) {
 
 .citizen-section-indicator {
   transition: transform 200ms ease;
+  transform: rotate(180deg);
 }
 
 .combo-section__content[hidden] {
@@ -251,12 +260,6 @@ function createFormatter(config) {
 
     const setCollapsed = (collapsed) => {
       if (collapsed) {
-        if (indicatorElement) {
-          indicatorElement.classList.remove('mw-ui-icon-wikimedia-collapse');
-          if (!indicatorElement.classList.contains('mw-ui-icon-wikimedia-expand')) {
-            indicatorElement.classList.add('mw-ui-icon-wikimedia-expand');
-          }
-        }
         const hiddenValue = content.dataset.citizenOriginalHiddenValue;
         if (hiddenValue) {
           content.setAttribute('hidden', hiddenValue);
@@ -264,18 +267,11 @@ function createFormatter(config) {
           content.setAttribute('hidden', '');
         }
         heading.setAttribute('aria-expanded', 'false');
-        heading.classList.add('citizen-section-heading--collapsed');
       } else {
-        if (indicatorElement) {
-          indicatorElement.classList.remove('mw-ui-icon-wikimedia-expand');
-          if (!indicatorElement.classList.contains('mw-ui-icon-wikimedia-collapse')) {
-            indicatorElement.classList.add('mw-ui-icon-wikimedia-collapse');
-          }
-        }
         content.removeAttribute('hidden');
         heading.setAttribute('aria-expanded', 'true');
-        heading.classList.remove('citizen-section-heading--collapsed');
       }
+      heading.classList.toggle('citizen-section-heading--collapsed', collapsed);
     };
 
     const toggleCollapsed = () => {
