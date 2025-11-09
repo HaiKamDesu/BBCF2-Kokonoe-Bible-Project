@@ -124,6 +124,7 @@ function createFormatter(config) {
 
   const source = root.dataset.source || 'combo-sections.json';
   const formattingSource = root.dataset.formattingRules || 'combo-formatting-rules.json';
+  const tableDefinitionsSource = root.dataset.tableDefinitions || 'combo-table-definitions.json';
 
   const fetchJson = (url, { optional } = {}) =>
     fetch(url).then((response) => {
@@ -201,11 +202,11 @@ function createFormatter(config) {
         if (typeof description.html === 'string') {
           html = description.html;
         } else {
-      const autoFormatOverride = resolveAutoFormatPreference(description);
-      const text = description.text != null ? description.text : '';
-      html = formatText(text, {
-        autoFormat: autoFormatOverride !== undefined ? autoFormatOverride : defaultAutoFormat,
-      });
+          const autoFormatOverride = resolveAutoFormatPreference(description);
+          const text = description.text != null ? description.text : '';
+          html = formatText(text, {
+            autoFormat: autoFormatOverride !== undefined ? autoFormatOverride : defaultAutoFormat,
+          });
         }
       }
 
@@ -223,6 +224,13 @@ function createFormatter(config) {
   const normaliseCell = (value, formatText, defaultAutoFormat) => {
     if (value == null) {
       return '';
+    }
+
+    if (Array.isArray(value)) {
+      return value
+        .map((item) => normaliseCell(item, formatText, defaultAutoFormat))
+        .filter((item) => item != null && item !== '')
+        .join(' / ');
     }
 
     if (typeof value === 'string' || typeof value === 'number') {
@@ -243,16 +251,485 @@ function createFormatter(config) {
     return formatText(String(value), { autoFormat: defaultAutoFormat });
   };
 
-  const createTable = (section, formatText, defaultAutoFormat) => {
+  const appendClassName = (existing, addition) => {
+    if (!addition) {
+      return existing || '';
+    }
+
+    const additions = Array.isArray(addition) ? addition : String(addition).split(/\s+/);
+    const current = existing ? existing.split(/\s+/) : [];
+    const merged = current.concat(additions).filter((value) => value);
+
+    return Array.from(new Set(merged)).join(' ');
+  };
+
+  const normaliseHeaderConfig = (column) => {
+    if (!column || typeof column !== 'object') {
+      return null;
+    }
+
+    const baseHeader = column.header && typeof column.header === 'object' ? column.header : {};
+    const headerConfig = {};
+
+    const align =
+      baseHeader.align != null
+        ? baseHeader.align
+        : column.header_align != null
+        ? column.header_align
+        : column.headerAlign;
+
+    const classes = [];
+    if (baseHeader.className) {
+      classes.push(baseHeader.className);
+    }
+    if (baseHeader.class) {
+      classes.push(baseHeader.class);
+    }
+    if (Array.isArray(baseHeader.classes)) {
+      classes.push(...baseHeader.classes);
+    }
+    if (column.header_class) {
+      classes.push(column.header_class);
+    }
+    if (column.headerClass) {
+      classes.push(column.headerClass);
+    }
+
+    if (classes.length) {
+      headerConfig.className = classes.join(' ');
+    }
+
+    const styles = [];
+    if (baseHeader.style) {
+      styles.push(baseHeader.style);
+    }
+    if (column.header_style) {
+      styles.push(column.header_style);
+    }
+    if (column.headerStyle) {
+      styles.push(column.headerStyle);
+    }
+    if (align) {
+      styles.push(`text-align: ${align}`);
+    }
+    if (styles.length) {
+      headerConfig.style = styles.join(';');
+    }
+
+    const attributes =
+      baseHeader.attributes && typeof baseHeader.attributes === 'object'
+        ? Object.assign({}, baseHeader.attributes)
+        : null;
+    if (attributes) {
+      headerConfig.attributes = attributes;
+    }
+
+    if (!headerConfig.className && !headerConfig.style && !headerConfig.attributes) {
+      return null;
+    }
+
+    return headerConfig;
+  };
+
+  const applyHeaderConfig = (th, headerConfig) => {
+    if (!headerConfig) {
+      return;
+    }
+
+    if (headerConfig.className) {
+      th.className = appendClassName(th.className, headerConfig.className);
+    }
+
+    if (headerConfig.style) {
+      const existing = th.style.cssText ? `${th.style.cssText};` : '';
+      th.style.cssText = `${existing}${headerConfig.style}`;
+    }
+
+    if (headerConfig.attributes) {
+      Object.entries(headerConfig.attributes).forEach(([attribute, value]) => {
+        if (value != null) {
+          th.setAttribute(attribute, value);
+        }
+      });
+    }
+  };
+
+  const normaliseSortConfig = (column) => {
+    if (!column || typeof column !== 'object') {
+      return null;
+    }
+
+    let sortConfig = column.sort || column.sortConfig || column.sorter;
+    if (sortConfig == null) {
+      return null;
+    }
+
+    if (sortConfig === false) {
+      return null;
+    }
+
+    if (sortConfig === true) {
+      sortConfig = {};
+    }
+
+    if (typeof sortConfig === 'string') {
+      sortConfig = { type: sortConfig };
+    }
+
+    if (typeof sortConfig !== 'object') {
+      return null;
+    }
+
+    const normalised = {};
+    const type = sortConfig.type || column.sort_type || column.sortType;
+    if (type) {
+      const lower = String(type).toLowerCase();
+      if (lower === 'number' || lower === 'numeric' || lower === 'digit') {
+        normalised.type = 'number';
+        normalised.sorter = sortConfig.sorter || 'digit';
+      } else {
+        normalised.type = lower;
+        if (sortConfig.sorter) {
+          normalised.sorter = sortConfig.sorter;
+        }
+      }
+    }
+
+    if (sortConfig.strategy) {
+      normalised.strategy = sortConfig.strategy;
+    } else if (sortConfig.mode) {
+      normalised.strategy = sortConfig.mode;
+    }
+
+    if (sortConfig.initialOrder || sortConfig.order) {
+      normalised.initialOrder = sortConfig.initialOrder || sortConfig.order;
+    }
+
+    if (!normalised.type && !normalised.sorter && !normalised.strategy && !normalised.initialOrder) {
+      return {};
+    }
+
+    return normalised;
+  };
+
+  const computeNumericValues = (input, results, scratch) => {
+    if (input == null) {
+      return;
+    }
+
+    if (typeof input === 'number' && !Number.isNaN(input)) {
+      results.push(input);
+      return;
+    }
+
+    if (typeof input === 'string') {
+      const matches = input.match(/-?\d+(?:\.\d+)?/g);
+      if (matches) {
+        matches.forEach((match) => {
+          const value = Number(match);
+          if (!Number.isNaN(value)) {
+            results.push(value);
+          }
+        });
+      }
+      return;
+    }
+
+    if (Array.isArray(input)) {
+      input.forEach((item) => computeNumericValues(item, results, scratch));
+      return;
+    }
+
+    if (typeof input === 'object') {
+      if (input.sort_value != null || input.sortValue != null) {
+        computeNumericValues(input.sort_value != null ? input.sort_value : input.sortValue, results, scratch);
+        return;
+      }
+
+      if (input.value != null) {
+        computeNumericValues(input.value, results, scratch);
+      }
+
+      if (input.text != null) {
+        computeNumericValues(input.text, results, scratch);
+      }
+
+      if (input.html != null && typeof input.html === 'string') {
+        scratch.innerHTML = input.html;
+        computeNumericValues(scratch.textContent || '', results, scratch);
+        scratch.textContent = '';
+      }
+    }
+  };
+
+  const computeSortValue = (value, html, columnConfig) => {
+    if (!columnConfig || !columnConfig.sort || !columnConfig.sort.type) {
+      return null;
+    }
+
+    if (columnConfig.sort.type === 'number') {
+      const scratch = document.createElement('div');
+      const numbers = [];
+      computeNumericValues(value, numbers, scratch);
+
+      if (!numbers.length && typeof html === 'string' && html) {
+        scratch.innerHTML = html;
+        computeNumericValues(scratch.textContent || '', numbers, scratch);
+      }
+
+      if (!numbers.length) {
+        return null;
+      }
+
+      const strategy = columnConfig.sort.strategy ? String(columnConfig.sort.strategy).toLowerCase() : 'first';
+      switch (strategy) {
+        case 'max':
+          return Math.max(...numbers);
+        case 'min':
+          return Math.min(...numbers);
+        case 'sum':
+          return numbers.reduce((total, current) => total + current, 0);
+        default:
+          return numbers[0];
+      }
+    }
+
+    if (columnConfig.sort.type === 'text') {
+      if (value == null) {
+        if (typeof html === 'string') {
+          const scratch = document.createElement('div');
+          scratch.innerHTML = html;
+          const text = scratch.textContent || '';
+          return text.trim();
+        }
+        return '';
+      }
+
+      if (typeof value === 'string' || typeof value === 'number') {
+        return String(value).trim();
+      }
+
+      if (Array.isArray(value)) {
+        return value.map((item) => computeSortValue(item, null, { sort: { type: 'text' } })).join(' ');
+      }
+
+      if (typeof value === 'object') {
+        if (typeof value.text === 'string' || typeof value.text === 'number') {
+          return String(value.text).trim();
+        }
+        if (typeof value.value === 'string' || typeof value.value === 'number') {
+          return String(value.value).trim();
+        }
+        if (typeof value.html === 'string') {
+          const scratch = document.createElement('div');
+          scratch.innerHTML = value.html;
+          const text = scratch.textContent || '';
+          return text.trim();
+        }
+      }
+
+      return '';
+    }
+
+    return null;
+  };
+
+  const applyValueColor = (element, color) => {
+    if (!color || !element) {
+      return;
+    }
+
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null);
+    const nodes = [];
+    while (walker.nextNode()) {
+      const current = walker.currentNode;
+      if (current && /\d/.test(current.nodeValue || '')) {
+        nodes.push(current);
+      }
+    }
+
+    nodes.forEach((textNode) => {
+      const value = textNode.nodeValue || '';
+      const fragment = document.createDocumentFragment();
+      let lastIndex = 0;
+      value.replace(/\d+(?:\.\d+)?/g, (match, index) => {
+        if (index > lastIndex) {
+          fragment.appendChild(document.createTextNode(value.slice(lastIndex, index)));
+        }
+
+        const span = document.createElement('span');
+        span.style.color = color;
+        span.textContent = match;
+        fragment.appendChild(span);
+        lastIndex = index + match.length;
+        return match;
+      });
+
+      if (lastIndex < value.length) {
+        fragment.appendChild(document.createTextNode(value.slice(lastIndex)));
+      }
+
+      if (textNode.parentNode) {
+        textNode.parentNode.replaceChild(fragment, textNode);
+      }
+    });
+  };
+
+  const mergeDefinitions = (base, extra) => {
+    const merged = Object.assign({}, base || {});
+    if (base && base.attributes) {
+      merged.attributes = Object.assign({}, base.attributes);
+    }
+
+    if (extra && typeof extra === 'object') {
+      const { attributes: extraAttributes, ...rest } = extra;
+      Object.keys(rest).forEach((key) => {
+        merged[key] = rest[key];
+      });
+
+      if (extraAttributes && typeof extraAttributes === 'object') {
+        merged.attributes = Object.assign({}, merged.attributes || {}, extraAttributes);
+      }
+    }
+
+    return merged;
+  };
+
+  const resolveDefinitionForType = (tableDefinitions, type, ancestry = []) => {
+    if (!type) {
+      return {};
+    }
+
+    if (ancestry.includes(type)) {
+      console.warn('Circular table definition inheritance detected for type', type);
+      return {};
+    }
+
+    const definition = tableDefinitions && tableDefinitions[type];
+    if (!definition || typeof definition !== 'object') {
+      return {};
+    }
+
+    const parentType = definition.extends || definition.extend;
+    const parentDefinition = resolveDefinitionForType(tableDefinitions, parentType, ancestry.concat(type));
+    const { extends: _extends, extend: _extend, ...ownDefinition } = definition;
+
+    return mergeDefinitions(parentDefinition, ownDefinition);
+  };
+
+  const resolveTableConfig = (section, tableDefinitions) => {
+    const tableSetting = section.table;
+    let tableType;
+    let overrides = {};
+
+    if (typeof tableSetting === 'string') {
+      tableType = tableSetting;
+    } else if (tableSetting && typeof tableSetting === 'object' && !Array.isArray(tableSetting)) {
+      tableType = tableSetting.type;
+      overrides = tableSetting;
+    }
+
+    const defaults = {
+      className: 'wikitable sortable jquery-tablesorter',
+      attributes: {
+        border: '1',
+        style: 'margin: 1em auto 1em auto;text-align: center',
+      },
+      columns: [
+        'Combo',
+        {
+          text: 'Damage',
+          color: '#4EA5FF',
+          header: {
+            align: 'center',
+          },
+          sort: {
+            type: 'number',
+            strategy: 'max',
+          },
+        },
+        {
+          text: 'Heat Gain',
+          color: '#FF6B6B',
+          header: {
+            align: 'center',
+          },
+          sort: {
+            type: 'number',
+            strategy: 'max',
+          },
+        },
+        {
+          text: 'Graviton Cost',
+          header: {
+            align: 'center',
+          },
+          sort: {
+            type: 'number',
+            strategy: 'max',
+          },
+        },
+        'Notes',
+        {
+          text: 'Example',
+          header: {
+            align: 'center',
+          },
+        },
+      ],
+    };
+
+    const defaultDefinition = resolveDefinitionForType(tableDefinitions || {}, 'default');
+    const typeDefinition = tableType ? resolveDefinitionForType(tableDefinitions || {}, tableType) : {};
+
+    const { type: _type, ...overrideDefinition } = overrides && typeof overrides === 'object' ? overrides : {};
+
+    const definition = mergeDefinitions(mergeDefinitions(defaultDefinition, typeDefinition), overrideDefinition);
+
+    const className = definition.className || defaults.className;
+    const attributes = Object.assign({}, defaults.attributes, definition.attributes || {});
+
+    const columnsHtml = Array.isArray(section.columns_html)
+      ? section.columns_html
+      : Array.isArray(definition.columns_html)
+      ? definition.columns_html
+      : Array.isArray(definition.columnsHtml)
+      ? definition.columnsHtml
+      : undefined;
+
+    const columns = columnsHtml
+      ? undefined
+      : Array.isArray(section.columns)
+      ? section.columns
+      : Array.isArray(definition.columns)
+      ? definition.columns
+      : Array.isArray(defaults.columns)
+      ? defaults.columns
+      : undefined;
+
+    return {
+      className,
+      attributes,
+      columns,
+      columnsHtml,
+    };
+  };
+
+  const createTable = (section, formatText, defaultAutoFormat, tableDefinitions) => {
+    const tableConfig = resolveTableConfig(section, tableDefinitions);
+
     const table = document.createElement('table');
-    table.className = 'wikitable sortable jquery-tablesorter';
-    table.setAttribute('border', '1');
-    table.setAttribute('style', 'margin: 1em auto 1em auto;text-align: center');
+    table.className = tableConfig.className || '';
+    Object.entries(tableConfig.attributes || {}).forEach(([attribute, value]) => {
+      if (value != null) {
+        table.setAttribute(attribute, value);
+      }
+    });
 
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
 
-    const columnValues = Array.isArray(section.columns_html) ? section.columns_html : section.columns;
+    const columnValues = tableConfig.columnsHtml || tableConfig.columns;
     const columnConfigs = [];
 
     (columnValues || []).forEach((column) => {
@@ -262,11 +739,17 @@ function createFormatter(config) {
       th.setAttribute('role', 'columnheader button');
       th.setAttribute('title', 'Sort ascending');
       let html;
-      if (Array.isArray(section.columns_html)) {
+      const columnConfig = {
+        autoFormat: undefined,
+        headerColor: null,
+        valueColor: null,
+        header: null,
+        sort: null,
+      };
+
+      if (tableConfig.columnsHtml) {
         html = (column || '').trim();
-        columnConfigs.push({});
       } else {
-        const columnConfig = { textColor: null, autoFormat: undefined };
         const autoFormatOverride = resolveAutoFormatPreference(column);
 
         if (column && typeof column === 'object' && !Array.isArray(column)) {
@@ -288,22 +771,60 @@ function createFormatter(config) {
             }
           }
 
-          const textColor = column.text_color || column.textColor || column.color;
-          if (textColor) {
-            columnConfig.textColor = textColor;
+          const headerColor =
+            column.header_text_color ||
+            column.headerTextColor ||
+            column.header_color ||
+            column.headerColor ||
+            column.text_color ||
+            column.textColor ||
+            column.color;
+          if (headerColor) {
+            columnConfig.headerColor = headerColor;
+          }
+
+          const valueColor =
+            column.value_text_color ||
+            column.valueTextColor ||
+            column.value_color ||
+            column.valueColor ||
+            column.color;
+          if (valueColor) {
+            columnConfig.valueColor = valueColor;
+          }
+
+          const headerConfig = normaliseHeaderConfig(column);
+          if (headerConfig) {
+            columnConfig.header = headerConfig;
+          }
+
+          const sortConfig = normaliseSortConfig(column);
+          if (sortConfig) {
+            columnConfig.sort = sortConfig;
           }
         } else {
           html = normaliseCell(column, formatText, defaultAutoFormat);
         }
 
         columnConfig.autoFormat = autoFormatOverride;
-        columnConfigs.push(columnConfig);
       }
 
+      columnConfigs.push(columnConfig);
+
       th.innerHTML = html;
-      const columnConfig = columnConfigs[columnConfigs.length - 1];
-      if (columnConfig && columnConfig.textColor) {
-        th.style.color = columnConfig.textColor;
+      if (columnConfig.headerColor) {
+        th.style.color = columnConfig.headerColor;
+      }
+      if (columnConfig.header) {
+        applyHeaderConfig(th, columnConfig.header);
+      }
+      if (columnConfig.sort) {
+        if (columnConfig.sort.sorter) {
+          th.dataset.sorter = columnConfig.sort.sorter;
+        }
+        if (columnConfig.sort.initialOrder) {
+          th.dataset.sortInitialOrder = columnConfig.sort.initialOrder;
+        }
       }
       headerRow.appendChild(th);
     });
@@ -323,10 +844,15 @@ function createFormatter(config) {
       if (Array.isArray(section.rows_html)) {
         row.forEach((cellHtml, columnIndex) => {
           const cell = document.createElement('td');
-          cell.innerHTML = cellHtml || '';
+          const html = cellHtml || '';
+          cell.innerHTML = html;
           const columnConfig = columnConfigs[columnIndex] || {};
-          if (columnConfig.textColor) {
-            cell.style.color = columnConfig.textColor;
+          const sortValue = computeSortValue(cellHtml, html, columnConfig);
+          if (sortValue != null) {
+            cell.setAttribute('data-sort-value', sortValue);
+          }
+          if (columnConfig.valueColor) {
+            applyValueColor(cell, columnConfig.valueColor);
           }
           tr.appendChild(cell);
         });
@@ -336,9 +862,14 @@ function createFormatter(config) {
           const columnConfig = columnConfigs[columnIndex] || {};
           const columnAutoFormat =
             columnConfig.autoFormat !== undefined ? columnConfig.autoFormat : defaultAutoFormat;
-          cell.innerHTML = normaliseCell(cellValue, formatText, columnAutoFormat);
-          if (columnConfig.textColor) {
-            cell.style.color = columnConfig.textColor;
+          const html = normaliseCell(cellValue, formatText, columnAutoFormat);
+          cell.innerHTML = html;
+          const sortValue = computeSortValue(cellValue, html, columnConfig);
+          if (sortValue != null) {
+            cell.setAttribute('data-sort-value', sortValue);
+          }
+          if (columnConfig.valueColor) {
+            applyValueColor(cell, columnConfig.valueColor);
           }
           tr.appendChild(cell);
         });
@@ -370,9 +901,14 @@ function createFormatter(config) {
       console.warn('Unable to load formatting rules', error);
       return null;
     }),
+    fetchJson(tableDefinitionsSource, { optional: true }).catch((error) => {
+      console.warn('Unable to load table definitions', error);
+      return null;
+    }),
   ])
-    .then(([sections, formattingConfig]) => {
+    .then(([sections, formattingConfig, tableDefinitions]) => {
       const formatText = createFormatter(formattingConfig || { rules: [] });
+      const resolvedDefinitions = tableDefinitions || {};
 
       root.innerHTML = '';
       const fragment = document.createDocumentFragment();
@@ -382,7 +918,7 @@ function createFormatter(config) {
         );
         fragment.appendChild(createHeader(section, formatText, defaultAutoFormat));
         fragment.appendChild(createDescriptions(section, formatText, defaultAutoFormat));
-        fragment.appendChild(createTable(section, formatText, defaultAutoFormat));
+        fragment.appendChild(createTable(section, formatText, defaultAutoFormat, resolvedDefinitions));
       });
       root.appendChild(fragment);
       initialiseTableSorter();
