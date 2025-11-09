@@ -1,5 +1,41 @@
 [
   {
+    "anchor": "Followups_Superball_Oki",
+    "headline_id": "Followups_Superball_Oki",
+    "title": {
+      "text": "Followups (Superball Oki)",
+      "wrap": "b"
+    },
+    "descriptions": [],
+    "columns": [
+      "Combo",
+      {
+        "text": "Damage",
+        "color": "#4EA5FF"
+      },
+      {
+        "text": "Heat Gain",
+        "color": "#FF6B6B"
+      },
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ],
+    "rows": [
+      [
+        "22C~(superball hits)~22C > 6[B] > 9D > 5C > 236B > j.C > 236[D] > j.C > ]D[ > 66B > (Optional ODC) > 5C > 3C(1) > 236C",
+        "7723",
+        "0",
+        "2",
+        "Optimal Crossup Superball Combo",
+        {
+          "html": ""
+        }
+      ]
+
+    ]
+  },
+  {
     "anchor": "Meterless_Routes_.285A.2F5B.2F5C.2F2A.2F2B.2F6B.29",
     "headline_id": "Meterless_Routes_(5A/5B/5C/2A/2B/6B)",
     "title": {
