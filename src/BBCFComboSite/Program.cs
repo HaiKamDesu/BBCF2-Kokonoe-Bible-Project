@@ -1,17 +1,19 @@
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.FileProviders.Physical;
 using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var siteContentRoot = Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "..", "SiteContent"));
-var webRoot = Path.Combine(siteContentRoot, "wwwroot");
-var referenceRoot = Path.Combine(siteContentRoot, "reference");
+var repoRoot = Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "..", ".."));
+var referenceRoot = Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "..", "SiteContent", "reference"));
+
+var webRoot = repoRoot;
 
 builder.Environment.WebRootPath = webRoot;
 
 var app = builder.Build();
 
-var webRootProvider = new PhysicalFileProvider(webRoot);
+var webRootProvider = new PhysicalFileProvider(webRoot, ExclusionFilters.Hidden | ExclusionFilters.System | ExclusionFilters.Sensitive);
 var defaultFiles = new DefaultFilesOptions
 {
     FileProvider = webRootProvider,
