@@ -136,25 +136,20 @@ function createFormatter(config) {
 }
 
 .citizen-section-heading {
-  margin-block-start: 4rem !important;
-  margin-block-end: 3rem !important;
+  margin-top: 4rem !important;
+  margin-bottom: 2.5rem !important;
 }
 
 .citizen-section-heading:first-of-type {
-  margin-block-start: 0 !important;
+  margin-top: 0 !important;
+}
+
+.citizen-section-heading--collapsed {
+  margin-bottom: 4rem !important;
 }
 
 .citizen-section-heading + .citizen-section {
   padding-left: 2.5rem !important;
-  margin-block-end: 3.5rem;
-}
-
-.citizen-section-heading--collapsed {
-  margin-block-end: 4rem !important;
-}
-
-.citizen-section-heading--collapsed .citizen-section-indicator {
-  transform: rotate(0deg);
 }
 
 .combo-section__header {
@@ -168,29 +163,30 @@ function createFormatter(config) {
   margin-bottom: 2rem;
 }
 
+.citizen-section-heading + .citizen-section .combo-section__header:first-child {
+  margin-top: 0;
+}
+
+.combo-section__indicator {
+  font-size: 0.9em;
+  line-height: 1;
+  min-width: 1em;
+  text-align: center;
+}
+
 .combo-section__content {
+  margin-left: 1.5rem;
   margin-bottom: 3rem;
+}
+
+.combo-section__content[hidden] {
+  display: none !important;
 }
 
 .combo-section__header:focus-visible,
 .citizen-section-heading[role="button"]:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 2px;
-}
-
-.combo-section__indicator {
-  display: inline-block;
-  min-width: 1rem;
-  text-align: center;
-}
-
-.citizen-section-indicator {
-  transition: transform 200ms ease;
-  transform: rotate(180deg);
-}
-
-.combo-section__content[hidden] {
-  display: none !important;
 }
 `;
 
@@ -199,17 +195,10 @@ function createFormatter(config) {
     }
   };
 
-  ensureStyles();
-
-  const CITIZEN_TOGGLE_DATA_KEY = 'citizenToggleInitialized';
-  let citizenGeneratedId = 0;
+  const CITIZEN_TOGGLE_DATA_KEY = 'citizenToggleInitialised';
 
   const initialiseCitizenSectionHeading = (heading) => {
-    if (!heading || heading.classList.contains('combo-section__header')) {
-      return;
-    }
-
-    if (heading.dataset[CITIZEN_TOGGLE_DATA_KEY] === 'true') {
+    if (!heading || heading.dataset[CITIZEN_TOGGLE_DATA_KEY] === 'true') {
       return;
     }
 
@@ -223,19 +212,14 @@ function createFormatter(config) {
     let indicator = heading.querySelector('.citizen-section-indicator');
     if (!indicator) {
       indicator = document.createElement('span');
-      indicator.className = 'citizen-section-indicator citizen-ui-icon';
+      indicator.className = 'citizen-section-indicator citizen-ui-icon mw-ui-icon';
       indicator.setAttribute('aria-hidden', 'true');
       heading.insertBefore(indicator, heading.firstChild);
+    } else if (!indicator.classList.contains('mw-ui-icon')) {
+      indicator.classList.add('mw-ui-icon');
     }
 
     const indicatorElement = indicator;
-    if (!indicatorElement.classList.contains('citizen-ui-icon')) {
-      indicatorElement.classList.add('citizen-ui-icon');
-    }
-    indicatorElement.classList.remove('mw-ui-icon-wikimedia-expand');
-    if (!indicatorElement.classList.contains('mw-ui-icon-wikimedia-collapse')) {
-      indicatorElement.classList.add('mw-ui-icon-wikimedia-collapse');
-    }
 
     if (!heading.hasAttribute('role')) {
       heading.setAttribute('role', 'button');
@@ -247,36 +231,43 @@ function createFormatter(config) {
     const contentId =
       content.id ||
       heading.getAttribute('aria-controls') ||
-      `${heading.id || 'citizen-section'}-${citizenGeneratedId++}`;
+      `${heading.id || 'citizen-section'}-${Math.random().toString(36).slice(2)}`;
     if (!content.id) {
       content.id = contentId;
     }
     heading.setAttribute('aria-controls', contentId);
 
-    const originalHiddenValue = content.getAttribute('hidden');
-    if (originalHiddenValue != null) {
-      content.dataset.citizenOriginalHiddenValue = originalHiddenValue;
-    }
+    const originalHiddenValue = content.hasAttribute('hidden')
+      ? content.getAttribute('hidden')
+      : null;
+
+    const updateIndicator = (collapsed) => {
+      indicatorElement.classList.remove('mw-ui-icon-wikimedia-collapse', 'mw-ui-icon-wikimedia-expand');
+      indicatorElement.classList.add(
+        collapsed ? 'mw-ui-icon-wikimedia-expand' : 'mw-ui-icon-wikimedia-collapse',
+      );
+    };
 
     const setCollapsed = (collapsed) => {
       if (collapsed) {
-        const hiddenValue = content.dataset.citizenOriginalHiddenValue;
-        if (hiddenValue) {
-          content.setAttribute('hidden', hiddenValue);
+        if (originalHiddenValue) {
+          content.setAttribute('hidden', originalHiddenValue);
         } else {
           content.setAttribute('hidden', '');
         }
         heading.setAttribute('aria-expanded', 'false');
+        heading.classList.add('citizen-section-heading--collapsed');
       } else {
         content.removeAttribute('hidden');
         heading.setAttribute('aria-expanded', 'true');
+        heading.classList.remove('citizen-section-heading--collapsed');
       }
-      heading.classList.toggle('citizen-section-heading--collapsed', collapsed);
+      updateIndicator(collapsed);
     };
 
     const toggleCollapsed = () => {
-      const isCollapsed = heading.getAttribute('aria-expanded') === 'false';
-      setCollapsed(!isCollapsed);
+      const collapsed = heading.getAttribute('aria-expanded') === 'false';
+      setCollapsed(!collapsed);
     };
 
     heading.addEventListener('click', (event) => {
@@ -296,16 +287,20 @@ function createFormatter(config) {
       }
     });
 
-    const isInitiallyCollapsed =
+    const initiallyCollapsed =
       heading.classList.contains('citizen-section-heading--collapsed') ||
       (content.hasAttribute('hidden') && content.getAttribute('hidden') !== 'until-found');
-    setCollapsed(isInitiallyCollapsed);
+
+    setCollapsed(initiallyCollapsed);
   };
 
   const initialiseCitizenSectionHeadings = () => {
-    const headings = document.querySelectorAll('h2.citizen-section-heading');
-    headings.forEach((heading) => initialiseCitizenSectionHeading(heading));
+    document
+      .querySelectorAll('h2.citizen-section-heading')
+      .forEach((heading) => initialiseCitizenSectionHeading(heading));
   };
+
+  ensureStyles();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initialiseCitizenSectionHeadings, { once: true });
@@ -329,12 +324,12 @@ function createFormatter(config) {
     });
 
   const createHeader = (section, formatText, defaultAutoFormat) => {
-    const fragment = document.createDocumentFragment();
+    const header = document.createElement('h3');
 
     if (section.anchor) {
       const anchor = document.createElement('span');
       anchor.id = section.anchor;
-      fragment.appendChild(anchor);
+      header.appendChild(anchor);
     }
 
     const headline = document.createElement('span');
@@ -369,9 +364,9 @@ function createFormatter(config) {
       titleHtml = formatText(text, { autoFormat: defaultAutoFormat });
     }
     headline.innerHTML = titleHtml;
-    fragment.appendChild(headline);
+    header.appendChild(headline);
 
-    return fragment;
+    return header;
   };
 
   const createDescriptions = (section, formatText, defaultAutoFormat) => {
@@ -1306,20 +1301,14 @@ function createFormatter(config) {
   const createSection = (section, formatText, defaultAutoFormat, tableDefinitions, index) => {
     const fragment = document.createDocumentFragment();
 
-    const headerContent = createHeader(section, formatText, defaultAutoFormat);
-
-    const header = document.createElement('h3');
-    header.className = 'combo-section__header';
+    const header = createHeader(section, formatText, defaultAutoFormat);
+    header.classList.add('combo-section__header');
 
     const indicator = document.createElement('span');
     indicator.className = 'combo-section__indicator';
     indicator.setAttribute('aria-hidden', 'true');
     indicator.textContent = '▼';
-    header.appendChild(indicator);
-
-    while (headerContent.firstChild) {
-      header.appendChild(headerContent.firstChild);
-    }
+    header.insertBefore(indicator, header.firstChild);
 
     const baseId =
       (section && (section.headline_id || section.anchor)) || `combo-section-${index}`;
@@ -1329,8 +1318,8 @@ function createFormatter(config) {
     header.setAttribute('role', 'button');
     header.tabIndex = 0;
 
-    const content = document.createElement('section');
-    content.className = 'citizen-section combo-section__content';
+    const content = document.createElement('div');
+    content.className = 'combo-section__content';
     content.id = contentId;
 
     const descriptions = createDescriptions(section, formatText, defaultAutoFormat);
@@ -1358,8 +1347,8 @@ function createFormatter(config) {
     };
 
     const toggleCollapsed = () => {
-      const isCollapsed = header.getAttribute('aria-expanded') === 'false';
-      setCollapsed(!isCollapsed);
+      const collapsed = header.getAttribute('aria-expanded') === 'false';
+      setCollapsed(!collapsed);
     };
 
     header.addEventListener('click', (event) => {
@@ -1368,6 +1357,7 @@ function createFormatter(config) {
       }
       toggleCollapsed();
     });
+
     header.addEventListener('keydown', (event) => {
       if (event.target !== header) {
         return;
@@ -1382,7 +1372,6 @@ function createFormatter(config) {
 
     fragment.appendChild(header);
     fragment.appendChild(content);
-
     return fragment;
   };
 
@@ -1420,7 +1409,7 @@ function createFormatter(config) {
           section && (section.auto_format === false || section.auto_format === 'none')
         );
         fragment.appendChild(
-          createSection(section, formatText, defaultAutoFormat, resolvedDefinitions, index)
+          createSection(section, formatText, defaultAutoFormat, resolvedDefinitions, index),
         );
       });
       root.appendChild(fragment);
