@@ -20,7 +20,11 @@
         "j.6A",
         "j6A",
         "j214A",
-        "j236A"
+        "j236A",
+        "tk2147A",
+        "236[a]",
+        "214214A",
+        "TKj214A"
       ],
       "className": "colorful-text-4"
     },
@@ -43,7 +47,8 @@
         "j.6B",
         "j6B",
         "j214B",
-        "j236B"
+        "j236B",
+        "6[B]"
       ],
       "className": "colorful-text-2"
     },
@@ -62,6 +67,7 @@
         "j.C",
         "jC",
         "j.2C",
+        "j2C",
         "j.3C",
         "j3C",
         "j.6C",
@@ -97,7 +103,11 @@
         "~D",
         "]D[",
         "]D",
-        "D]"
+        "D]",
+        "j236D",
+        "j9D",
+        "9D",
+        "j5D"
       ],
       "className": "colorful-text-5"
     }
