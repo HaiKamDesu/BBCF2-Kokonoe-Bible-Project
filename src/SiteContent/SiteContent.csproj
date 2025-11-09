@@ -8,8 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\\**\\*">
-      <Link>wwwroot\\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    <None Include="..\\..\\index.html">
+      <Link>wwwroot\\index.html</Link>
+    </None>
+    <None Include="..\\..\\combo-formatting-rules.json">
+      <Link>wwwroot\\combo-formatting-rules.json</Link>
+    </None>
+    <None Include="..\\..\\combo-sections.js">
+      <Link>wwwroot\\combo-sections.js</Link>
+    </None>
+    <None Include="..\\..\\combo-sections.json">
+      <Link>wwwroot\\combo-sections.json</Link>
+    </None>
+    <None Include="..\\..\\combo-table-definitions.json">
+      <Link>wwwroot\\combo-table-definitions.json</Link>
+    </None>
+    <None Include="..\\..\\dustloop-assets\\**\\*">
+      <Link>wwwroot\\dustloop-assets\\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </None>
     <None Include="reference\\**\\*">
       <Link>reference\\%(RecursiveDir)%(Filename)%(Extension)</Link>
