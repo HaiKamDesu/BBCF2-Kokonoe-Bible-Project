@@ -124,6 +124,7 @@ function createFormatter(config) {
 
   const source = root.dataset.source || 'combo-sections.json';
   const formattingSource = root.dataset.formattingRules || 'combo-formatting-rules.json';
+  const tableDefinitionsSource = root.dataset.tableDefinitions || 'combo-table-definitions.json';
 
   const fetchJson = (url, { optional } = {}) =>
     fetch(url).then((response) => {
@@ -201,11 +202,11 @@ function createFormatter(config) {
         if (typeof description.html === 'string') {
           html = description.html;
         } else {
-      const autoFormatOverride = resolveAutoFormatPreference(description);
-      const text = description.text != null ? description.text : '';
-      html = formatText(text, {
-        autoFormat: autoFormatOverride !== undefined ? autoFormatOverride : defaultAutoFormat,
-      });
+          const autoFormatOverride = resolveAutoFormatPreference(description);
+          const text = description.text != null ? description.text : '';
+          html = formatText(text, {
+            autoFormat: autoFormatOverride !== undefined ? autoFormatOverride : defaultAutoFormat,
+          });
         }
       }
 
@@ -243,16 +244,133 @@ function createFormatter(config) {
     return formatText(String(value), { autoFormat: defaultAutoFormat });
   };
 
-  const createTable = (section, formatText, defaultAutoFormat) => {
+  const mergeDefinitions = (base, extra) => {
+    const merged = Object.assign({}, base || {});
+    if (base && base.attributes) {
+      merged.attributes = Object.assign({}, base.attributes);
+    }
+
+    if (extra && typeof extra === 'object') {
+      const { attributes: extraAttributes, ...rest } = extra;
+      Object.keys(rest).forEach((key) => {
+        merged[key] = rest[key];
+      });
+
+      if (extraAttributes && typeof extraAttributes === 'object') {
+        merged.attributes = Object.assign({}, merged.attributes || {}, extraAttributes);
+      }
+    }
+
+    return merged;
+  };
+
+  const resolveDefinitionForType = (tableDefinitions, type, ancestry = []) => {
+    if (!type) {
+      return {};
+    }
+
+    if (ancestry.includes(type)) {
+      console.warn('Circular table definition inheritance detected for type', type);
+      return {};
+    }
+
+    const definition = tableDefinitions && tableDefinitions[type];
+    if (!definition || typeof definition !== 'object') {
+      return {};
+    }
+
+    const parentType = definition.extends || definition.extend;
+    const parentDefinition = resolveDefinitionForType(tableDefinitions, parentType, ancestry.concat(type));
+    const { extends: _extends, extend: _extend, ...ownDefinition } = definition;
+
+    return mergeDefinitions(parentDefinition, ownDefinition);
+  };
+
+  const resolveTableConfig = (section, tableDefinitions) => {
+    const tableSetting = section.table;
+    let tableType;
+    let overrides = {};
+
+    if (typeof tableSetting === 'string') {
+      tableType = tableSetting;
+    } else if (tableSetting && typeof tableSetting === 'object' && !Array.isArray(tableSetting)) {
+      tableType = tableSetting.type;
+      overrides = tableSetting;
+    }
+
+    const defaults = {
+      className: 'wikitable sortable jquery-tablesorter',
+      attributes: {
+        border: '1',
+        style: 'margin: 1em auto 1em auto;text-align: center',
+      },
+      columns: [
+        'Combo',
+        {
+          text: 'Damage',
+          color: '#4EA5FF',
+        },
+        {
+          text: 'Heat Gain',
+          color: '#FF6B6B',
+        },
+        'Graviton Cost',
+        'Notes',
+        'Example',
+      ],
+    };
+
+    const defaultDefinition = resolveDefinitionForType(tableDefinitions || {}, 'default');
+    const typeDefinition = tableType ? resolveDefinitionForType(tableDefinitions || {}, tableType) : {};
+
+    const { type: _type, ...overrideDefinition } = overrides && typeof overrides === 'object' ? overrides : {};
+
+    const definition = mergeDefinitions(mergeDefinitions(defaultDefinition, typeDefinition), overrideDefinition);
+
+    const className = definition.className || defaults.className;
+    const attributes = Object.assign({}, defaults.attributes, definition.attributes || {});
+
+    const columnsHtml = Array.isArray(section.columns_html)
+      ? section.columns_html
+      : Array.isArray(definition.columns_html)
+      ? definition.columns_html
+      : Array.isArray(definition.columnsHtml)
+      ? definition.columnsHtml
+      : undefined;
+
+    const columns = columnsHtml
+      ? undefined
+      : Array.isArray(section.columns)
+      ? section.columns
+      : Array.isArray(definition.columns)
+      ? definition.columns
+      : Array.isArray(defaults.columns)
+      ? defaults.columns
+      : undefined;
+
+    return {
+      className,
+      attributes,
+      columns,
+      columnsHtml,
+    };
+  };
+
+  const createTable = (section, formatText, defaultAutoFormat, tableDefinitions) => {
+    const tableConfig = resolveTableConfig(section, tableDefinitions);
+
     const table = document.createElement('table');
-    table.className = 'wikitable sortable jquery-tablesorter';
-    table.setAttribute('border', '1');
-    table.setAttribute('style', 'margin: 1em auto 1em auto;text-align: center');
+    table.className = tableConfig.className || '';
+    Object.entries(tableConfig.attributes || {}).forEach(([attribute, value]) => {
+      if (value != null) {
+        table.setAttribute(attribute, value);
+      }
+    });
 
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
 
-    const columnValues = Array.isArray(section.columns_html) ? section.columns_html : section.columns;
+    const columnValues = tableConfig.columnsHtml || tableConfig.columns;
     const columnConfigs = [];
 
     (columnValues || []).forEach((column) => {
@@ -262,7 +380,7 @@ function createFormatter(config) {
       th.setAttribute('role', 'columnheader button');
       th.setAttribute('title', 'Sort ascending');
       let html;
-      if (Array.isArray(section.columns_html)) {
+      if (tableConfig.columnsHtml) {
         html = (column || '').trim();
         columnConfigs.push({});
       } else {
@@ -370,9 +488,14 @@ function createFormatter(config) {
       console.warn('Unable to load formatting rules', error);
       return null;
     }),
+    fetchJson(tableDefinitionsSource, { optional: true }).catch((error) => {
+      console.warn('Unable to load table definitions', error);
+      return null;
+    }),
   ])
-    .then(([sections, formattingConfig]) => {
+    .then(([sections, formattingConfig, tableDefinitions]) => {
       const formatText = createFormatter(formattingConfig || { rules: [] });
+      const resolvedDefinitions = tableDefinitions || {};
 
       root.innerHTML = '';
       const fragment = document.createDocumentFragment();
@@ -382,7 +505,7 @@ function createFormatter(config) {
         );
         fragment.appendChild(createHeader(section, formatText, defaultAutoFormat));
         fragment.appendChild(createDescriptions(section, formatText, defaultAutoFormat));
-        fragment.appendChild(createTable(section, formatText, defaultAutoFormat));
+        fragment.appendChild(createTable(section, formatText, defaultAutoFormat, resolvedDefinitions));
       });
       root.appendChild(fragment);
       initialiseTableSorter();

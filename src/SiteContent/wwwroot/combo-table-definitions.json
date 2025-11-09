@@ -1,0 +1,26 @@
+{
+  "default": {
+    "className": "wikitable sortable jquery-tablesorter",
+    "attributes": {
+      "border": "1",
+      "style": "margin: 1em auto 1em auto;text-align: center"
+    },
+    "columns": [
+      "Combo",
+      {
+        "text": "Damage",
+        "color": "#4EA5FF"
+      },
+      {
+        "text": "Heat Gain",
+        "color": "#FF6B6B"
+      },
+      "Graviton Cost",
+      "Notes",
+      "Example"
+    ]
+  },
+  "standard": {
+    "extends": "default"
+  }
+}

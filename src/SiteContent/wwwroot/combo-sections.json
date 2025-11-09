@@ -7,20 +7,6 @@
       "wrap": "b"
     },
     "descriptions": [],
-    "columns": [
-      "Combo",
-      {
-        "text": "Damage",
-        "color": "#4EA5FF"
-      },
-      {
-        "text": "Heat Gain",
-        "color": "#FF6B6B"
-      },
-      "Graviton Cost",
-      "Notes",
-      "Example"
-    ],
     "rows": [
       [
         "22C~(superball hits)~22C > 6[B] > 9D > 5C > 236B > j.C > 236[D] > j.C > ]D[ > 66B > (Optional ODC) > 5C > 3C(1) > 236C",
@@ -32,8 +18,8 @@
           "html": ""
         }
       ]
-
-    ]
+    ],
+    "table": "standard"
   },
   {
     "anchor": "Meterless_Routes_.285A.2F5B.2F5C.2F2A.2F2B.2F6B.29",
@@ -43,20 +29,6 @@
       "wrap": "b"
     },
     "descriptions": [],
-    "columns": [
-      "Combo",
-      {
-        "text": "Damage",
-        "color": "#4EA5FF"
-      },
-      {
-        "text": "Heat Gain",
-        "color": "#FF6B6B"
-      },
-      "Graviton Cost",
-      "Notes",
-      "Example"
-    ],
     "rows": [
       [
         "5A / 2A > 5B > 5C > 3C > 236A",
@@ -174,7 +146,8 @@
         "Delayed 236[A] bomb Okizeme. Followups are the same as the above route.",
         ""
       ]
-    ]
+    ],
+    "table": "standard"
   },
   {
     "anchor": "Meterless_Routes.283C.2F6C.2Fj2C.29",
@@ -183,20 +156,6 @@
       "text": "Meterless Routes(3C/6C/j2C)"
     },
     "descriptions": [],
-    "columns": [
-      "Combo",
-      {
-        "text": "Damage",
-        "color": "#4EA5FF"
-      },
-      {
-        "text": "Heat Gain",
-        "color": "#FF6B6B"
-      },
-      "Graviton Cost",
-      "Notes",
-      "Example"
-    ],
     "rows": [
       [
         "3C > 236[A] > 5A > 5B > 6A > jB(2) > j2C > j2D > j236D > 6B > 5C > 3C(1) > 236A",
@@ -308,7 +267,8 @@
         "236[A] > 236A>tkj214A setup off of TK j2C in the corner (Character specific)",
         ""
       ]
-    ]
+    ],
+    "table": "standard"
   },
   {
     "anchor": "Metered_Routes_.285A.2F5B.2F5C.2F2A.2F2B.2F6B.29",
@@ -318,20 +278,6 @@
       "wrap": "b"
     },
     "descriptions": [],
-    "columns": [
-      "Combo",
-      {
-        "text": "Damage",
-        "color": "#4EA5FF"
-      },
-      {
-        "text": "Heat Gain",
-        "color": "#FF6B6B"
-      },
-      "Graviton Cost",
-      "Notes",
-      "Example"
-    ],
     "rows": [
       [
         "5A / 2A > 5B > 5C > 3C > 214214A > 5D > 22B > 5B > 5C > 2C > 6C > j2C > j236D > 6B > 5C > 3C(1) > 214X",
@@ -393,7 +339,8 @@
           "html": "<a class=\"external text\" href=\"https://twitter.com/BananaKen/status/1492604552578801671\" rel=\"nofollow\">Video</a>"
         }
       ]
-    ]
+    ],
+    "table": "standard"
   },
   {
     "anchor": "Metered_Routes_.283C.2F6C.2Fj2C.29",
@@ -403,20 +350,6 @@
       "wrap": "b"
     },
     "descriptions": [],
-    "columns": [
-      "Combo",
-      {
-        "text": "Damage",
-        "color": "#4EA5FF"
-      },
-      {
-        "text": "Heat Gain",
-        "color": "#FF6B6B"
-      },
-      "Graviton Cost",
-      "Notes",
-      "Example"
-    ],
     "rows": [
       [
         "j2C > RC > jB(1) > 6A > 6C > jC > j9D > j236D > 66 > 6B > 5C > 3C(1) > 22A > 5C > 214X",
@@ -438,7 +371,8 @@
           "html": "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=543\" rel=\"nofollow\">Video</a>."
         }
       ]
-    ]
+    ],
+    "table": "standard"
   },
   {
     "anchor": "Followups_.28j3D_Fireball_Okizeme.29",
@@ -448,20 +382,6 @@
       "wrap": "b"
     },
     "descriptions": [],
-    "columns": [
-      "Combo",
-      {
-        "text": "Damage",
-        "color": "#4EA5FF"
-      },
-      {
-        "text": "Heat Gain",
-        "color": "#FF6B6B"
-      },
-      "Graviton Cost",
-      "Notes",
-      "Example"
-    ],
     "rows": [
       [
         "_____ > 22B > 2B > 5C > 236A > 5B > 6A > jC > j3D > jB(1) > jC > j214A",
@@ -501,7 +421,8 @@
         "High/Low into 236[A]>236a>tk j214A oki",
         ""
       ]
-    ]
+    ],
+    "table": "standard"
   },
   {
     "anchor": "Followups_.28236.5BA.5D.3E236a.3Etk_j214A_oki.29",
@@ -511,20 +432,6 @@
       "wrap": "b"
     },
     "descriptions": [],
-    "columns": [
-      "Combo",
-      {
-        "text": "Damage",
-        "color": "#4EA5FF"
-      },
-      {
-        "text": "Heat Gain",
-        "color": "#FF6B6B"
-      },
-      "Graviton Cost",
-      "Notes",
-      "Example"
-    ],
     "rows": [
       [
         "j214A > (6B / 2B > 5B) > 5C > 236[A] > (Fireball Hits) > 6[A] > Jump back > jC > 5b > 6A > 22B > 236[A] > 236A > (superjump) TKj214A",
@@ -558,7 +465,8 @@
         "Damaging 236c ender",
         ""
       ]
-    ]
+    ],
+    "table": "standard"
   },
   {
     "anchor": "Followups_.28j5D_Ice_Reset_Okizeme.29",
@@ -568,20 +476,6 @@
       "wrap": "b"
     },
     "descriptions": [],
-    "columns": [
-      "Combo",
-      {
-        "text": "Damage",
-        "color": "#4EA5FF"
-      },
-      {
-        "text": "Heat Gain",
-        "color": "#FF6B6B"
-      },
-      "Graviton Cost",
-      "Notes",
-      "Example"
-    ],
     "rows": [
       [
         "_____~]D[ > j2C > 6C > j9D > j236B > jC > j236[D] >~ ]D[ > 6B > 5C > 3C(1) > 22A > 5C > 214X",
@@ -623,7 +517,8 @@
           "html": "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=634\" rel=\"nofollow\">Video</a>."
         }
       ]
-    ]
+    ],
+    "table": "standard"
   },
   {
     "anchor": "Aerial_Routes_.286A.2FjA.2FjB.2FjC.2Fj2C.29",
@@ -633,20 +528,6 @@
       "wrap": "b"
     },
     "descriptions": [],
-    "columns": [
-      "Combo",
-      {
-        "text": "Damage",
-        "color": "#4EA5FF"
-      },
-      {
-        "text": "Heat Gain",
-        "color": "#FF6B6B"
-      },
-      "Graviton Cost",
-      "Notes",
-      "Example"
-    ],
     "rows": [
       [
         "6A > 6C > 8D > j236B > jB(1) > 236[D]~]D[ > 22B > 2C > 6B > 5C > 3C(1) > 214X",
@@ -708,7 +589,8 @@
           "html": "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=690\" rel=\"nofollow\">Video</a>."
         }
       ]
-    ]
+    ],
+    "table": "standard"
   },
   {
     "anchor": "Throw_Routes_.28BC.2F4BC.2FjBC.29",
@@ -717,20 +599,6 @@
       "text": "Throw Routes (BC/4BC/jBC)"
     },
     "descriptions": [],
-    "columns": [
-      "Combo",
-      {
-        "text": "Damage",
-        "color": "#4EA5FF"
-      },
-      {
-        "text": "Heat Gain",
-        "color": "#FF6B6B"
-      },
-      "Graviton Cost",
-      "Notes",
-      "Example"
-    ],
     "rows": [
       [
         "BC > 6D > 236[A] > 5A > 236D~22B > 5B > 5C > 236[A] > 6B > 5C > 3C(1) > 236[A] > 5C > 214X",
@@ -832,7 +700,8 @@
           "html": "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=788\" rel=\"nofollow\">Video</a>."
         }
       ]
-    ]
+    ],
+    "table": "standard"
   },
   {
     "anchor": "Special_Routes_.28236A.2F22B.29",
@@ -842,20 +711,6 @@
       "wrap": "b"
     },
     "descriptions": [],
-    "columns": [
-      "Combo",
-      {
-        "text": "Damage",
-        "color": "#4EA5FF"
-      },
-      {
-        "text": "Heat Gain",
-        "color": "#FF6B6B"
-      },
-      "Graviton Cost",
-      "Notes",
-      "Example"
-    ],
     "rows": [
       [
         "236[A] > RC > 5B > 5C > 2C > 5D > 5B > 6A > 5C > 22B > 2C > 236[A]~D > 6B > 5C > 3C(1) > 236[A] > 6B > 5C > 3C(1) > 236[A] > 5C > 214X",
@@ -907,7 +762,8 @@
           "html": "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=839\" rel=\"nofollow\">Video</a>."
         }
       ]
-    ]
+    ],
+    "table": "standard"
   },
   {
     "anchor": "Distortion_Routes_.28214214X.29",
@@ -916,20 +772,6 @@
       "text": "Distortion Routes (214214X)"
     },
     "descriptions": [],
-    "columns": [
-      "Combo",
-      {
-        "text": "Damage",
-        "color": "#4EA5FF"
-      },
-      {
-        "text": "Heat Gain",
-        "color": "#FF6B6B"
-      },
-      "Graviton Cost",
-      "Notes",
-      "Example"
-    ],
     "rows": [
       [
         "214214A > 5D > 22B > 5B > 5C > 236D > 6B > 5C > 3C(1) > 22A > 5C > 214X",
@@ -951,7 +793,8 @@
           "html": "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=858\" rel=\"nofollow\">Video</a>."
         }
       ]
-    ]
+    ],
+    "table": "standard"
   },
   {
     "anchor": "Counter_Hit_Routes",
@@ -960,20 +803,6 @@
       "text": "Counter Hit Routes"
     },
     "descriptions": [],
-    "columns": [
-      "Combo",
-      {
-        "text": "Damage",
-        "color": "#4EA5FF"
-      },
-      {
-        "text": "Heat Gain",
-        "color": "#FF6B6B"
-      },
-      "Graviton Cost",
-      "Notes",
-      "Example"
-    ],
     "rows": [
       [
         "5C > 22C > 6[A] > AB >~ 6C > j8D > j236B > jB(1) > j236D > 22B > 5AA > 6B > 5C > 3C(1) > 236C",
@@ -1051,7 +880,8 @@
           "html": "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=948\" rel=\"nofollow\">Video</a>."
         }
       ]
-    ]
+    ],
+    "table": "standard"
   },
   {
     "anchor": "Overdrive_Routes",
@@ -1060,20 +890,6 @@
       "text": "Overdrive Routes"
     },
     "descriptions": [],
-    "columns": [
-      "Combo",
-      {
-        "text": "Damage",
-        "color": "#4EA5FF"
-      },
-      {
-        "text": "Heat Gain",
-        "color": "#FF6B6B"
-      },
-      "Graviton Cost",
-      "Notes",
-      "Example"
-    ],
     "rows": [
       [
         "5B > 5C > 3C > 5D > 5B > 5C > 236B > 5B > 236D > 6B > 5C > 3C(1) > 236C",
@@ -1123,6 +939,7 @@
           "html": "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=1028\" rel=\"nofollow\">Video</a>."
         }
       ]
-    ]
+    ],
+    "table": "standard"
   }
 ]
