@@ -136,8 +136,8 @@ function createFormatter(config) {
 }
 
 .citizen-section-heading {
-  margin-top: 4rem !important;
-  margin-bottom: 2.5rem !important;
+  margin-top: 5rem !important;
+  margin-bottom: 3.5rem !important;
 }
 
 .citizen-section-heading:first-of-type {
@@ -145,22 +145,35 @@ function createFormatter(config) {
 }
 
 .citizen-section-heading--collapsed {
-  margin-bottom: 4rem !important;
+  margin-bottom: 5rem !important;
+}
+
+.citizen-section-heading .citizen-section-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25em;
+  margin-right: 0.35em;
+  font-size: 0.9em;
 }
 
 .citizen-section-heading + .citizen-section {
-  padding-left: 2.5rem !important;
+  box-sizing: border-box;
+  padding-left: 3rem !important;
 }
 
 .combo-section__header {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin: 2.5rem 0 1rem;
+  margin: 1.75rem 0 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-left: 1.5rem;
 }
 
 .combo-section__header--collapsed {
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .citizen-section-heading + .citizen-section .combo-section__header:first-child {
@@ -212,11 +225,22 @@ function createFormatter(config) {
     let indicator = heading.querySelector('.citizen-section-indicator');
     if (!indicator) {
       indicator = document.createElement('span');
-      indicator.className = 'citizen-section-indicator citizen-ui-icon mw-ui-icon';
+      indicator.className = 'citizen-section-indicator';
       indicator.setAttribute('aria-hidden', 'true');
+      indicator.textContent = '▼';
       heading.insertBefore(indicator, heading.firstChild);
-    } else if (!indicator.classList.contains('mw-ui-icon')) {
-      indicator.classList.add('mw-ui-icon');
+    } else {
+      indicator.classList.remove(
+        'citizen-ui-icon',
+        'mw-ui-icon',
+        'mw-ui-icon-wikimedia-collapse',
+        'mw-ui-icon-wikimedia-expand',
+      );
+      indicator.classList.add('citizen-section-indicator');
+      indicator.setAttribute('aria-hidden', 'true');
+      if (!indicator.textContent || !indicator.textContent.trim()) {
+        indicator.textContent = '▼';
+      }
     }
 
     const indicatorElement = indicator;
@@ -242,10 +266,7 @@ function createFormatter(config) {
       : null;
 
     const updateIndicator = (collapsed) => {
-      indicatorElement.classList.remove('mw-ui-icon-wikimedia-collapse', 'mw-ui-icon-wikimedia-expand');
-      indicatorElement.classList.add(
-        collapsed ? 'mw-ui-icon-wikimedia-expand' : 'mw-ui-icon-wikimedia-collapse',
-      );
+      indicatorElement.textContent = collapsed ? '▲' : '▼';
     };
 
     const setCollapsed = (collapsed) => {
