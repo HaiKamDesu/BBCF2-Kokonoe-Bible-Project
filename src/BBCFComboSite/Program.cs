@@ -1,5 +1,6 @@
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
 
@@ -10,6 +11,8 @@ var referenceRoot = FindReferenceRoot(repoRoot, builder.Environment.ContentRootP
 
 var webRoot = repoRoot;
 
+builder.Host.UseContentRoot(repoRoot);
+builder.WebHost.UseWebRoot(webRoot);
 builder.Environment.WebRootPath = webRoot;
 
 var app = builder.Build();
@@ -33,10 +36,29 @@ defaultFiles.DefaultFileNames.Clear();
 defaultFiles.DefaultFileNames.Add("index.html");
 app.UseDefaultFiles(defaultFiles);
 
+var staticFileLogger = app.Logger;
+
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = webRootProvider,
-    RequestPath = string.Empty
+    RequestPath = string.Empty,
+    OnPrepareResponse = ctx =>
+    {
+        var physicalPath = ctx.File?.PhysicalPath ?? "(unknown)";
+        staticFileLogger.LogDebug(
+            "Static file request for {RequestPath} resolved to {PhysicalPath}",
+            ctx.Context.Request.Path,
+            physicalPath);
+
+        if (!string.IsNullOrEmpty(physicalPath) &&
+            ".json".Equals(Path.GetExtension(physicalPath), StringComparison.OrdinalIgnoreCase))
+        {
+            var headers = ctx.Context.Response.Headers;
+            headers.CacheControl = "no-store, no-cache, must-revalidate";
+            headers.Pragma = "no-cache";
+            headers.Expires = "0";
+        }
+    }
 });
 
 if (Directory.Exists(referenceRoot))
