@@ -235,11 +235,9 @@ function createFormatter(config) {
       return;
     }
     indicator.textContent = '';
-    indicator.classList.add('citizen-ui-icon', 'mw-ui-icon');
+    indicator.classList.add('citizen-ui-icon', 'mw-ui-icon', 'mw-ui-icon-element');
     indicator.classList.toggle('mw-ui-icon-wikimedia-expand', collapsed);
     indicator.classList.toggle('mw-ui-icon-wikimedia-collapse', !collapsed);
-    indicator.classList.toggle('mw-ui-icon-wikimedia-arrowUp', collapsed);
-    indicator.classList.toggle('mw-ui-icon-wikimedia-arrowDown', !collapsed);
   };
 
   const initialiseCitizenSectionHeading = (heading) => {
