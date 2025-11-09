@@ -135,14 +135,33 @@ function createFormatter(config) {
   cursor: pointer;
 }
 
-.combo-section__header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.citizen-section-heading {
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
 }
 
-.combo-section__header .mw-headline {
-  flex: 1 1 auto;
+.citizen-section-heading:first-of-type {
+  margin-top: 0;
+}
+
+.citizen-section-heading--collapsed {
+  margin-bottom: 3rem;
+}
+
+.combo-section__header {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.75rem 0 0.5rem;
+}
+
+.citizen-section .combo-section__header,
+.citizen-section .combo-section__content {
+  margin-left: 1.75rem;
+}
+
+.citizen-section .combo-section__content {
+  margin-bottom: 1.75rem;
 }
 
 .combo-section__header:focus-visible,
@@ -151,18 +170,14 @@ function createFormatter(config) {
   outline-offset: 2px;
 }
 
-.combo-section__indicator,
+.combo-section__indicator {
+  display: inline-block;
+  min-width: 1rem;
+  text-align: center;
+}
+
 .citizen-section-indicator {
   transition: transform 200ms ease;
-}
-
-.combo-section__header--collapsed .combo-section__indicator,
-.citizen-section-heading--collapsed .citizen-section-indicator {
-  transform: rotate(-180deg);
-}
-
-.citizen-section-heading--collapsed {
-  margin-bottom: 2.5rem;
 }
 
 .combo-section__content[hidden] {
@@ -236,6 +251,12 @@ function createFormatter(config) {
 
     const setCollapsed = (collapsed) => {
       if (collapsed) {
+        if (indicatorElement) {
+          indicatorElement.classList.remove('mw-ui-icon-wikimedia-collapse');
+          if (!indicatorElement.classList.contains('mw-ui-icon-wikimedia-expand')) {
+            indicatorElement.classList.add('mw-ui-icon-wikimedia-expand');
+          }
+        }
         const hiddenValue = content.dataset.citizenOriginalHiddenValue;
         if (hiddenValue) {
           content.setAttribute('hidden', hiddenValue);
@@ -245,6 +266,12 @@ function createFormatter(config) {
         heading.setAttribute('aria-expanded', 'false');
         heading.classList.add('citizen-section-heading--collapsed');
       } else {
+        if (indicatorElement) {
+          indicatorElement.classList.remove('mw-ui-icon-wikimedia-expand');
+          if (!indicatorElement.classList.contains('mw-ui-icon-wikimedia-collapse')) {
+            indicatorElement.classList.add('mw-ui-icon-wikimedia-collapse');
+          }
+        }
         content.removeAttribute('hidden');
         heading.setAttribute('aria-expanded', 'true');
         heading.classList.remove('citizen-section-heading--collapsed');
@@ -1289,8 +1316,9 @@ function createFormatter(config) {
     header.className = 'combo-section__header';
 
     const indicator = document.createElement('span');
-    indicator.className = 'combo-section__indicator citizen-ui-icon mw-ui-icon-wikimedia-collapse';
+    indicator.className = 'combo-section__indicator';
     indicator.setAttribute('aria-hidden', 'true');
+    indicator.textContent = '▼';
     header.appendChild(indicator);
 
     while (headerContent.firstChild) {
@@ -1321,10 +1349,12 @@ function createFormatter(config) {
 
     const setCollapsed = (collapsed) => {
       if (collapsed) {
+        indicator.textContent = '▲';
         content.setAttribute('hidden', '');
         header.setAttribute('aria-expanded', 'false');
         header.classList.add('combo-section__header--collapsed');
       } else {
+        indicator.textContent = '▼';
         content.removeAttribute('hidden');
         header.setAttribute('aria-expanded', 'true');
         header.classList.remove('combo-section__header--collapsed');
