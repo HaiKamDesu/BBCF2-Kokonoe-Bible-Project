@@ -1,17 +1,27 @@
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
+using System;
 using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var repoRoot = FindRepositoryRoot(builder.Environment.ContentRootPath);
-var referenceRoot = Path.Combine(repoRoot, "src", "SiteContent", "reference");
+var referenceRoot = FindReferenceRoot(repoRoot, builder.Environment.ContentRootPath);
 
 var webRoot = repoRoot;
 
 builder.Environment.WebRootPath = webRoot;
 
 var app = builder.Build();
+
+app.Logger.LogInformation("Serving static files from {WebRoot}", webRoot);
+if (!string.Equals(webRoot, builder.Environment.ContentRootPath, StringComparison.Ordinal))
+{
+    app.Logger.LogDebug(
+        "Content root is {ContentRoot}; static web root adjusted to {WebRoot}",
+        builder.Environment.ContentRootPath,
+        webRoot);
+}
 
 var webRootProvider = new PhysicalFileProvider(webRoot, ExclusionFilters.Hidden | ExclusionFilters.System | ExclusionFilters.Sensitive);
 var defaultFiles = new DefaultFilesOptions
@@ -37,6 +47,10 @@ if (Directory.Exists(referenceRoot))
         RequestPath = "/reference"
     });
 }
+else
+{
+    app.Logger.LogWarning("Reference assets directory not found at {ReferenceRoot}", referenceRoot);
+}
 
 app.Run();
 
@@ -46,9 +60,13 @@ static string FindRepositoryRoot(string contentRootPath)
 
     while (directory is not null)
     {
-        var candidate = Path.Combine(directory.FullName, "BBCFComboFlowTree.sln");
+        if (File.Exists(Path.Combine(directory.FullName, "BBCFComboFlowTree.sln")))
+        {
+            return directory.FullName;
+        }
 
-        if (File.Exists(candidate))
+        if (File.Exists(Path.Combine(directory.FullName, "combo-sections.json")) &&
+            File.Exists(Path.Combine(directory.FullName, "index.html")))
         {
             return directory.FullName;
         }
@@ -57,4 +75,42 @@ static string FindRepositoryRoot(string contentRootPath)
     }
 
     return contentRootPath;
+}
+
+static string FindReferenceRoot(string? repoRoot, string contentRootPath)
+{
+    if (!string.IsNullOrEmpty(repoRoot))
+    {
+        var directReferencePath = Path.Combine(repoRoot, "src", "SiteContent", "reference");
+        if (Directory.Exists(directReferencePath))
+        {
+            return directReferencePath;
+        }
+
+        var directory = new DirectoryInfo(repoRoot);
+        while (directory is not null)
+        {
+            var candidate = Path.Combine(directory.FullName, "reference");
+            if (Directory.Exists(candidate))
+            {
+                return candidate;
+            }
+
+            directory = directory.Parent;
+        }
+    }
+
+    var fallbackDirectory = new DirectoryInfo(contentRootPath);
+    while (fallbackDirectory is not null)
+    {
+        var candidate = Path.Combine(fallbackDirectory.FullName, "reference");
+        if (Directory.Exists(candidate))
+        {
+            return candidate;
+        }
+
+        fallbackDirectory = fallbackDirectory.Parent;
+    }
+
+    return Path.Combine(repoRoot ?? contentRootPath, "src", "SiteContent", "reference");
 }
