@@ -117,6 +117,11 @@ function createFormatter(config) {
 }
 
 (function () {
+  const COLLAPSE_ICON_MASK =
+    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyMCAyMCc+PHBhdGggZmlsbD0nd2hpdGUnIGQ9J001IDdsNSA2IDUtNnonLz48L3N2Zz4=';
+  const EXPAND_ICON_MASK =
+    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyMCAyMCc+PHBhdGggZmlsbD0nd2hpdGUnIGQ9J003IDVsNiA1LTYgNXonLz48L3N2Zz4=';
+
   const root = document.getElementById('combo-sections-root');
   if (!root) {
     return;
@@ -157,6 +162,30 @@ function createFormatter(config) {
   margin-right: 0.5em;
   font-size: 1.1em;
   line-height: 1;
+}
+
+.citizen-section-indicator::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+}
+
+.citizen-section-indicator.mw-ui-icon-wikimedia-collapse::before {
+  -webkit-mask-image: url('${COLLAPSE_ICON_MASK}');
+  mask-image: url('${COLLAPSE_ICON_MASK}');
+}
+
+.citizen-section-indicator.mw-ui-icon-wikimedia-expand::before {
+  -webkit-mask-image: url('${EXPAND_ICON_MASK}');
+  mask-image: url('${EXPAND_ICON_MASK}');
 }
 
 .section-spacing {
