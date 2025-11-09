@@ -4,8 +4,8 @@ using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var repoRoot = Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "..", ".."));
-var referenceRoot = Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "..", "SiteContent", "reference"));
+var repoRoot = FindRepositoryRoot(builder.Environment.ContentRootPath);
+var referenceRoot = Path.Combine(repoRoot, "src", "SiteContent", "reference");
 
 var webRoot = repoRoot;
 
@@ -39,3 +39,22 @@ if (Directory.Exists(referenceRoot))
 }
 
 app.Run();
+
+static string FindRepositoryRoot(string contentRootPath)
+{
+    var directory = new DirectoryInfo(contentRootPath);
+
+    while (directory is not null)
+    {
+        var candidate = Path.Combine(directory.FullName, "BBCFComboFlowTree.sln");
+
+        if (File.Exists(candidate))
+        {
+            return directory.FullName;
+        }
+
+        directory = directory.Parent;
+    }
+
+    return contentRootPath;
+}
