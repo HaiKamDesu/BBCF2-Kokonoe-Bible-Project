@@ -78,7 +78,8 @@
       "Is Overdrive Only",
       "Has ODC",
       "Corner Carry",
-      "Has Rapid"
+      "Has Rapid",
+      "Is Optimal"
     ]
   },
   "standard": {
