@@ -1053,7 +1053,23 @@
         {
           "html": "<a class=\"external text\" href=\"https://youtu.be/rb190iXjuns?t=999\" rel=\"nofollow\">Video</a>."
         }
-      ],
+      ]
+    ],
+    "table": "standard"
+  },
+  {
+    "anchor": "Golden_Tager",
+    "headline_id": "Golden_Tager",
+    "title": {
+      "text": "Golden Tager",
+      "wrap": "b"
+    },
+    "descriptions": [
+      {
+        "source": "sections/golden-tager-combos.html"
+      }
+    ],
+    "rows": [
       [
         "BC > ODC > 5D > 236[A] > 5A > 236D > 22B > 6A > 6461236[C]~]C[",
         "7219",

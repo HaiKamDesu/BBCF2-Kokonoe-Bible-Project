@@ -135,6 +135,7 @@ function createFormatter(config) {
     style.id = 'combo-section-styles';
     style.textContent = `
 .citizen-section-heading[role="button"],
+.citizen-subsection-heading[role="button"],
 .combo-section__header {
   cursor: pointer;
 }
@@ -160,6 +161,27 @@ function createFormatter(config) {
   width: 1.25em;
   margin-right: 0.5em;
   font-size: 1.1em;
+  line-height: 1;
+}
+
+.citizen-subsection-heading {
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.5rem !important;
+  padding-left: 0.25rem;
+  font-size: 1.5rem;
+}
+
+.citizen-subsection-heading:first-of-type {
+  margin-top: 0 !important;
+}
+
+.citizen-subsection-heading .citizen-section-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1em;
+  margin-right: 0.5em;
+  font-size: 1em;
   line-height: 1;
 }
 
@@ -203,6 +225,12 @@ function createFormatter(config) {
 .citizen-section-heading + .citizen-section {
   box-sizing: border-box;
   padding-left: 3.25rem !important;
+  margin-bottom: 0 !important;
+}
+
+.citizen-subsection-heading + .citizen-subsection__content {
+  box-sizing: border-box;
+  padding-left: 1.5rem !important;
   margin-bottom: 0 !important;
 }
 
@@ -277,7 +305,12 @@ function createFormatter(config) {
     }
 
     const content = heading.nextElementSibling;
-    if (!(content && content.matches('section.citizen-section'))) {
+    if (
+      !(
+        content &&
+        (content.matches('section.citizen-section') || content.matches('.citizen-subsection__content'))
+      )
+    ) {
       return;
     }
 
@@ -366,7 +399,7 @@ function createFormatter(config) {
 
   const initialiseCitizenSectionHeadings = () => {
     document
-      .querySelectorAll('h2.citizen-section-heading')
+      .querySelectorAll('h2.citizen-section-heading, h3.citizen-subsection-heading')
       .forEach((heading) => initialiseCitizenSectionHeading(heading));
   };
 
@@ -386,6 +419,89 @@ function createFormatter(config) {
       }
       return response.json();
     });
+
+  const fetchText = (url) =>
+    fetch(url).then((response) => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${url}: ${response.status}`);
+      }
+      return response.text();
+    });
+
+  const DESCRIPTION_SOURCE_KEYS = ['descriptions', 'descriptions_html'];
+
+  const collectDescriptionSources = (sections) => {
+    const sources = new Set();
+    if (!Array.isArray(sections)) {
+      return sources;
+    }
+
+    sections.forEach((section) => {
+      if (!section || typeof section !== 'object') {
+        return;
+      }
+
+      DESCRIPTION_SOURCE_KEYS.forEach((key) => {
+        const entries = Array.isArray(section[key]) ? section[key] : [];
+        entries.forEach((entry) => {
+          if (!entry || typeof entry !== 'object') {
+            return;
+          }
+          const source = typeof entry.source === 'string' ? entry.source.trim() : '';
+          if (source) {
+            sources.add(source);
+          }
+        });
+      });
+    });
+
+    return sources;
+  };
+
+  const applyDescriptionSources = (sections, htmlMap) => {
+    if (!Array.isArray(sections)) {
+      return [];
+    }
+
+    return sections.map((section) => {
+      if (!section || typeof section !== 'object') {
+        return section;
+      }
+
+      const updated = { ...section };
+
+      DESCRIPTION_SOURCE_KEYS.forEach((key) => {
+        if (!Array.isArray(section[key])) {
+          return;
+        }
+
+        updated[key] = section[key].map((entry) => {
+          if (!entry || typeof entry !== 'object') {
+            return entry;
+          }
+
+          const source = typeof entry.source === 'string' ? entry.source.trim() : '';
+          if (!source) {
+            return entry;
+          }
+
+          const html = htmlMap.get(source);
+          if (html == null) {
+            return entry;
+          }
+
+          const clone = { ...entry };
+          delete clone.source;
+          if (clone.html == null) {
+            clone.html = html;
+          }
+          return clone;
+        });
+      });
+
+      return updated;
+    });
+  };
 
   const createHeader = (section, formatText, defaultAutoFormat) => {
     const header = document.createElement('h3');
@@ -1484,7 +1600,27 @@ function createFormatter(config) {
         return null;
       }),
     ])
-      .then(([sections, formattingConfig, tableDefinitions]) => {
+      .then(async ([sections, formattingConfig, tableDefinitions]) => {
+        if (!Array.isArray(sections)) {
+          throw new Error('Invalid combo sections configuration.');
+        }
+
+        const descriptionSources = collectDescriptionSources(sections);
+        const htmlMap = new Map();
+
+        await Promise.all(
+          Array.from(descriptionSources).map((source) =>
+            fetchText(source)
+              .then((html) => {
+                htmlMap.set(source, html);
+              })
+              .catch((error) => {
+                console.warn(`Unable to load description content from ${source}`, error);
+              }),
+          ),
+        );
+
+        const resolvedSections = applyDescriptionSources(sections, htmlMap);
         const formatText = createFormatter(formattingConfig || { rules: [] });
         const resolvedDefinitions = tableDefinitions || {};
 
@@ -1493,7 +1629,7 @@ function createFormatter(config) {
         }
         comboRoot.innerHTML = '';
         const fragment = document.createDocumentFragment();
-        sections.forEach((section, index) => {
+        resolvedSections.forEach((section, index) => {
           const defaultAutoFormat = !(
             section && (section.auto_format === false || section.auto_format === 'none')
           );

@@ -1,47 +1,67 @@
 [
   {
-    "title": "Why i made this",
-    "headlineId": "Why_I_Made_This",
-    "sectionId": "citizen-section-7",
+    "title": "Intro",
+    "headlineId": "Intro",
+    "sectionId": "citizen-section-intro",
     "content": {
-      "mode": "html-fragment",
-      "source": "sections/why-i-made-this.html"
+      "mode": "group",
+      "sections": [
+        {
+          "title": "Why I Made This",
+          "headlineId": "Why_I_Made_This",
+          "sectionId": "section-why-i-made-this",
+          "content": {
+            "mode": "html-fragment",
+            "source": "sections/why-i-made-this.html"
+          }
+        },
+        {
+          "title": "Combo Notation",
+          "headlineId": "Combo_Notation",
+          "sectionId": "section-combo-notation",
+          "content": {
+            "mode": "html-fragment",
+            "source": "sections/combo-notation.html"
+          }
+        }
+      ]
     }
   },
   {
-    "title": "Resources",
-    "headlineId": "Resources",
-    "sectionId": "citizen-section-1",
+    "title": "Strategy and Explanations",
+    "headlineId": "Strategy_and_Explanations",
+    "sectionId": "citizen-section-strategy",
     "content": {
-      "mode": "html-fragment",
-      "source": "sections/resources.html"
+      "mode": "group",
+      "sections": [
+        {
+          "title": "Character Specifics",
+          "headlineId": "Character_Specifics",
+          "sectionId": "section-character-specifics",
+          "content": {
+            "mode": "html-fragment",
+            "source": "sections/character-specifics.html"
+          }
+        },
+        {
+          "title": "Combo Theory",
+          "headlineId": "Combo_Theory",
+          "sectionId": "section-combo-theory",
+          "sectionAttributes": {
+            "hidden": "until-found"
+          },
+          "content": {
+            "mode": "html-fragment",
+            "source": "sections/combo-theory.html"
+          }
+        }
+      ]
     }
   },
   {
-    "title": "Character Specifics",
-    "headlineId": "Character_Specifics",
-    "sectionId": "citizen-section-2",
-    "content": {
-      "mode": "html-fragment",
-      "source": "sections/character-specifics.html"
-    }
-  },
-  {
-    "title": "Combo Theory",
-    "headlineId": "Combo_Theory",
-    "sectionId": "citizen-section-3",
-    "sectionAttributes": {
-      "hidden": "until-found"
-    },
-    "content": {
-      "mode": "html-fragment",
-      "source": "sections/combo-theory.html"
-    }
-  },
-  {
-    "title": "Combo List",
-    "headlineId": "Combo_List",
-    "sectionId": "citizen-section-4",
+    "title": "Combo Bible",
+    "headlineId": "Combo_Bible",
+    "sectionId": "citizen-section-combo-bible",
     "content": {
       "mode": "combo-list",
       "rootId": "combo-sections-root",
@@ -50,30 +70,49 @@
     }
   },
   {
-    "title": "Golden Tager Combos",
-    "headlineId": "Golden_Tager_Combos",
-    "sectionId": "citizen-section-5",
+    "title": "External Links and Resources",
+    "headlineId": "External_Links_and_Resources",
+    "sectionId": "citizen-section-external",
     "content": {
-      "mode": "html-fragment",
-      "source": "sections/golden-tager-combos.html"
+      "mode": "group",
+      "sections": [
+        {
+          "title": "Resources",
+          "headlineId": "Resources",
+          "sectionId": "section-resources",
+          "content": {
+            "mode": "html-fragment",
+            "source": "sections/resources.html"
+          }
+        },
+        {
+          "title": "Video Examples",
+          "headlineId": "Video_Examples",
+          "sectionId": "section-video-examples",
+          "content": {
+            "mode": "html-fragment",
+            "source": "sections/video-examples.html"
+          }
+        },
+        {
+          "title": "Dustloop Links",
+          "headlineId": "Dustloop_Links",
+          "sectionId": "section-dustloop-links",
+          "content": {
+            "mode": "html-fragment",
+            "source": "sections/navigation.html"
+          }
+        }
+      ]
     }
   },
   {
-    "title": "Video Examples",
-    "headlineId": "Video_Examples",
-    "sectionId": "citizen-section-6",
+    "title": "Special Thanks",
+    "headlineId": "Special_Thanks",
+    "sectionId": "citizen-section-special-thanks",
     "content": {
       "mode": "html-fragment",
-      "source": "sections/video-examples.html"
-    }
-  },
-  {
-    "title": "Dustloop",
-    "headlineId": "Dustloop",
-    "sectionId": "citizen-section-7",
-    "content": {
-      "mode": "html-fragment",
-      "source": "sections/navigation.html"
+      "source": "sections/special-thanks.html"
     }
   }
 ]
