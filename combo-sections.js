@@ -141,7 +141,7 @@ function createFormatter(config) {
 }
 
 .citizen-section-heading {
-  margin-top: 3rem !important;
+  margin-top: 0rem !important;
   margin-bottom: 1rem !important;
   padding-left: 0.25rem;
 }

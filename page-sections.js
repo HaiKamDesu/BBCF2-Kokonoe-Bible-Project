@@ -492,7 +492,7 @@
         }
 
         const spacingEnabled = sectionConfig.spacing !== false;
-        const spacingHeight = sectionConfig.spacingHeight || '1.75rem';
+        const spacingHeight = sectionConfig.spacingHeight || '2rem';
 
         if (spacingEnabled) {
           fragment.appendChild(createSpacing(spacingHeight));

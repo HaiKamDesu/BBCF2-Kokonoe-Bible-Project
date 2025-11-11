@@ -6,7 +6,13 @@
       "style": "margin: 1em auto 1em auto;text-align: center"
     },
     "columns": [
-      "Combo",
+      "Position",
+      //Type, aka Neutral, Crouch confirm, Air-To-Air, Air-To-Ground, Anti-Air, Off-The-Ground
+      "Type",
+      "Starters",
+      //Route
+      "Route",
+      //Damage
       {
         "text": "Damage",
         "color": "#4EA5FF",
@@ -18,6 +24,7 @@
           "strategy": "max"
         }
       },
+      //Heat Gain
       {
         "text": "Heat Gain",
         "color": "#FF6B6B",
@@ -29,6 +36,19 @@
           "strategy": "max"
         }
       },
+      //Minimum Heat
+      {
+        "text": "Minimum Heat",
+        "color": "#FF6B6B",
+        "header": {
+          "align": "center"
+        },
+        "sort": {
+          "type": "number",
+          "strategy": "max"
+        }
+      },
+      //Graviton Cost
       {
         "text": "Graviton Cost",
         "header": {
@@ -39,14 +59,26 @@
           "strategy": "max"
         }
       },
+      //Graviton Gain
+      "Graviton Gain",
+      //Extra Notes
       "Notes",
+      //Video Example
       {
         "text": "Example",
         "header": {
           "align": "center"
         }
       },
-      "End Situation"
+      //End Situation
+      "End Situation",
+      //Minimum OD Time
+      "Minimum OD Time",
+      "Is Counter Hit",
+      "Is Overdrive Only",
+      "Has ODC",
+      "Corner Carry",
+      "Has Rapid"
     ]
   },
   "standard": {
