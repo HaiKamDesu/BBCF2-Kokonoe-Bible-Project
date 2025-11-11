@@ -259,14 +259,17 @@
 
   const initialiseTableOfContents = (() => {
     let rootObserver = null;
-    let headingObservers = [];
     let pendingBuild = false;
     let contentRoot = null;
     let tocList = null;
-
-    const disconnectHeadingObservers = () => {
-      headingObservers.forEach((observer) => observer.disconnect());
-      headingObservers = [];
+    let allEntries = [];
+    let entryById = new Map();
+    let flatEntries = [];
+    let activeEntry = null;
+    let pendingScrollUpdate = false;
+    let scrollListenerAttached = false;
+    const handleScroll = () => {
+      scheduleScrollUpdate();
     };
 
     const setupBackToTopLink = () => {
@@ -337,9 +340,206 @@
       return rootItems;
     };
 
-    const createListItem = (item, depth, numberingSegments) => {
+    const getLevelClass = (depth) => `citizen-toc-level-${Math.max(depth + 1, 1)}`;
+    const getLevelActiveClass = (depth) => `${getLevelClass(depth)}--active`;
+
+    const updateToggleVisuals = (entry) => {
+      if (!entry || !entry.childList) {
+        return;
+      }
+
+      entry.listItem.classList.toggle('citizen-toc-list-item--expanded', Boolean(entry.expanded));
+      entry.childList.hidden = !entry.expanded;
+
+      if (entry.toggleButton) {
+        entry.toggleButton.setAttribute('aria-expanded', entry.expanded ? 'true' : 'false');
+      }
+
+      if (entry.toggleIcon) {
+        entry.toggleIcon.classList.add('citizen-ui-icon', 'mw-ui-icon', 'mw-ui-icon-element');
+        entry.toggleIcon.classList.toggle('mw-ui-icon-wikimedia-collapse', Boolean(entry.expanded));
+        entry.toggleIcon.classList.toggle('mw-ui-icon-wikimedia-expand', !entry.expanded);
+      }
+    };
+
+    const setExpanded = (entry, expanded, { silent = false } = {}) => {
+      if (!entry || !entry.childList) {
+        return;
+      }
+
+      const nextState = Boolean(expanded);
+      if (entry.expanded === nextState) {
+        updateToggleVisuals(entry);
+        return;
+      }
+
+      entry.expanded = nextState;
+      updateToggleVisuals(entry);
+
+      if (!silent && entry.expanded && entry.parent && entry.parent.childList && !entry.parent.expanded) {
+        setExpanded(entry.parent, true, { silent: true });
+      }
+    };
+
+    const getPathToRoot = (entry) => {
+      const path = [];
+      let current = entry;
+      while (current) {
+        path.unshift(current);
+        current = current.parent || null;
+      }
+      return path;
+    };
+
+    const enforceSingleBranchState = (entry) => {
+      if (!entry) {
+        return;
+      }
+
+      const path = getPathToRoot(entry);
+      const pathSet = new Set(path);
+
+      path.forEach((pathEntry) => {
+        if (pathEntry.childList) {
+          setExpanded(pathEntry, true, { silent: true });
+        }
+      });
+
+      allEntries.forEach((candidate) => {
+        if (!candidate.childList || pathSet.has(candidate)) {
+          return;
+        }
+        setExpanded(candidate, false, { silent: true });
+      });
+    };
+
+    const expandPath = (entry) => {
+      getPathToRoot(entry).forEach((pathEntry) => {
+        if (pathEntry.childList) {
+          setExpanded(pathEntry, true, { silent: true });
+        }
+      });
+    };
+
+    const setActiveEntry = (entry, { enforceSingleBranch = true } = {}) => {
+      if (entry === activeEntry) {
+        if (enforceSingleBranch && entry) {
+          enforceSingleBranchState(entry);
+        }
+        return;
+      }
+
+      if (activeEntry) {
+        activeEntry.listItem.classList.remove('citizen-toc-list-item--active');
+        activeEntry.listItem.classList.remove(getLevelActiveClass(activeEntry.depth));
+        if (activeEntry.link) {
+          activeEntry.link.removeAttribute('aria-current');
+        }
+      }
+
+      activeEntry = entry || null;
+
+      if (activeEntry) {
+        activeEntry.listItem.classList.add('citizen-toc-list-item--active');
+        activeEntry.listItem.classList.add(getLevelActiveClass(activeEntry.depth));
+        if (activeEntry.link) {
+          activeEntry.link.setAttribute('aria-current', 'location');
+        }
+
+        if (enforceSingleBranch) {
+          enforceSingleBranchState(activeEntry);
+        } else {
+          expandPath(activeEntry);
+        }
+      }
+    };
+
+    const updateActiveFromScroll = () => {
+      if (!flatEntries.length) {
+        return;
+      }
+
+      const scrollTop =
+        (typeof window !== 'undefined' && (window.pageYOffset || document.documentElement.scrollTop)) || 0;
+      const offset = 160;
+      const targetPosition = scrollTop + offset;
+
+      let candidate = flatEntries[0];
+      for (let index = 0; index < flatEntries.length; index += 1) {
+        const entry = flatEntries[index];
+        const element = entry && entry.item && entry.item.element;
+        if (!element) {
+          continue;
+        }
+
+        const rect = element.getBoundingClientRect();
+        const top = rect.top + scrollTop;
+        if (top <= targetPosition) {
+          candidate = entry;
+        } else {
+          break;
+        }
+      }
+
+      setActiveEntry(candidate, { enforceSingleBranch: true });
+    };
+
+    const scheduleScrollUpdate = () => {
+      if (pendingScrollUpdate) {
+        return;
+      }
+
+      pendingScrollUpdate = true;
+      requestFrame(() => {
+        pendingScrollUpdate = false;
+        updateActiveFromScroll();
+      });
+    };
+
+    const ensureScrollListener = () => {
+      if (scrollListenerAttached || typeof window === 'undefined') {
+        return;
+      }
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      window.addEventListener('resize', handleScroll, { passive: true });
+      scrollListenerAttached = true;
+    };
+
+    const applyHashSelection = () => {
+      if (typeof window === 'undefined' || !window.location || !window.location.hash) {
+        return false;
+      }
+
+      const rawHash = window.location.hash.replace(/^#/, '');
+      if (!rawHash) {
+        return false;
+      }
+
+      let decodedHash = rawHash;
+      try {
+        decodedHash = decodeURIComponent(rawHash);
+      } catch (error) {
+        decodedHash = rawHash;
+      }
+
+      const entry = entryById.get(decodedHash) || entryById.get(rawHash);
+      if (!entry) {
+        return false;
+      }
+
+      setActiveEntry(entry, { enforceSingleBranch: true });
+      return true;
+    };
+
+    const createListEntry = (item, depth, numberingSegments, parentEntry) => {
+      if (!item) {
+        return null;
+      }
+
       const listItem = document.createElement('li');
-      listItem.classList.add('citizen-toc-list-item', `citizen-toc-level-${Math.max(depth + 1, 1)}`);
+      const levelClass = getLevelClass(depth);
+      listItem.classList.add('citizen-toc-list-item', levelClass);
       listItem.id = `toc-${item.id}`;
 
       const link = document.createElement('a');
@@ -372,38 +572,41 @@
       headingSpan.textContent = item.text;
       textWrapper.appendChild(headingSpan);
 
-      link.addEventListener('click', (event) => {
-        event.preventDefault();
+      const entry = {
+        item,
+        depth,
+        listItem,
+        link,
+        childList: null,
+        toggleButton: null,
+        toggleIcon: null,
+        parent: parentEntry || null,
+        children: [],
+        expanded: false,
+      };
 
-        const headingElement = item.element;
-        if (headingElement) {
-          const toggleInitialised =
-            headingElement.dataset && headingElement.dataset.citizenToggleInitialised === 'true';
-          if (toggleInitialised) {
-            if (headingElement.getAttribute('aria-expanded') === 'false') {
-              headingElement.click();
-            }
-          } else {
-            const nextContent = headingElement.nextElementSibling;
-            if (
-              nextContent &&
-              (nextContent.matches('section.citizen-section') ||
-                nextContent.matches('.citizen-subsection__content') ||
-                nextContent.matches('.combo-section__content'))
-            ) {
-              nextContent.removeAttribute('hidden');
-            }
-            headingElement.classList.remove('citizen-section-heading--collapsed', 'combo-section__header--collapsed');
-            headingElement.setAttribute('aria-expanded', 'true');
-            const indicator = headingElement.querySelector(
-              '.citizen-section-indicator, .combo-section__indicator',
-            );
-            if (indicator) {
-              indicator.classList.remove('mw-ui-icon-wikimedia-expand');
-              indicator.classList.add('mw-ui-icon-wikimedia-collapse');
-            }
-          }
+      if (parentEntry) {
+        parentEntry.children.push(entry);
+      }
+
+      allEntries.push(entry);
+      entryById.set(item.id, entry);
+
+      link.addEventListener('click', (event) => {
+        if (
+          event.defaultPrevented ||
+          event.button !== 0 ||
+          event.metaKey ||
+          event.ctrlKey ||
+          event.shiftKey ||
+          event.altKey
+        ) {
+          return;
         }
+
+        event.preventDefault();
+        expandPath(entry);
+        setActiveEntry(entry, { enforceSingleBranch: true });
 
         const target = document.getElementById(item.id);
         if (target && typeof target.scrollIntoView === 'function') {
@@ -419,43 +622,48 @@
 
       listItem.appendChild(link);
 
-      let childList = null;
       if (item.children && item.children.length) {
-        childList = document.createElement('ul');
+        const childList = document.createElement('ul');
         childList.className = 'citizen-toc-list';
-        item.children.forEach((child, index) => {
-          childList.appendChild(createListItem(child, depth + 1, numberingSegments.concat(index + 1)));
+        childList.id = `${listItem.id}-sublist`;
+
+        const toggleButton = document.createElement('button');
+        toggleButton.type = 'button';
+        toggleButton.className = 'citizen-toc-toggle';
+        toggleButton.setAttribute('aria-controls', childList.id);
+        toggleButton.setAttribute('aria-expanded', 'false');
+
+        const toggleIcon = document.createElement('span');
+        toggleIcon.className = 'citizen-ui-icon mw-ui-icon mw-ui-icon-element';
+        const toggleLabel = document.createElement('span');
+
+        toggleButton.appendChild(toggleIcon);
+        toggleButton.appendChild(toggleLabel);
+
+        toggleButton.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          setExpanded(entry, !entry.expanded);
         });
+
+        item.children.forEach((child, index) => {
+          const childEntry = createListEntry(child, depth + 1, numberingSegments.concat(index + 1), entry);
+          if (childEntry) {
+            childList.appendChild(childEntry.listItem);
+          }
+        });
+
+        entry.childList = childList;
+        entry.toggleButton = toggleButton;
+        entry.toggleIcon = toggleIcon;
+
+        updateToggleVisuals(entry);
+
+        listItem.appendChild(toggleButton);
         listItem.appendChild(childList);
       }
 
-      const updateExpandedState = () => {
-        const element = item.element;
-        if (!element) {
-          return;
-        }
-
-        const collapsed =
-          element.classList.contains('citizen-section-heading--collapsed') ||
-          element.classList.contains('combo-section__header--collapsed') ||
-          element.getAttribute('aria-expanded') === 'false';
-        const expanded = !collapsed;
-
-        if (childList) {
-          listItem.classList.toggle('citizen-toc-list-item--expanded', expanded);
-          childList.hidden = !expanded;
-        }
-      };
-
-      updateExpandedState();
-
-      if (item.element) {
-        const observer = new MutationObserver(updateExpandedState);
-        observer.observe(item.element, { attributes: true, attributeFilter: ['aria-expanded', 'class'] });
-        headingObservers.push(observer);
-      }
-
-      return listItem;
+      return entry;
     };
 
     const rebuild = () => {
@@ -463,17 +671,32 @@
         return;
       }
 
-      disconnectHeadingObservers();
-
       const headings = collectHeadings(contentRoot);
       const hierarchy = buildHierarchy(headings);
 
       tocList.innerHTML = '';
+
+      allEntries = [];
+      entryById = new Map();
+      flatEntries = [];
+      activeEntry = null;
+
       const fragment = document.createDocumentFragment();
       hierarchy.forEach((item, index) => {
-        fragment.appendChild(createListItem(item, 0, [index + 1]));
+        const entry = createListEntry(item, 0, [index + 1], null);
+        if (entry) {
+          fragment.appendChild(entry.listItem);
+        }
       });
       tocList.appendChild(fragment);
+
+      flatEntries = headings
+        .map((heading) => entryById.get(heading.id))
+        .filter((entry) => entry && entry.item && entry.item.element);
+
+      ensureScrollListener();
+      applyHashSelection();
+      scheduleScrollUpdate();
     };
 
     const scheduleRebuild = () => {
