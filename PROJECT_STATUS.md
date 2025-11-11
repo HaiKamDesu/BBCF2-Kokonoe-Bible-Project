@@ -19,7 +19,9 @@
 - `README.md` – High-level project introduction and local run instructions.
 
 ## Near-Term Notes
-- Combo sections now render from `combo-sections.json` via `combo-sections.js`; edit the JSON to add or update categories.
+- High-level sections (Resources through Navigation) now load from `page-sections.json`, which points to HTML fragments in `sections/` and the combo data sources.
+- `combo-sections.js` waits for the `combo-sections-root-ready` event so combo tables initialise after the dynamic layout loads.
+- Update `page-sections.json` (and the referenced fragments) to add, remove, reorder, or rename major sections.
 - Validate the static copy in GitHub Pages after deployment; record any assets that fail to load.
 - Confirm the ASP.NET Core project launches successfully in Visual Studio. (HTTPS is disabled by default to avoid dev-certificate warnings; re-enable as needed.)
 - Plan the migration path from the static dump to a React + TypeScript implementation with modular components.

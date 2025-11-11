@@ -121,11 +121,10 @@ function createFormatter(config) {
     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyMCAyMCc+PHBhdGggZmlsbD0nd2hpdGUnIGQ9J001IDdsNSA2IDUtNnonLz48L3N2Zz4=';
   const EXPAND_ICON_MASK =
     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyMCAyMCc+PHBhdGggZmlsbD0nd2hpdGUnIGQ9J003IDVsNiA1LTYgNXonLz48L3N2Zz4=';
+  const COMBO_SECTIONS_ROOT_ID = 'combo-sections-root';
 
-  const root = document.getElementById('combo-sections-root');
-  if (!root) {
-    return;
-  }
+  let comboRoot = null;
+  let hasInitialised = false;
 
   const ensureStyles = () => {
     if (document.getElementById('combo-section-styles')) {
@@ -371,17 +370,11 @@ function createFormatter(config) {
       .forEach((heading) => initialiseCitizenSectionHeading(heading));
   };
 
-  ensureStyles();
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initialiseCitizenSectionHeadings, { once: true });
-  } else {
-    initialiseCitizenSectionHeadings();
-  }
-
-  const source = root.dataset.source || 'combo-sections.json';
-  const formattingSource = root.dataset.formattingRules || 'combo-formatting-rules.json';
-  const tableDefinitionsSource = root.dataset.tableDefinitions || 'combo-table-definitions.json';
+  const getSources = () => ({
+    source: comboRoot.dataset.source || 'combo-sections.json',
+    formattingSource: comboRoot.dataset.formattingRules || 'combo-formatting-rules.json',
+    tableDefinitionsSource: comboRoot.dataset.tableDefinitions || 'combo-table-definitions.json',
+  });
 
   const fetchJson = (url, { optional } = {}) =>
     fetch(url).then((response) => {
@@ -1452,8 +1445,8 @@ function createFormatter(config) {
 
   const initialiseTableSorter = () => {
     try {
-      if (window.jQuery && window.jQuery.fn && typeof window.jQuery.fn.tablesorter === 'function') {
-        const tables = window.jQuery(root).find('table.wikitable.sortable');
+      if (window.jQuery && window.jQuery.fn && typeof window.jQuery.fn.tablesorter === 'function' && comboRoot) {
+        const tables = window.jQuery(comboRoot).find('table.wikitable.sortable');
         tables.trigger('destroy');
         tables.tablesorter();
       }
@@ -1462,36 +1455,78 @@ function createFormatter(config) {
     }
   };
 
-  Promise.all([
-    fetchJson(source),
-    fetchJson(formattingSource, { optional: true }).catch((error) => {
-      console.warn('Unable to load formatting rules', error);
-      return null;
-    }),
-    fetchJson(tableDefinitionsSource, { optional: true }).catch((error) => {
-      console.warn('Unable to load table definitions', error);
-      return null;
-    }),
-  ])
-    .then(([sections, formattingConfig, tableDefinitions]) => {
-      const formatText = createFormatter(formattingConfig || { rules: [] });
-      const resolvedDefinitions = tableDefinitions || {};
+  const initialise = (rootElement) => {
+    if (!rootElement || hasInitialised) {
+      return;
+    }
 
-      root.innerHTML = '';
-      const fragment = document.createDocumentFragment();
-      sections.forEach((section, index) => {
-        const defaultAutoFormat = !(
-          section && (section.auto_format === false || section.auto_format === 'none')
-        );
-        fragment.appendChild(
-          createSection(section, formatText, defaultAutoFormat, resolvedDefinitions, index),
-        );
+    comboRoot = rootElement;
+    hasInitialised = true;
+
+    ensureStyles();
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initialiseCitizenSectionHeadings, { once: true });
+    } else {
+      initialiseCitizenSectionHeadings();
+    }
+
+    const { source, formattingSource, tableDefinitionsSource } = getSources();
+
+    Promise.all([
+      fetchJson(source),
+      fetchJson(formattingSource, { optional: true }).catch((error) => {
+        console.warn('Unable to load formatting rules', error);
+        return null;
+      }),
+      fetchJson(tableDefinitionsSource, { optional: true }).catch((error) => {
+        console.warn('Unable to load table definitions', error);
+        return null;
+      }),
+    ])
+      .then(([sections, formattingConfig, tableDefinitions]) => {
+        const formatText = createFormatter(formattingConfig || { rules: [] });
+        const resolvedDefinitions = tableDefinitions || {};
+
+        if (!comboRoot) {
+          throw new Error('Combo sections root element is missing.');
+        }
+        comboRoot.innerHTML = '';
+        const fragment = document.createDocumentFragment();
+        sections.forEach((section, index) => {
+          const defaultAutoFormat = !(
+            section && (section.auto_format === false || section.auto_format === 'none')
+          );
+          fragment.appendChild(
+            createSection(section, formatText, defaultAutoFormat, resolvedDefinitions, index),
+          );
+        });
+        comboRoot.appendChild(fragment);
+        initialiseTableSorter();
+      })
+      .catch((error) => {
+        console.error(error);
+        if (comboRoot) {
+          comboRoot.textContent = 'Unable to load combo tables.';
+        }
       });
-      root.appendChild(fragment);
-      initialiseTableSorter();
-    })
-    .catch((error) => {
-      console.error(error);
-      root.textContent = 'Unable to load combo tables.';
-    });
+  };
+
+  const existingRoot = document.getElementById(COMBO_SECTIONS_ROOT_ID);
+  if (existingRoot) {
+    initialise(existingRoot);
+  }
+
+  document.addEventListener('combo-sections-root-ready', (event) => {
+    if (hasInitialised) {
+      return;
+    }
+
+    const target =
+      (event && event.detail && event.detail.root) ||
+      document.getElementById(COMBO_SECTIONS_ROOT_ID);
+    if (target) {
+      initialise(target);
+    }
+  });
 })();

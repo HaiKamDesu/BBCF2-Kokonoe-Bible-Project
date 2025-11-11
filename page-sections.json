@@ -1,0 +1,70 @@
+[
+  {
+    "title": "Resources",
+    "headlineId": "Resources",
+    "sectionId": "citizen-section-1",
+    "content": {
+      "mode": "html-fragment",
+      "source": "sections/resources.html"
+    }
+  },
+  {
+    "title": "Character Specifics",
+    "headlineId": "Character_Specifics",
+    "sectionId": "citizen-section-2",
+    "content": {
+      "mode": "html-fragment",
+      "source": "sections/character-specifics.html"
+    }
+  },
+  {
+    "title": "Combo Theory",
+    "headlineId": "Combo_Theory",
+    "sectionId": "citizen-section-3",
+    "sectionAttributes": {
+      "hidden": "until-found"
+    },
+    "content": {
+      "mode": "html-fragment",
+      "source": "sections/combo-theory.html"
+    }
+  },
+  {
+    "title": "Combo List",
+    "headlineId": "Combo_List",
+    "sectionId": "citizen-section-4",
+    "content": {
+      "mode": "combo-list",
+      "rootId": "combo-sections-root",
+      "source": "combo-sections.json",
+      "tableDefinitions": "combo-table-definitions.json"
+    }
+  },
+  {
+    "title": "Golden Tager Combos",
+    "headlineId": "Golden_Tager_Combos",
+    "sectionId": "citizen-section-5",
+    "content": {
+      "mode": "html-fragment",
+      "source": "sections/golden-tager-combos.html"
+    }
+  },
+  {
+    "title": "Video Examples",
+    "headlineId": "Video_Examples",
+    "sectionId": "citizen-section-6",
+    "content": {
+      "mode": "html-fragment",
+      "source": "sections/video-examples.html"
+    }
+  },
+  {
+    "title": "Navigation",
+    "headlineId": "Navigation",
+    "sectionId": "citizen-section-7",
+    "content": {
+      "mode": "html-fragment",
+      "source": "sections/navigation.html"
+    }
+  }
+]
