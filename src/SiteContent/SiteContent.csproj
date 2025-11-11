@@ -11,6 +11,15 @@
     <None Include="..\\..\\index.html">
       <Link>wwwroot\\index.html</Link>
     </None>
+	  <None Include="..\\..\\sections\\**\\*">
+		  <Link>wwwroot\\sections\\%(RecursiveDir)%(Filename)%(Extension)</Link>
+	  </None>
+	  <None Include="..\\..\\page-sections.js">
+		  <Link>wwwroot\\page-sections.js</Link>
+	  </None>
+	  <None Include="..\\..\\page-sections.json">
+		  <Link>wwwroot\\page-sections.json</Link>
+	  </None>
     <None Include="..\\..\\combo-formatting-rules.json">
       <Link>wwwroot\\combo-formatting-rules.json</Link>
     </None>

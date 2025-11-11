@@ -1,5 +1,14 @@
 [
   {
+    "title": "Why i made this",
+    "headlineId": "Why_I_Made_This",
+    "sectionId": "citizen-section-7",
+    "content": {
+      "mode": "html-fragment",
+      "source": "sections/why-i-made-this.html"
+    }
+  },
+  {
     "title": "Resources",
     "headlineId": "Resources",
     "sectionId": "citizen-section-1",
@@ -59,8 +68,8 @@
     }
   },
   {
-    "title": "Navigation",
-    "headlineId": "Navigation",
+    "title": "Dustloop",
+    "headlineId": "Dustloop",
     "sectionId": "citizen-section-7",
     "content": {
       "mode": "html-fragment",
