@@ -356,6 +356,7 @@
       }
 
       if (entry.toggleIcon) {
+        entry.toggleIcon.classList.add('citizen-ui-icon', 'mw-ui-icon', 'mw-ui-icon-element');
         entry.toggleIcon.classList.toggle('mw-ui-icon-wikimedia-collapse', Boolean(entry.expanded));
         entry.toggleIcon.classList.toggle('mw-ui-icon-wikimedia-expand', !entry.expanded);
       }
@@ -604,6 +605,7 @@
         }
 
         event.preventDefault();
+        expandPath(entry);
         setActiveEntry(entry, { enforceSingleBranch: true });
 
         const target = document.getElementById(item.id);
@@ -632,7 +634,7 @@
         toggleButton.setAttribute('aria-expanded', 'false');
 
         const toggleIcon = document.createElement('span');
-        toggleIcon.className = 'citizen-ui-icon';
+        toggleIcon.className = 'citizen-ui-icon mw-ui-icon mw-ui-icon-element';
         const toggleLabel = document.createElement('span');
 
         toggleButton.appendChild(toggleIcon);
