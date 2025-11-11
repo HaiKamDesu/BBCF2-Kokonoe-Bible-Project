@@ -343,6 +343,76 @@
     const getLevelClass = (depth) => `citizen-toc-level-${Math.max(depth + 1, 1)}`;
     const getLevelActiveClass = (depth) => `${getLevelClass(depth)}--active`;
 
+    const updateToggleIcon = (icon, expanded) => {
+      if (!icon) {
+        return;
+      }
+
+      icon.textContent = '';
+      icon.classList.add('citizen-section-indicator', 'citizen-ui-icon', 'mw-ui-icon', 'mw-ui-icon-element');
+      icon.classList.toggle('mw-ui-icon-wikimedia-collapse', Boolean(expanded));
+      icon.classList.toggle('mw-ui-icon-wikimedia-expand', !expanded);
+    };
+
+    const findHeadingContent = (heading) => {
+      if (!heading) {
+        return null;
+      }
+
+      const content = heading.nextElementSibling;
+      if (
+        content &&
+        (content.matches('section.citizen-section') ||
+          content.matches('.citizen-subsection__content') ||
+          content.matches('.combo-section__content'))
+      ) {
+        return content;
+      }
+
+      return null;
+    };
+
+    const ensureHeadingExpanded = (heading) => {
+      if (!heading) {
+        return;
+      }
+
+      const content = findHeadingContent(heading);
+      if (content && content.hasAttribute('hidden')) {
+        content.removeAttribute('hidden');
+      }
+
+      if (
+        heading.classList.contains('citizen-section-heading--collapsed') ||
+        heading.classList.contains('combo-section__header--collapsed') ||
+        heading.getAttribute('aria-expanded') === 'false'
+      ) {
+        heading.classList.remove('citizen-section-heading--collapsed', 'combo-section__header--collapsed');
+        if (heading.matches('[aria-expanded]')) {
+          heading.setAttribute('aria-expanded', 'true');
+        }
+
+        const indicator = heading.querySelector('.citizen-section-indicator, .combo-section__indicator');
+        if (indicator) {
+          indicator.classList.add('citizen-ui-icon', 'mw-ui-icon', 'mw-ui-icon-element');
+          indicator.classList.remove('mw-ui-icon-wikimedia-expand');
+          indicator.classList.add('mw-ui-icon-wikimedia-collapse');
+        }
+      }
+    };
+
+    const expandContentForEntry = (entry) => {
+      if (!entry) {
+        return;
+      }
+
+      const path = getPathToRoot(entry);
+      path.forEach((pathEntry) => {
+        const heading = pathEntry && pathEntry.item && pathEntry.item.element;
+        ensureHeadingExpanded(heading);
+      });
+    };
+
     const updateToggleVisuals = (entry) => {
       if (!entry || !entry.childList) {
         return;
@@ -356,9 +426,7 @@
       }
 
       if (entry.toggleIcon) {
-        entry.toggleIcon.classList.add('citizen-ui-icon', 'mw-ui-icon', 'mw-ui-icon-element');
-        entry.toggleIcon.classList.toggle('mw-ui-icon-wikimedia-collapse', Boolean(entry.expanded));
-        entry.toggleIcon.classList.toggle('mw-ui-icon-wikimedia-expand', !entry.expanded);
+        updateToggleIcon(entry.toggleIcon, Boolean(entry.expanded));
       }
     };
 
@@ -529,6 +597,7 @@
       }
 
       setActiveEntry(entry, { enforceSingleBranch: true });
+      expandContentForEntry(entry);
       return true;
     };
 
@@ -607,6 +676,7 @@
         event.preventDefault();
         expandPath(entry);
         setActiveEntry(entry, { enforceSingleBranch: true });
+        expandContentForEntry(entry);
 
         const target = document.getElementById(item.id);
         if (target && typeof target.scrollIntoView === 'function') {
@@ -634,7 +704,8 @@
         toggleButton.setAttribute('aria-expanded', 'false');
 
         const toggleIcon = document.createElement('span');
-        toggleIcon.className = 'citizen-ui-icon mw-ui-icon mw-ui-icon-element';
+        toggleIcon.className = 'citizen-section-indicator citizen-ui-icon mw-ui-icon mw-ui-icon-element';
+        toggleIcon.setAttribute('aria-hidden', 'true');
         const toggleLabel = document.createElement('span');
 
         toggleButton.appendChild(toggleIcon);
