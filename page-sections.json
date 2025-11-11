@@ -47,9 +47,6 @@
           "title": "Combo Theory",
           "headlineId": "Combo_Theory",
           "sectionId": "section-combo-theory",
-          "sectionAttributes": {
-            "hidden": "until-found"
-          },
           "content": {
             "mode": "html-fragment",
             "source": "sections/combo-theory.html"

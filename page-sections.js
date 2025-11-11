@@ -249,6 +249,265 @@
 
   ensureSectionStyles();
 
+  const requestFrame = (callback) => {
+    if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+      window.requestAnimationFrame(callback);
+    } else {
+      setTimeout(callback, 16);
+    }
+  };
+
+  const initialiseTableOfContents = (() => {
+    let rootObserver = null;
+    let headingObservers = [];
+    let pendingBuild = false;
+    let contentRoot = null;
+    let tocList = null;
+
+    const disconnectHeadingObservers = () => {
+      headingObservers.forEach((observer) => observer.disconnect());
+      headingObservers = [];
+    };
+
+    const setupBackToTopLink = () => {
+      const topLink = document.querySelector('#citizen-toc .citizen-toc-top');
+      if (!topLink || topLink.dataset.tocInitialised === 'true') {
+        return;
+      }
+
+      topLink.dataset.tocInitialised = 'true';
+      topLink.href = '#';
+      topLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        try {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (error) {
+          window.scrollTo(0, 0);
+        }
+      });
+    };
+
+    const collectHeadings = (rootElement) => {
+      if (!rootElement) {
+        return [];
+      }
+
+      const selector =
+        'h2.citizen-section-heading, h3.citizen-subsection-heading, h3.combo-section__header';
+      return Array.from(rootElement.querySelectorAll(selector))
+        .map((element) => {
+          const level = Number.parseInt(element.tagName.replace(/[^0-9]/g, ''), 10) || 0;
+          const headline = element.querySelector('.mw-headline');
+          const id = headline && headline.id ? headline.id : element.id;
+          const text = headline && headline.textContent ? headline.textContent.trim() : element.textContent.trim();
+          if (!id || !text) {
+            return null;
+          }
+
+          return {
+            element,
+            id,
+            text,
+            level,
+          };
+        })
+        .filter(Boolean);
+    };
+
+    const buildHierarchy = (headings) => {
+      const rootItems = [];
+      const stack = [];
+
+      headings.forEach((heading) => {
+        const item = { ...heading, children: [] };
+
+        while (stack.length && stack[stack.length - 1].level >= heading.level) {
+          stack.pop();
+        }
+
+        if (stack.length) {
+          stack[stack.length - 1].children.push(item);
+        } else {
+          rootItems.push(item);
+        }
+
+        stack.push(item);
+      });
+
+      return rootItems;
+    };
+
+    const createListItem = (item, depth, numberingSegments) => {
+      const listItem = document.createElement('li');
+      listItem.classList.add('citizen-toc-list-item', `citizen-toc-level-${Math.max(depth + 1, 1)}`);
+      listItem.id = `toc-${item.id}`;
+
+      const link = document.createElement('a');
+      link.className = 'citizen-toc-link';
+      link.href = `#${item.id}`;
+      link.setAttribute('role', 'button');
+
+      const indicator = document.createElement('div');
+      indicator.className = 'citizen-toc-indicator';
+      link.appendChild(indicator);
+
+      const content = document.createElement('div');
+      content.className = 'citizen-toc-content';
+      link.appendChild(content);
+
+      const textWrapper = document.createElement('div');
+      textWrapper.className = 'citizen-toc-text';
+      content.appendChild(textWrapper);
+
+      const numbering = numberingSegments.join('.');
+      if (numbering) {
+        const numberSpan = document.createElement('span');
+        numberSpan.className = 'citizen-toc-numb';
+        numberSpan.textContent = numbering;
+        textWrapper.appendChild(numberSpan);
+      }
+
+      const headingSpan = document.createElement('span');
+      headingSpan.className = 'citizen-toc-heading';
+      headingSpan.textContent = item.text;
+      textWrapper.appendChild(headingSpan);
+
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        const headingElement = item.element;
+        if (headingElement) {
+          const toggleInitialised =
+            headingElement.dataset && headingElement.dataset.citizenToggleInitialised === 'true';
+          if (toggleInitialised) {
+            if (headingElement.getAttribute('aria-expanded') === 'false') {
+              headingElement.click();
+            }
+          } else {
+            const nextContent = headingElement.nextElementSibling;
+            if (
+              nextContent &&
+              (nextContent.matches('section.citizen-section') ||
+                nextContent.matches('.citizen-subsection__content') ||
+                nextContent.matches('.combo-section__content'))
+            ) {
+              nextContent.removeAttribute('hidden');
+            }
+            headingElement.classList.remove('citizen-section-heading--collapsed', 'combo-section__header--collapsed');
+            headingElement.setAttribute('aria-expanded', 'true');
+            const indicator = headingElement.querySelector(
+              '.citizen-section-indicator, .combo-section__indicator',
+            );
+            if (indicator) {
+              indicator.classList.remove('mw-ui-icon-wikimedia-expand');
+              indicator.classList.add('mw-ui-icon-wikimedia-collapse');
+            }
+          }
+        }
+
+        const target = document.getElementById(item.id);
+        if (target && typeof target.scrollIntoView === 'function') {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        if (window.history && typeof window.history.replaceState === 'function') {
+          window.history.replaceState(null, '', `#${item.id}`);
+        } else {
+          window.location.hash = item.id;
+        }
+      });
+
+      listItem.appendChild(link);
+
+      let childList = null;
+      if (item.children && item.children.length) {
+        childList = document.createElement('ul');
+        childList.className = 'citizen-toc-list';
+        item.children.forEach((child, index) => {
+          childList.appendChild(createListItem(child, depth + 1, numberingSegments.concat(index + 1)));
+        });
+        listItem.appendChild(childList);
+      }
+
+      const updateExpandedState = () => {
+        const element = item.element;
+        if (!element) {
+          return;
+        }
+
+        const collapsed =
+          element.classList.contains('citizen-section-heading--collapsed') ||
+          element.classList.contains('combo-section__header--collapsed') ||
+          element.getAttribute('aria-expanded') === 'false';
+        const expanded = !collapsed;
+
+        if (childList) {
+          listItem.classList.toggle('citizen-toc-list-item--expanded', expanded);
+          childList.hidden = !expanded;
+        }
+      };
+
+      updateExpandedState();
+
+      if (item.element) {
+        const observer = new MutationObserver(updateExpandedState);
+        observer.observe(item.element, { attributes: true, attributeFilter: ['aria-expanded', 'class'] });
+        headingObservers.push(observer);
+      }
+
+      return listItem;
+    };
+
+    const rebuild = () => {
+      if (!contentRoot || !tocList) {
+        return;
+      }
+
+      disconnectHeadingObservers();
+
+      const headings = collectHeadings(contentRoot);
+      const hierarchy = buildHierarchy(headings);
+
+      tocList.innerHTML = '';
+      const fragment = document.createDocumentFragment();
+      hierarchy.forEach((item, index) => {
+        fragment.appendChild(createListItem(item, 0, [index + 1]));
+      });
+      tocList.appendChild(fragment);
+    };
+
+    const scheduleRebuild = () => {
+      if (pendingBuild) {
+        return;
+      }
+
+      pendingBuild = true;
+      requestFrame(() => {
+        pendingBuild = false;
+        rebuild();
+      });
+    };
+
+    return (rootElement) => {
+      contentRoot = rootElement;
+      tocList = document.getElementById('mw-panel-toc-list');
+
+      if (!contentRoot || !tocList) {
+        return;
+      }
+
+      setupBackToTopLink();
+      scheduleRebuild();
+
+      if (rootObserver) {
+        rootObserver.disconnect();
+      }
+
+      rootObserver = new MutationObserver(scheduleRebuild);
+      rootObserver.observe(contentRoot, { childList: true, subtree: true });
+    };
+  })();
+
   const createSpacing = (height) => {
     const spacing = document.createElement('div');
     spacing.className = 'section-spacing';
@@ -262,6 +521,16 @@
   const createHeading = (config) => {
     const heading = document.createElement('h2');
     heading.className = 'citizen-section-heading';
+
+    const collapsedByDefault = !(
+      config && (config.startCollapsed === false || config.start_collapsed === false)
+    );
+    if (collapsedByDefault) {
+      heading.classList.add('citizen-section-heading--collapsed');
+      heading.setAttribute('aria-expanded', 'false');
+    } else {
+      heading.setAttribute('aria-expanded', 'true');
+    }
 
     if (config.headingClass) {
       heading.classList.add(...String(config.headingClass).split(/\s+/).filter(Boolean));
@@ -279,6 +548,10 @@
     const indicator = document.createElement('span');
     indicator.className = 'citizen-section-indicator citizen-ui-icon mw-ui-icon mw-ui-icon-element mw-ui-icon-wikimedia-collapse';
     indicator.setAttribute('aria-hidden', 'true');
+    if (collapsedByDefault) {
+      indicator.classList.remove('mw-ui-icon-wikimedia-collapse');
+      indicator.classList.add('mw-ui-icon-wikimedia-expand');
+    }
     heading.appendChild(indicator);
 
     const headline = document.createElement('span');
@@ -302,6 +575,16 @@
     const heading = document.createElement('h3');
     heading.className = 'citizen-subsection-heading';
 
+    const collapsedByDefault = !(
+      config && (config.startCollapsed === false || config.start_collapsed === false)
+    );
+    if (collapsedByDefault) {
+      heading.classList.add('citizen-section-heading--collapsed');
+      heading.setAttribute('aria-expanded', 'false');
+    } else {
+      heading.setAttribute('aria-expanded', 'true');
+    }
+
     if (config.headingClass) {
       heading.classList.add(...String(config.headingClass).split(/\s+/).filter(Boolean));
     }
@@ -319,6 +602,10 @@
     indicator.className =
       'citizen-section-indicator citizen-ui-icon mw-ui-icon mw-ui-icon-element mw-ui-icon-wikimedia-collapse';
     indicator.setAttribute('aria-hidden', 'true');
+    if (collapsedByDefault) {
+      indicator.classList.remove('mw-ui-icon-wikimedia-collapse');
+      indicator.classList.add('mw-ui-icon-wikimedia-expand');
+    }
     heading.appendChild(indicator);
 
     const headline = document.createElement('span');
@@ -438,6 +725,16 @@
           if (child.contentContainerAttributes) {
             applyAttributes(contentContainer, child.contentContainerAttributes);
           }
+          const childCollapsedByDefault = !(
+            child && (child.startCollapsed === false || child.start_collapsed === false)
+          );
+          if (childCollapsedByDefault) {
+            if (!contentContainer.hasAttribute('hidden')) {
+              contentContainer.setAttribute('hidden', '');
+            }
+          } else {
+            contentContainer.removeAttribute('hidden');
+          }
           wrapper.appendChild(contentContainer);
         }
 
@@ -468,6 +765,17 @@
     }
     if (config.sectionAttributes) {
       applyAttributes(section, config.sectionAttributes);
+    }
+
+    const collapsedByDefault = !(
+      config && (config.startCollapsed === false || config.start_collapsed === false)
+    );
+    if (collapsedByDefault) {
+      if (!section.hasAttribute('hidden')) {
+        section.setAttribute('hidden', '');
+      }
+    } else {
+      section.removeAttribute('hidden');
     }
 
     const comboRoots = await renderSectionContent(section, config);
@@ -520,6 +828,7 @@
       }
 
       root.appendChild(fragment);
+      initialiseTableOfContents(root);
       comboRoots.forEach((comboRoot) => {
         document.dispatchEvent(
           new CustomEvent('combo-sections-root-ready', {

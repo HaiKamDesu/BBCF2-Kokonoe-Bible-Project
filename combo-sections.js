@@ -1546,7 +1546,10 @@ function createFormatter(config) {
       }
     });
 
-    setCollapsed(false);
+    const shouldStartCollapsed = !(
+      section && (section.startCollapsed === false || section.start_collapsed === false)
+    );
+    setCollapsed(shouldStartCollapsed);
 
     fragment.appendChild(header);
     fragment.appendChild(content);
