@@ -19,6 +19,7 @@
 - `README.md` – High-level project introduction and local run instructions.
 
 ## Near-Term Notes
+- NUnit tests cover the ASP.NET host's path resolution helpers (`tests/BBCFComboSite.Tests`).
 - High-level sections (Resources through Navigation) now load from `page-sections.json`, which points to HTML fragments in `sections/` and the combo data sources.
 - `combo-sections.js` waits for the `combo-sections-root-ready` event so combo tables initialise after the dynamic layout loads.
 - Update `page-sections.json` (and the referenced fragments) to add, remove, reorder, or rename major sections.

@@ -28,6 +28,13 @@ curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 8.0
 export PATH="$HOME/.dotnet:$PATH"
 ```
 
+### Run the automated tests
+Run the NUnit suite to verify the path resolution logic and hosting setup:
+
+```bash
+dotnet test
+```
+
 HTTPS is disabled by default to avoid certificate trust prompts. If you prefer HTTPS during local development, restore it by editing `applicationUrl` in `src/BBCFComboSite/Properties/launchSettings.json` and trust the development certificate with `dotnet dev-certs https --trust`.
 
 ## Deployment
