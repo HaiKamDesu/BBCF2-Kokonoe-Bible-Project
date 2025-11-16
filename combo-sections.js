@@ -613,18 +613,135 @@ function createFormatter(config) {
     }
   }
 
-  function registerSectionMetadata(key, label) {
+  function registerSectionMetadata(key, label, metadata = {}) {
     if (!key) {
       return;
     }
-    const existing = sectionRegistry.get(key) || { key, label: label || key };
+    const existing = sectionRegistry.get(key) || {
+      key,
+      label: label || key,
+      elements: new Set(),
+    };
     const resolvedLabel = label && String(label).trim() ? String(label).trim() : '';
     if (resolvedLabel) {
       existing.label = resolvedLabel;
     } else if (!existing.label) {
       existing.label = existing.key;
     }
+
+    if (metadata.order != null && Number.isFinite(metadata.order)) {
+      existing.order = metadata.order;
+    }
+
+    if (metadata.depth != null && Number.isFinite(metadata.depth)) {
+      existing.depth = metadata.depth;
+    }
+
+    if (metadata.parentKey !== undefined) {
+      existing.parentKey = metadata.parentKey;
+    }
+
+    if (metadata.type) {
+      existing.type = metadata.type;
+    }
+
+    if (metadata.sectionIndex != null && Number.isFinite(metadata.sectionIndex)) {
+      existing.sectionIndex = metadata.sectionIndex;
+    }
+
+    if (Array.isArray(metadata.elements)) {
+      metadata.elements.filter(Boolean).forEach((element) => existing.elements.add(element));
+    }
+
     sectionRegistry.set(key, existing);
+  }
+
+  function resolveHeadingElements(heading) {
+    if (!heading) {
+      return [];
+    }
+    if (heading.classList.contains('combo-section__header')) {
+      const comboSection = heading.closest('.combo-section');
+      return comboSection ? [comboSection] : [heading];
+    }
+    if (heading.classList.contains('citizen-subsection-heading')) {
+      const wrapper = heading.closest('.citizen-subsection');
+      return wrapper ? [wrapper] : [heading];
+    }
+    if (heading.classList.contains('citizen-section-heading')) {
+      const elements = [];
+      const spacing = heading.previousElementSibling;
+      if (spacing && spacing.classList && spacing.classList.contains('section-spacing')) {
+        elements.push(spacing);
+      }
+      elements.push(heading);
+      const content = heading.nextElementSibling;
+      if (content && content.matches && content.matches('section.citizen-section')) {
+        elements.push(content);
+      }
+      return elements;
+    }
+    return [heading];
+  }
+
+  function resolveHeadingKey(heading, fallbackIndex) {
+    if (!heading) {
+      return `section-${fallbackIndex}`;
+    }
+    if (heading.dataset && heading.dataset.sectionKey) {
+      return heading.dataset.sectionKey;
+    }
+    const parentWithKey = heading.closest('[data-section-key]');
+    if (parentWithKey && parentWithKey.dataset.sectionKey) {
+      return parentWithKey.dataset.sectionKey;
+    }
+    const headline = heading.querySelector && heading.querySelector('.mw-headline');
+    if (headline && headline.id) {
+      return headline.id;
+    }
+    if (heading.id) {
+      return heading.id;
+    }
+    return `section-${fallbackIndex}`;
+  }
+
+  function registerPageSectionsFromDom() {
+    if (typeof document === 'undefined') {
+      return;
+    }
+    const selector =
+      'h2.citizen-section-heading, h3.citizen-subsection-heading, h3.combo-section__header';
+    const headings = document.querySelectorAll(selector);
+    if (!headings.length) {
+      return;
+    }
+    const stack = [];
+    let order = 0;
+    headings.forEach((heading, index) => {
+      const level = Number.parseInt(heading.tagName.replace(/[^0-9]/g, ''), 10) || 0;
+      if (!level) {
+        return;
+      }
+      const depth = Math.max(0, level - 2);
+      while (stack.length && stack[stack.length - 1].level >= level) {
+        stack.pop();
+      }
+      const parentKey = stack.length ? stack[stack.length - 1].key : undefined;
+      const key = resolveHeadingKey(heading, index);
+      const headline = heading.querySelector('.mw-headline');
+      const label = headline && headline.textContent ? headline.textContent.trim() : heading.textContent.trim();
+      const elements = resolveHeadingElements(heading);
+      const type = heading.classList.contains('combo-section__header') ? 'combo' : 'page';
+      registerSectionMetadata(key, label, {
+        order,
+        depth,
+        parentKey,
+        type,
+        elements,
+      });
+      stack.push({ key, level });
+      order += 1;
+    });
   }
 
   function resetColumnMetadata() {
@@ -870,41 +987,51 @@ function createFormatter(config) {
     });
   }
 
-  function updateSectionVisibility() {
-    if (!comboRoot) {
+  function setElementFilterHidden(element, hidden) {
+    if (!element) {
       return;
     }
-    const sections = comboRoot.querySelectorAll('.combo-section');
+    if (hidden) {
+      element.setAttribute('data-filter-hidden', 'true');
+    } else {
+      element.removeAttribute('data-filter-hidden');
+    }
+  }
+
+  function countVisibleRowsBySection() {
+    const counts = new Map();
+    tableMetadataList.forEach((metadata) => {
+      const sectionKey = metadata.sectionKey;
+      if (!sectionKey) {
+        return;
+      }
+      let visibleRows = metadata.visibleRowCount;
+      if (typeof visibleRows !== 'number') {
+        const fallbackRows = Array.from(
+          metadata.element.querySelectorAll('tbody tr:not(.combo-table__empty-row)'),
+        ).filter((row) => !row.hidden).length;
+        visibleRows = fallbackRows;
+      }
+      counts.set(sectionKey, (counts.get(sectionKey) || 0) + visibleRows);
+    });
+    return counts;
+  }
+
+  function updateSectionVisibility() {
     const shouldHideEmpty = Boolean(filterState.hideEmptySections);
-    sections.forEach((section) => {
-      const key = section.dataset.sectionKey;
-      const manuallyHidden = key ? filterState.hiddenSections.has(key) : false;
-      if (manuallyHidden) {
-        section.setAttribute('hidden', 'true');
+    const visibleRowCounts = shouldHideEmpty ? countVisibleRowsBySection() : new Map();
+    sectionRegistry.forEach((entry) => {
+      const elements = entry.elements ? Array.from(entry.elements).filter(Boolean) : [];
+      if (!elements.length) {
         return;
       }
-      if (!shouldHideEmpty) {
-        section.removeAttribute('hidden');
-        return;
+      const manuallyHidden = filterState.hiddenSections.has(entry.key);
+      let hidden = manuallyHidden;
+      if (!hidden && shouldHideEmpty && entry.type === 'combo') {
+        const visibleRows = visibleRowCounts.get(entry.key) || 0;
+        hidden = visibleRows === 0;
       }
-      const tables = section.querySelectorAll('table');
-      let visibleRows = 0;
-      tables.forEach((table) => {
-        const metadata = tableMetadataMap.get(table);
-        if (metadata && typeof metadata.visibleRowCount === 'number') {
-          visibleRows += metadata.visibleRowCount;
-        } else {
-          const fallbackRows = Array.from(
-            table.querySelectorAll('tbody tr:not(.combo-table__empty-row)'),
-          ).filter((row) => !row.hidden).length;
-          visibleRows += fallbackRows;
-        }
-      });
-      if (visibleRows === 0) {
-        section.setAttribute('hidden', 'true');
-      } else {
-        section.removeAttribute('hidden');
-      }
+      elements.forEach((element) => setElementFilterHidden(element, hidden));
     });
   }
 
@@ -1416,7 +1543,14 @@ function createFormatter(config) {
     }
     columnUiState.clear();
     sectionUiState.clear();
-    const sections = Array.from(sectionRegistry.values());
+    const sections = Array.from(sectionRegistry.values()).sort((left, right) => {
+      const leftOrder = left.order != null ? left.order : Number.MAX_SAFE_INTEGER;
+      const rightOrder = right.order != null ? right.order : Number.MAX_SAFE_INTEGER;
+      if (leftOrder === rightOrder) {
+        return (left.label || '').localeCompare(right.label || '', undefined, { sensitivity: 'base' });
+      }
+      return leftOrder - rightOrder;
+    });
     const columns = Array.from(columnRegistry.values());
     const filterableColumns = columns.filter((column) => column.filterEnabled !== false);
 
@@ -1429,6 +1563,9 @@ function createFormatter(config) {
       } else {
         sections.forEach((section) => {
           const label = document.createElement('label');
+          label.className = 'combo-filter-section-option';
+          const depth = Number.isFinite(section.depth) ? section.depth : 0;
+          label.style.setProperty('--section-depth', String(depth));
           const checkbox = document.createElement('input');
           checkbox.type = 'checkbox';
           checkbox.checked = !filterState.hiddenSections.has(section.key);
@@ -1436,7 +1573,10 @@ function createFormatter(config) {
             setSectionHidden(section.key, !checkbox.checked);
           });
           label.appendChild(checkbox);
-          label.appendChild(document.createTextNode(section.label || section.key));
+          const labelText = document.createElement('span');
+          labelText.className = 'combo-filter-section-option__label';
+          labelText.textContent = section.label || section.key;
+          label.appendChild(labelText);
           filterInterface.sectionVisibilityContainer.appendChild(label);
 
           sectionUiState.set(section.key, { visibilityCheckbox: checkbox });
@@ -1512,6 +1652,41 @@ function createFormatter(config) {
     }
   }
 
+  function createCollapsibleFilterSection(title) {
+    const section = document.createElement('section');
+    section.className = 'combo-filter-panel__section';
+    const heading = document.createElement('h3');
+    heading.className = 'combo-filter-panel__section-heading';
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'combo-filter-panel__section-toggle';
+    toggle.setAttribute('aria-expanded', 'true');
+    const label = document.createElement('span');
+    label.className = 'combo-filter-panel__section-label';
+    label.textContent = title;
+    const icon = document.createElement('span');
+    icon.className = 'combo-filter-panel__section-toggle-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    toggle.appendChild(label);
+    toggle.appendChild(icon);
+    heading.appendChild(toggle);
+    const body = document.createElement('div');
+    body.className = 'combo-filter-panel__section-body';
+    section.appendChild(heading);
+    section.appendChild(body);
+    const setOpen = (open) => {
+      const isOpen = Boolean(open);
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      body.hidden = !isOpen;
+    };
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      setOpen(!expanded);
+    });
+    setOpen(true);
+    return { section, body, toggle, setOpen };
+  }
+
   function ensureFilterInterface() {
     if (filterInterface || typeof document === 'undefined' || !document.body) {
       return;
@@ -1543,57 +1718,36 @@ function createFormatter(config) {
     header.className = 'combo-filter-panel__header';
     const title = document.createElement('h2');
     title.textContent = 'Filters';
+    const headerActions = document.createElement('div');
+    headerActions.className = 'combo-filter-panel__header-actions';
+    const resetButton = document.createElement('button');
+    resetButton.type = 'button';
+    resetButton.textContent = 'Reset Filters';
     const closeButton = document.createElement('button');
     closeButton.type = 'button';
     closeButton.textContent = 'Close';
+    headerActions.appendChild(resetButton);
+    headerActions.appendChild(closeButton);
     header.appendChild(title);
-    header.appendChild(closeButton);
+    header.appendChild(headerActions);
     panel.appendChild(header);
 
-    const sectionVisibilitySection = document.createElement('section');
-    sectionVisibilitySection.className = 'combo-filter-panel__section';
-    const sectionVisibilityHeading = document.createElement('h3');
-    sectionVisibilityHeading.textContent = 'Visible Sections';
-    const sectionVisibilityContainer = document.createElement('div');
-    sectionVisibilityContainer.className = 'combo-filter-visibility combo-filter-sections';
-    sectionVisibilitySection.appendChild(sectionVisibilityHeading);
-    sectionVisibilitySection.appendChild(sectionVisibilityContainer);
+    const sectionVisibilitySection = createCollapsibleFilterSection('Visible Sections');
+    sectionVisibilitySection.body.classList.add('combo-filter-sections');
 
-    const visibilitySection = document.createElement('section');
-    visibilitySection.className = 'combo-filter-panel__section';
-    const visibilityHeading = document.createElement('h3');
-    visibilityHeading.textContent = 'Visible Columns';
-    const visibilityContainer = document.createElement('div');
-    visibilityContainer.className = 'combo-filter-visibility';
-    visibilitySection.appendChild(visibilityHeading);
-    visibilitySection.appendChild(visibilityContainer);
+    const visibilitySection = createCollapsibleFilterSection('Visible Columns');
+    visibilitySection.body.classList.add('combo-filter-visibility');
 
-    const conditionsSection = document.createElement('section');
-    conditionsSection.className = 'combo-filter-panel__section';
-    const conditionsHeading = document.createElement('h3');
-    conditionsHeading.textContent = 'Column Filters';
-    const conditionsContainer = document.createElement('div');
-    conditionsSection.appendChild(conditionsHeading);
-    conditionsSection.appendChild(conditionsContainer);
+    const conditionsSection = createCollapsibleFilterSection('Column Filters');
 
-    const optionsSection = document.createElement('section');
-    optionsSection.className = 'combo-filter-panel__section';
-    const optionsHeading = document.createElement('h3');
-    optionsHeading.textContent = 'Options';
-    const optionsContent = document.createElement('div');
-    optionsContent.className = 'combo-filter-options';
+    const optionsSection = createCollapsibleFilterSection('Options');
+    optionsSection.body.classList.add('combo-filter-options');
     const hideEmptyLabel = document.createElement('label');
     const hideEmptyCheckbox = document.createElement('input');
     hideEmptyCheckbox.type = 'checkbox';
     hideEmptyLabel.appendChild(hideEmptyCheckbox);
     hideEmptyLabel.appendChild(document.createTextNode('Hide sections without combos'));
-    const resetButton = document.createElement('button');
-    resetButton.type = 'button';
-    resetButton.textContent = 'Reset Filters';
-    optionsContent.appendChild(hideEmptyLabel);
-    optionsContent.appendChild(resetButton);
-    optionsSection.appendChild(optionsHeading);
-    optionsSection.appendChild(optionsContent);
+    optionsSection.body.appendChild(hideEmptyLabel);
 
     const presetsSection = document.createElement('section');
     presetsSection.className = 'combo-filter-panel__section combo-filter-presets';
@@ -1615,10 +1769,10 @@ function createFormatter(config) {
     presetsSection.appendChild(presetSelect);
     presetsSection.appendChild(presetsActions);
 
-    panel.appendChild(sectionVisibilitySection);
-    panel.appendChild(visibilitySection);
-    panel.appendChild(conditionsSection);
-    panel.appendChild(optionsSection);
+    panel.appendChild(sectionVisibilitySection.section);
+    panel.appendChild(visibilitySection.section);
+    panel.appendChild(conditionsSection.section);
+    panel.appendChild(optionsSection.section);
     panel.appendChild(presetsSection);
 
     button.addEventListener('click', () => toggleFilterPanel());
@@ -1669,13 +1823,15 @@ function createFormatter(config) {
       button,
       overlay,
       panel,
-      sectionVisibilityContainer,
-      visibilityContainer,
-      conditionsContainer,
+      sectionVisibilityContainer: sectionVisibilitySection.body,
+      visibilityContainer: visibilitySection.body,
+      conditionsContainer: conditionsSection.body,
       hideEmptyCheckbox,
       presetSelect,
+      savePresetButton,
       deletePresetButton,
       selectedPresetValue: '',
+      closeButton,
     };
   }
 
@@ -1877,6 +2033,10 @@ function createFormatter(config) {
   background: #ff6b6b;
 }
 
+[data-filter-hidden='true'] {
+  display: none !important;
+}
+
 .combo-filter-overlay {
   position: fixed;
   inset: 0;
@@ -1911,6 +2071,11 @@ function createFormatter(config) {
   margin-bottom: 1rem;
 }
 
+.combo-filter-panel__header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .combo-filter-panel__header h2 {
   margin: 0;
   font-size: 1.35rem;
@@ -1921,6 +2086,22 @@ function createFormatter(config) {
 .combo-filter-panel input,
 .combo-filter-panel textarea {
   font: inherit;
+}
+
+.combo-filter-panel select option,
+.combo-filter-panel select optgroup {
+  background-color: #0f1421;
+  color: inherit;
+}
+
+.combo-filter-panel select optgroup {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.combo-filter-panel select optgroup option {
+  font-weight: 400;
+  color: #fff;
 }
 
 .combo-filter-panel button {
@@ -1946,9 +2127,53 @@ function createFormatter(config) {
 }
 
 .combo-filter-panel__section h3 {
-  margin: 0 0 0.5rem;
+  margin: 0;
   font-size: 1rem;
   font-weight: 600;
+}
+
+.combo-filter-panel__section-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.4rem 0.75rem;
+  text-align: left;
+}
+
+.combo-filter-panel__section-label {
+  font-weight: 600;
+}
+
+.combo-filter-panel__section-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+}
+
+.combo-filter-panel__section-toggle-icon::before {
+  content: '';
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.combo-filter-panel__section-toggle[aria-expanded='false'] .combo-filter-panel__section-toggle-icon::before {
+  transform: rotate(-135deg);
+}
+
+.combo-filter-panel__section-body {
+  margin-top: 0.75rem;
 }
 
 .combo-filter-visibility {
@@ -1962,6 +2187,24 @@ function createFormatter(config) {
   align-items: center;
   gap: 0.35rem;
   font-size: 0.9rem;
+}
+
+.combo-filter-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.combo-filter-section-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  padding-left: calc(0.35rem + 0.85rem * var(--section-depth, 0));
+}
+
+.combo-filter-section-option__label {
+  flex: 1;
 }
 
 .combo-filter-visibility input[type='checkbox'] {
@@ -3311,6 +3554,7 @@ body.combo-filter-open {
       columns: columnConfigs,
       emptyRow,
       sectionIndex,
+      sectionKey: null,
     };
     tableMetadataMap.set(table, metadata);
     tableMetadataList.push(metadata);
@@ -3340,7 +3584,11 @@ body.combo-filter-open {
       (section && (section.headline_id || section.anchor)) || `combo-section-${index}`;
     const sectionKey = String(baseId);
     sectionContainer.dataset.sectionKey = sectionKey;
-    registerSectionMetadata(sectionKey, sectionLabel);
+    registerSectionMetadata(sectionKey, sectionLabel, {
+      sectionIndex: index,
+      type: 'combo',
+      elements: [sectionContainer],
+    });
     const contentId = `${String(baseId).replace(/\s+/g, '-')}-content`;
     header.setAttribute('aria-controls', contentId);
     header.setAttribute('aria-expanded', 'true');
@@ -3359,6 +3607,10 @@ body.combo-filter-open {
     const table = createTable(section, formatText, defaultAutoFormat, tableDefinitions, index);
     if (table) {
       content.appendChild(table);
+      const metadata = tableMetadataMap.get(table);
+      if (metadata) {
+        metadata.sectionKey = sectionKey;
+      }
     }
 
     const setCollapsed = (collapsed) => {
@@ -3492,6 +3744,7 @@ body.combo-filter-open {
           );
         });
         comboRoot.appendChild(fragment);
+        registerPageSectionsFromDom();
         finaliseColumnRegistry();
         pruneFilterState();
         ensureFilterInterface();
