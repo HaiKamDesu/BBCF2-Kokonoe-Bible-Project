@@ -130,6 +130,7 @@ function createFormatter(config) {
   const BOOLEAN_TRUE_VALUES = ['yes', 'true', '1', '✔', '✓'];
 
   const columnRegistry = new Map();
+  const sectionRegistry = new Map();
   let tableMetadataList = [];
   let tableMetadataMap = new WeakMap();
   let filterState = createDefaultFilterState();
@@ -137,10 +138,12 @@ function createFormatter(config) {
   let filterInterface = null;
   let isFilterPanelOpen = false;
   const columnUiState = new Map();
+  const sectionUiState = new Map();
 
   function createDefaultFilterState() {
     return {
       hiddenColumns: new Set(),
+      hiddenSections: new Set(),
       columnConditions: {},
       hideEmptySections: false,
     };
@@ -288,7 +291,20 @@ function createFormatter(config) {
     }
 
     nextState.hideEmptySections = Boolean(state.hideEmptySections);
-    nextState.hiddenColumns = new Set(Array.isArray(state.hiddenColumns) ? state.hiddenColumns : state.hiddenColumns instanceof Set ? Array.from(state.hiddenColumns) : []);
+    nextState.hiddenColumns = new Set(
+      Array.isArray(state.hiddenColumns)
+        ? state.hiddenColumns
+        : state.hiddenColumns instanceof Set
+        ? Array.from(state.hiddenColumns)
+        : [],
+    );
+    nextState.hiddenSections = new Set(
+      Array.isArray(state.hiddenSections)
+        ? state.hiddenSections
+        : state.hiddenSections instanceof Set
+        ? Array.from(state.hiddenSections)
+        : [],
+    );
     nextState.columnConditions = {};
 
     const entries = state.columnConditions && typeof state.columnConditions === 'object' ? Object.entries(state.columnConditions) : [];
@@ -322,6 +338,7 @@ function createFormatter(config) {
     const serialised = {
       hideEmptySections: Boolean(state.hideEmptySections),
       hiddenColumns: Array.from(state.hiddenColumns || []),
+      hiddenSections: Array.from(state.hiddenSections || []),
       columnConditions: {},
     };
 
@@ -347,6 +364,7 @@ function createFormatter(config) {
       const state = createDefaultFilterState();
       state.hideEmptySections = Boolean(parsed.hideEmptySections);
       state.hiddenColumns = new Set(Array.isArray(parsed.hiddenColumns) ? parsed.hiddenColumns : []);
+      state.hiddenSections = new Set(Array.isArray(parsed.hiddenSections) ? parsed.hiddenSections : []);
       state.columnConditions = {};
       if (parsed.columnConditions && typeof parsed.columnConditions === 'object') {
         Object.entries(parsed.columnConditions).forEach(([key, condition]) => {
@@ -440,6 +458,40 @@ function createFormatter(config) {
       }
     }
     return `Column ${index + 1}`;
+  }
+
+  function resolveSectionLabel(section, index) {
+    const fallback = `Section ${index + 1}`;
+    if (!section || typeof section !== 'object') {
+      return fallback;
+    }
+    if (typeof section.title_html === 'string' && section.title_html.trim()) {
+      const extracted = extractTextContent(section.title_html).trim();
+      if (extracted) {
+        return extracted;
+      }
+    }
+    if (typeof section.title === 'string' && section.title.trim()) {
+      return section.title.trim();
+    }
+    if (section.title && typeof section.title === 'object') {
+      if (typeof section.title.text === 'string' && section.title.text.trim()) {
+        return section.title.text.trim();
+      }
+      if (typeof section.title.html === 'string' && section.title.html.trim()) {
+        const extracted = extractTextContent(section.title.html).trim();
+        if (extracted) {
+          return extracted;
+        }
+      }
+    }
+    if (typeof section.anchor === 'string' && section.anchor.trim()) {
+      return section.anchor.trim();
+    }
+    if (typeof section.headline_id === 'string' && section.headline_id.trim()) {
+      return section.headline_id.trim();
+    }
+    return fallback;
   }
 
   function createColumnKey(label, index) {
@@ -561,8 +613,23 @@ function createFormatter(config) {
     }
   }
 
+  function registerSectionMetadata(key, label) {
+    if (!key) {
+      return;
+    }
+    const existing = sectionRegistry.get(key) || { key, label: label || key };
+    const resolvedLabel = label && String(label).trim() ? String(label).trim() : '';
+    if (resolvedLabel) {
+      existing.label = resolvedLabel;
+    } else if (!existing.label) {
+      existing.label = existing.key;
+    }
+    sectionRegistry.set(key, existing);
+  }
+
   function resetColumnMetadata() {
     columnRegistry.clear();
+    sectionRegistry.clear();
     tableMetadataList = [];
     tableMetadataMap = new WeakMap();
   }
@@ -593,6 +660,10 @@ function createFormatter(config) {
     const hiddenColumns = filterState.hiddenColumns || new Set();
     filterState.hiddenColumns = new Set(
       Array.from(hiddenColumns).filter((columnKey) => columnRegistry.has(columnKey)),
+    );
+    const hiddenSections = filterState.hiddenSections || new Set();
+    filterState.hiddenSections = new Set(
+      Array.from(hiddenSections).filter((sectionKey) => sectionRegistry.has(sectionKey)),
     );
     const conditions = filterState.columnConditions || {};
     Object.keys(conditions).forEach((columnKey) => {
@@ -774,7 +845,12 @@ function createFormatter(config) {
     const columnFilters = filterState.columnConditions
       ? Object.keys(filterState.columnConditions).filter((key) => filterState.columnConditions[key]).length > 0
       : false;
-    return columnFilters || filterState.hiddenColumns.size > 0 || Boolean(filterState.hideEmptySections);
+    return (
+      columnFilters ||
+      filterState.hiddenColumns.size > 0 ||
+      filterState.hiddenSections.size > 0 ||
+      Boolean(filterState.hideEmptySections)
+    );
   }
 
   function applyColumnVisibility() {
@@ -799,9 +875,15 @@ function createFormatter(config) {
       return;
     }
     const sections = comboRoot.querySelectorAll('.combo-section');
-    const shouldHide = Boolean(filterState.hideEmptySections);
+    const shouldHideEmpty = Boolean(filterState.hideEmptySections);
     sections.forEach((section) => {
-      if (!shouldHide) {
+      const key = section.dataset.sectionKey;
+      const manuallyHidden = key ? filterState.hiddenSections.has(key) : false;
+      if (manuallyHidden) {
+        section.setAttribute('hidden', 'true');
+        return;
+      }
+      if (!shouldHideEmpty) {
         section.removeAttribute('hidden');
         return;
       }
@@ -877,6 +959,20 @@ function createFormatter(config) {
     updateFilterButtonState();
   }
 
+  function setSectionHidden(sectionKey, hidden) {
+    if (!sectionKey || !sectionRegistry.has(sectionKey)) {
+      return;
+    }
+    if (hidden) {
+      filterState.hiddenSections.add(sectionKey);
+    } else {
+      filterState.hiddenSections.delete(sectionKey);
+    }
+    persistFilterState();
+    updateSectionVisibility();
+    updateFilterButtonState();
+  }
+
   function setColumnCondition(columnKey, condition) {
     if (!columnKey) {
       return;
@@ -911,6 +1007,11 @@ function createFormatter(config) {
         entry.conditionControl.update(filterState.columnConditions[columnKey]);
       }
     });
+    sectionUiState.forEach((entry, sectionKey) => {
+      if (entry.visibilityCheckbox) {
+        entry.visibilityCheckbox.checked = !filterState.hiddenSections.has(sectionKey);
+      }
+    });
     if (filterInterface && filterInterface.hideEmptyCheckbox) {
       filterInterface.hideEmptyCheckbox.checked = Boolean(filterState.hideEmptySections);
     }
@@ -932,6 +1033,9 @@ function createFormatter(config) {
     const nextState = cloneFilterState(state);
     nextState.hiddenColumns = new Set(
       Array.from(nextState.hiddenColumns || []).filter((columnKey) => columnRegistry.has(columnKey)),
+    );
+    nextState.hiddenSections = new Set(
+      Array.from(nextState.hiddenSections || []).filter((sectionKey) => sectionRegistry.has(sectionKey)),
     );
     Object.keys(nextState.columnConditions).forEach((columnKey) => {
       const column = columnRegistry.get(columnKey);
@@ -1311,9 +1415,34 @@ function createFormatter(config) {
       return;
     }
     columnUiState.clear();
+    sectionUiState.clear();
+    const sections = Array.from(sectionRegistry.values());
     const columns = Array.from(columnRegistry.values());
-    columns.sort((left, right) => left.label.localeCompare(right.label, undefined, { sensitivity: 'base' }));
     const filterableColumns = columns.filter((column) => column.filterEnabled !== false);
+
+    if (filterInterface.sectionVisibilityContainer) {
+      filterInterface.sectionVisibilityContainer.innerHTML = '';
+      if (!sections.length) {
+        const notice = document.createElement('p');
+        notice.textContent = 'Sections will appear once combo data loads.';
+        filterInterface.sectionVisibilityContainer.appendChild(notice);
+      } else {
+        sections.forEach((section) => {
+          const label = document.createElement('label');
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.checked = !filterState.hiddenSections.has(section.key);
+          checkbox.addEventListener('change', () => {
+            setSectionHidden(section.key, !checkbox.checked);
+          });
+          label.appendChild(checkbox);
+          label.appendChild(document.createTextNode(section.label || section.key));
+          filterInterface.sectionVisibilityContainer.appendChild(label);
+
+          sectionUiState.set(section.key, { visibilityCheckbox: checkbox });
+        });
+      }
+    }
 
     if (filterInterface.visibilityContainer) {
       filterInterface.visibilityContainer.innerHTML = '';
@@ -1421,6 +1550,15 @@ function createFormatter(config) {
     header.appendChild(closeButton);
     panel.appendChild(header);
 
+    const sectionVisibilitySection = document.createElement('section');
+    sectionVisibilitySection.className = 'combo-filter-panel__section';
+    const sectionVisibilityHeading = document.createElement('h3');
+    sectionVisibilityHeading.textContent = 'Visible Sections';
+    const sectionVisibilityContainer = document.createElement('div');
+    sectionVisibilityContainer.className = 'combo-filter-visibility combo-filter-sections';
+    sectionVisibilitySection.appendChild(sectionVisibilityHeading);
+    sectionVisibilitySection.appendChild(sectionVisibilityContainer);
+
     const visibilitySection = document.createElement('section');
     visibilitySection.className = 'combo-filter-panel__section';
     const visibilityHeading = document.createElement('h3');
@@ -1477,6 +1615,7 @@ function createFormatter(config) {
     presetsSection.appendChild(presetSelect);
     presetsSection.appendChild(presetsActions);
 
+    panel.appendChild(sectionVisibilitySection);
     panel.appendChild(visibilitySection);
     panel.appendChild(conditionsSection);
     panel.appendChild(optionsSection);
@@ -1530,6 +1669,7 @@ function createFormatter(config) {
       button,
       overlay,
       panel,
+      sectionVisibilityContainer,
       visibilityContainer,
       conditionsContainer,
       hideEmptyCheckbox,
@@ -3186,6 +3326,7 @@ body.combo-filter-open {
     const sectionContainer = document.createElement('section');
     sectionContainer.className = 'combo-section';
     sectionContainer.dataset.sectionIndex = String(index);
+    const sectionLabel = resolveSectionLabel(section, index);
 
     const header = createHeader(section, formatText, defaultAutoFormat);
     header.classList.add('combo-section__header');
@@ -3197,6 +3338,9 @@ body.combo-filter-open {
 
     const baseId =
       (section && (section.headline_id || section.anchor)) || `combo-section-${index}`;
+    const sectionKey = String(baseId);
+    sectionContainer.dataset.sectionKey = sectionKey;
+    registerSectionMetadata(sectionKey, sectionLabel);
     const contentId = `${String(baseId).replace(/\s+/g, '-')}-content`;
     header.setAttribute('aria-controls', contentId);
     header.setAttribute('aria-expanded', 'true');
