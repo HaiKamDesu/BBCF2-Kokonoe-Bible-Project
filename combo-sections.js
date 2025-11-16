@@ -459,26 +459,61 @@ function createFormatter(config) {
     const label = resolveColumnLabel(column, index);
     const key = createColumnKey(label, index);
     const filterType = determineFilterTypeFromColumn(column);
-    return { key, label, filterType };
+    const filterEnabled = determineFilterEnabledFromColumn(column);
+    return { key, label, filterType, filterEnabled };
+  }
+
+  function normaliseFilterType(value) {
+    if (typeof value !== 'string') {
+      return null;
+    }
+    const trimmed = value.trim().toLowerCase();
+    if (!trimmed) {
+      return null;
+    }
+    if (['number', 'numeric', 'int', 'integer', 'float', 'decimal'].includes(trimmed)) {
+      return 'number';
+    }
+    if (['enum', 'enumeration', 'list', 'select', 'boolean', 'bool'].includes(trimmed)) {
+      return 'enum';
+    }
+    return 'text';
   }
 
   function determineFilterTypeFromColumn(column) {
     if (!column || typeof column !== 'object') {
       return null;
     }
-    if (typeof column.filterType === 'string') {
-      return column.filterType;
-    }
-    if (typeof column.filter_type === 'string') {
-      return column.filter_type;
-    }
-    if (column.filter && typeof column.filter === 'object' && typeof column.filter.type === 'string') {
-      return column.filter.type;
+    const typeValue =
+      column.type ||
+      column.filterType ||
+      column.filter_type ||
+      (column.filter && typeof column.filter === 'object' && (column.filter.type || column.filter.filterType));
+    const normalised = normaliseFilterType(typeValue);
+    if (normalised) {
+      return normalised;
     }
     if (column.sort && column.sort.type === 'number') {
       return 'number';
     }
     return null;
+  }
+
+  function determineFilterEnabledFromColumn(column) {
+    if (!column || typeof column !== 'object') {
+      return undefined;
+    }
+    const filterConfig = column.filter && typeof column.filter === 'object' ? column.filter : null;
+    if (filterConfig && filterConfig.enabled !== undefined) {
+      return Boolean(filterConfig.enabled);
+    }
+    if (column.filterable === false || column.filterEnabled === false) {
+      return false;
+    }
+    if (column.filterable === true || column.filterEnabled === true) {
+      return true;
+    }
+    return undefined;
   }
 
   function registerColumnDefinition(columnConfig) {
@@ -492,12 +527,16 @@ function createFormatter(config) {
       values: new Map(),
       numericCount: 0,
       totalCount: 0,
+      filterEnabled: true,
     };
     if (!existing.label && columnConfig.label) {
       existing.label = columnConfig.label;
     }
     if (columnConfig.filterType && !existing.explicitType) {
       existing.explicitType = columnConfig.filterType;
+    }
+    if (columnConfig.filterEnabled === false) {
+      existing.filterEnabled = false;
     }
     columnRegistry.set(columnConfig.key, existing);
   }
@@ -543,6 +582,23 @@ function createFormatter(config) {
       if (entry.type === 'enum') {
         entry.enumValues = Array.from(entry.values.entries()).map(([value, label]) => ({ value, label }));
         entry.enumValues.sort((left, right) => left.label.localeCompare(right.label, undefined, { sensitivity: 'base' }));
+      }
+    });
+  }
+
+  function pruneFilterState() {
+    if (!filterState) {
+      return;
+    }
+    const hiddenColumns = filterState.hiddenColumns || new Set();
+    filterState.hiddenColumns = new Set(
+      Array.from(hiddenColumns).filter((columnKey) => columnRegistry.has(columnKey)),
+    );
+    const conditions = filterState.columnConditions || {};
+    Object.keys(conditions).forEach((columnKey) => {
+      const column = columnRegistry.get(columnKey);
+      if (!column || column.filterEnabled === false) {
+        delete conditions[columnKey];
       }
     });
   }
@@ -825,6 +881,16 @@ function createFormatter(config) {
     if (!columnKey) {
       return;
     }
+    const column = columnRegistry.get(columnKey);
+    if (!column || column.filterEnabled === false) {
+      if (filterState.columnConditions[columnKey]) {
+        delete filterState.columnConditions[columnKey];
+        persistFilterState();
+        applyFilters();
+        updateFilterButtonState();
+      }
+      return;
+    }
     const normalised = cloneCondition(condition);
     if (normalised) {
       filterState.columnConditions[columnKey] = normalised;
@@ -868,11 +934,13 @@ function createFormatter(config) {
       Array.from(nextState.hiddenColumns || []).filter((columnKey) => columnRegistry.has(columnKey)),
     );
     Object.keys(nextState.columnConditions).forEach((columnKey) => {
-      if (!columnRegistry.has(columnKey)) {
+      const column = columnRegistry.get(columnKey);
+      if (!column || column.filterEnabled === false) {
         delete nextState.columnConditions[columnKey];
       }
     });
     filterState = nextState;
+    pruneFilterState();
     persistFilterState();
     applyColumnVisibility();
     applyFilters();
@@ -1245,6 +1313,7 @@ function createFormatter(config) {
     columnUiState.clear();
     const columns = Array.from(columnRegistry.values());
     columns.sort((left, right) => left.label.localeCompare(right.label, undefined, { sensitivity: 'base' }));
+    const filterableColumns = columns.filter((column) => column.filterEnabled !== false);
 
     if (filterInterface.visibilityContainer) {
       filterInterface.visibilityContainer.innerHTML = '';
@@ -1274,16 +1343,22 @@ function createFormatter(config) {
 
     if (filterInterface.conditionsContainer) {
       filterInterface.conditionsContainer.innerHTML = '';
-      columns.forEach((column) => {
-        const control = createConditionControl(column);
-        if (!control) {
-          return;
-        }
-        filterInterface.conditionsContainer.appendChild(control.element);
-        const entry = columnUiState.get(column.key) || {};
-        entry.conditionControl = control;
-        columnUiState.set(column.key, entry);
-      });
+      if (!filterableColumns.length) {
+        const notice = document.createElement('p');
+        notice.textContent = 'No columns available for filtering.';
+        filterInterface.conditionsContainer.appendChild(notice);
+      } else {
+        filterableColumns.forEach((column) => {
+          const control = createConditionControl(column);
+          if (!control) {
+            return;
+          }
+          filterInterface.conditionsContainer.appendChild(control.element);
+          const entry = columnUiState.get(column.key) || {};
+          entry.conditionControl = control;
+          columnUiState.set(column.key, entry);
+        });
+      }
     }
 
     renderPresetOptions();
@@ -2995,6 +3070,9 @@ body.combo-filter-open {
       if (columnInfo.filterType) {
         columnConfig.filterType = columnInfo.filterType;
       }
+      if (columnInfo.filterEnabled !== undefined) {
+        columnConfig.filterEnabled = columnInfo.filterEnabled;
+      }
       registerColumnDefinition(columnConfig);
 
       columnConfigs.push(columnConfig);
@@ -3271,6 +3349,7 @@ body.combo-filter-open {
         });
         comboRoot.appendChild(fragment);
         finaliseColumnRegistry();
+        pruneFilterState();
         ensureFilterInterface();
         renderFilterControls();
         applyColumnVisibility();

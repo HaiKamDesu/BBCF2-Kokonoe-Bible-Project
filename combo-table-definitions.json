@@ -6,13 +6,22 @@
       "style": "margin: 1em auto 1em auto;text-align: center"
     },
     "columns": [
-      "Position",
-      //Type, aka Neutral, Crouch confirm, Air-To-Air, Air-To-Ground, Anti-Air, Off-The-Ground
-      "Type",
-      "Starters",
-      //Route
-      "Route",
-      //Damage
+      {
+        "text": "Position",
+        "type": "int"
+      },
+      {
+        "text": "Type",
+        "type": "enum"
+      },
+      {
+        "text": "Starters",
+        "type": "string"
+      },
+      {
+        "text": "Route",
+        "type": "string"
+      },
       {
         "text": "Damage",
         "color": "#4EA5FF",
@@ -22,9 +31,9 @@
         "sort": {
           "type": "number",
           "strategy": "max"
-        }
+        },
+        "type": "int"
       },
-      //Heat Gain
       {
         "text": "Heat Gain",
         "color": "#FF6B6B",
@@ -34,9 +43,9 @@
         "sort": {
           "type": "number",
           "strategy": "max"
-        }
+        },
+        "type": "int"
       },
-      //Minimum Heat
       {
         "text": "Minimum Heat",
         "color": "#FF6B6B",
@@ -46,9 +55,9 @@
         "sort": {
           "type": "number",
           "strategy": "max"
-        }
+        },
+        "type": "int"
       },
-      //Graviton Cost
       {
         "text": "Graviton Cost",
         "header": {
@@ -57,29 +66,59 @@
         "sort": {
           "type": "number",
           "strategy": "max"
-        }
+        },
+        "type": "int"
       },
-      //Graviton Gain
-      "Graviton Gain",
-      //Extra Notes
-      "Notes",
-      //Video Example
+      {
+        "text": "Graviton Gain",
+        "type": "int"
+      },
+      {
+        "text": "Notes",
+        "type": "string"
+      },
       {
         "text": "Example",
         "header": {
           "align": "center"
+        },
+        "type": "string",
+        "filter": {
+          "enabled": false
         }
       },
-      //End Situation
-      "End Situation",
-      //Minimum OD Time
-      "Minimum OD Time",
-      "Is Counter Hit",
-      "Is Overdrive Only",
-      "Has ODC",
-      "Corner Carry",
-      "Has Rapid",
-      "Is Optimal"
+      {
+        "text": "End Situation",
+        "type": "string"
+      },
+      {
+        "text": "Minimum OD Time",
+        "type": "int"
+      },
+      {
+        "text": "Is Counter Hit",
+        "type": "enum"
+      },
+      {
+        "text": "Is Overdrive Only",
+        "type": "enum"
+      },
+      {
+        "text": "Has ODC",
+        "type": "enum"
+      },
+      {
+        "text": "Corner Carry",
+        "type": "string"
+      },
+      {
+        "text": "Has Rapid",
+        "type": "enum"
+      },
+      {
+        "text": "Is Optimal",
+        "type": "enum"
+      }
     ]
   },
   "standard": {
