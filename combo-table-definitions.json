@@ -6,13 +6,26 @@
       "style": "margin: 1em auto 1em auto;text-align: center"
     },
     "columns": [
-      "Position",
-      //Type, aka Neutral, Crouch confirm, Air-To-Air, Air-To-Ground, Anti-Air, Off-The-Ground
-      "Type",
-      "Starters",
-      //Route
-      "Route",
-      //Damage
+      {
+        "text": "Position",
+        "type": "int",
+        "description": "Valid starting screen position for the combo. Midscreen/Back to corner/Corner/Any"
+      },
+      {
+        "text": "Type",
+        "type": "enum",
+        "description": "Type of confirm. Neutral/Anti air/Crouching"
+      },
+      {
+        "text": "Starters",
+        "type": "string",
+        "description": "Valid buttons that work as starter for the combo"
+      },
+      {
+        "text": "Route",
+        "type": "string",
+        "description": "The combo string itself"
+      },
       {
         "text": "Damage",
         "color": "#4EA5FF",
@@ -22,9 +35,10 @@
         "sort": {
           "type": "number",
           "strategy": "max"
-        }
+        },
+        "type": "int",
+        "description": "The final damage of the combo (assuming no Active Flow/Counterhit or any buffs)"
       },
-      //Heat Gain
       {
         "text": "Heat Gain",
         "color": "#FF6B6B",
@@ -34,9 +48,10 @@
         "sort": {
           "type": "number",
           "strategy": "max"
-        }
+        },
+        "type": "int",
+        "description": "Meter gain for the combo"
       },
-      //Minimum Heat
       {
         "text": "Minimum Heat",
         "color": "#FF6B6B",
@@ -46,9 +61,10 @@
         "sort": {
           "type": "number",
           "strategy": "max"
-        }
+        },
+        "type": "int",
+        "description": "Minimum meter you have to have before starting the combo."
       },
-      //Graviton Cost
       {
         "text": "Graviton Cost",
         "header": {
@@ -57,29 +73,71 @@
         "sort": {
           "type": "number",
           "strategy": "max"
-        }
+        },
+        "type": "int",
+        "description": "How many gravitons you will spend doing this combo"
       },
-      //Graviton Gain
-      "Graviton Gain",
-      //Extra Notes
-      "Notes",
-      //Video Example
+      {
+        "text": "Graviton Gain",
+        "type": "int",
+        "description": "How many gravitons you recover from this combo"
+      },
+      {
+        "text": "Notes",
+        "type": "string",
+        "description": "A simple label for the combo"
+      },
       {
         "text": "Example",
         "header": {
           "align": "center"
-        }
+        },
+        "type": "string",
+        "filter": {
+          "enabled": false
+        },
+        "description": "A video example of the combo being done."
       },
-      //End Situation
-      "End Situation",
-      //Minimum OD Time
-      "Minimum OD Time",
-      "Is Counter Hit",
-      "Is Overdrive Only",
-      "Has ODC",
-      "Corner Carry",
-      "Has Rapid",
-      "Is Optimal"
+      {
+        "text": "End Situation",
+        "type": "string",
+        "description": "The situations you can get into once you pull off this combo, meaning setups/specific oki/etc. Can be one or more."
+      },
+      {
+        "text": "Minimum OD Time",
+        "type": "int",
+        "description": "Minimum OD timer for the combo."
+      },
+      {
+        "text": "Is Counter Hit",
+        "type": "enum",
+        "description": "If the starter has to land as counter hit."
+      },
+      {
+        "text": "Is Overdrive Only",
+        "type": "enum",
+        "description": "If the start has to land while you're already in overdrive."
+      },
+      {
+        "text": "Has ODC",
+        "type": "enum",
+        "description": "Whether the combo contains an overdrive cancel or not."
+      },
+      {
+        "text": "Corner Carry",
+        "type": "string",
+        "description": "5 Star based system to rank how far you will carry opponent. Each star after 1 is 25% of the screen, meaning 3 stars is half the screen, and 5 stars is corner to corner."
+      },
+      {
+        "text": "Has Rapid",
+        "type": "enum",
+        "description": "Whether the combo contains a rapid cancel."
+      },
+      {
+        "text": "Is Optimal",
+        "type": "enum",
+        "description": "An ambiguous check of the community, this being set to true means it is what is believed to be your optimal combo for the situation you got into."
+      }
     ]
   },
   "standard": {

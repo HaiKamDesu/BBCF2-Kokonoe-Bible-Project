@@ -1,0 +1,65 @@
+[
+  {
+    "key": "default-view",
+    "name": "Default view",
+    "description": "Baseline view used when resetting filters.",
+    "defaultReset": true,
+    "state": {
+      "hideEmptySections": false,
+      "hiddenColumns": ["example"],
+      "hiddenSections": [],
+      "columnConditions": {}
+    }
+  },
+  {
+    "key": "overdrive",
+    "name": "Overdrive Combos",
+    "description": "Show only combos flagged as Overdrive-only routes.",
+    "state": {
+      "hideEmptySections": true,
+      "hiddenColumns": [],
+      "hiddenSections": [],
+      "columnConditions": {
+        "is-overdrive-only": {
+          "type": "enum",
+          "mode": "include",
+          "values": ["yes", "true", "1", "✔", "✓"]
+        }
+      }
+    }
+  },
+  {
+    "key": "rapid-cancel",
+    "name": "Rapid Cancel Combos",
+    "description": "Focus on combos that require Rapid Cancel.",
+    "state": {
+      "hideEmptySections": true,
+      "hiddenColumns": [],
+      "hiddenSections": [],
+      "columnConditions": {
+        "has-rapid": {
+          "type": "enum",
+          "mode": "include",
+          "values": ["yes", "true", "1", "✔", "✓"]
+        }
+      }
+    }
+  },
+  {
+    "key": "odc",
+    "name": "ODC Combos",
+    "description": "Show combos that include Overdrive Cancel (ODC) routes.",
+    "state": {
+      "hideEmptySections": true,
+      "hiddenColumns": [],
+      "hiddenSections": [],
+      "columnConditions": {
+        "has-odc": {
+          "type": "enum",
+          "mode": "include",
+          "values": ["yes", "true", "1", "✔", "✓"]
+        }
+      }
+    }
+  }
+]
