@@ -141,6 +141,8 @@ function createFormatter(config) {
   const sectionUiState = new Map();
   let tocObserver = null;
   let hasStoredFilterState = false;
+  let latestSectionVisibility = new Map();
+  let defaultPresetValue = '';
 
   function createEmptyFilterState() {
     return {
@@ -169,6 +171,24 @@ function createFormatter(config) {
           .filter((value) => value),
       ),
     );
+  }
+
+  function applyTooltip(element, description) {
+    if (!element) {
+      return;
+    }
+    const tooltip = description && String(description).trim();
+    if (tooltip) {
+      element.setAttribute('title', tooltip);
+    } else {
+      element.removeAttribute('title');
+    }
+  }
+
+  function buildTooltip(description, hint) {
+    const descriptionText = description && String(description).trim();
+    const hintText = hint && String(hint).trim();
+    return [descriptionText, hintText].filter(Boolean).join(' ');
   }
 
   const safeStorage = (() => {
@@ -651,9 +671,13 @@ function createFormatter(config) {
       existing.sectionIndex = metadata.sectionIndex;
     }
 
-      if (Array.isArray(metadata.elements)) {
-        metadata.elements.filter(Boolean).forEach((element) => existing.elements.add(element));
-      }
+    if (metadata.hasStandaloneContent !== undefined) {
+      existing.hasStandaloneContent = Boolean(metadata.hasStandaloneContent);
+    }
+
+    if (Array.isArray(metadata.elements)) {
+      metadata.elements.filter(Boolean).forEach((element) => existing.elements.add(element));
+    }
 
       if (Array.isArray(metadata.navElements)) {
         metadata.navElements.filter(Boolean).forEach((element) => existing.navElements.add(element));
@@ -738,6 +762,43 @@ function createFormatter(config) {
     return `section-${fallbackIndex}`;
   }
 
+  function hasStandaloneSectionContent(heading) {
+    if (!heading || typeof document === 'undefined') {
+      return false;
+    }
+
+    let container = null;
+    if (heading.classList.contains('citizen-subsection-heading')) {
+      container = heading.closest('.citizen-subsection');
+    } else {
+      const content = heading.nextElementSibling;
+      if (content && content.matches && content.matches('section.citizen-section')) {
+        container = content;
+      }
+    }
+
+    if (!container) {
+      return false;
+    }
+
+    const TEXT_NODE = typeof Node !== 'undefined' ? Node.TEXT_NODE : 3;
+    const ELEMENT_NODE = typeof Node !== 'undefined' ? Node.ELEMENT_NODE : 1;
+
+    return Array.from(container.childNodes || []).some((node) => {
+      if (node.nodeType === TEXT_NODE) {
+        return node.textContent && node.textContent.trim();
+      }
+      if (node.nodeType !== ELEMENT_NODE) {
+        return false;
+      }
+      const element = node;
+      if (element.matches && element.matches('h3.citizen-subsection-heading, .citizen-subsection')) {
+        return false;
+      }
+      return element.textContent && element.textContent.trim();
+    });
+  }
+
   function registerPageSectionsFromDom() {
     if (typeof document === 'undefined') {
       return;
@@ -766,6 +827,7 @@ function createFormatter(config) {
         const elements = resolveHeadingElements(heading);
         const navElements = resolveSectionNavigationElements(key);
         const type = heading.classList.contains('combo-section__header') ? 'combo' : 'page';
+        const hasStandaloneContent = type === 'combo' ? true : hasStandaloneSectionContent(heading);
         registerSectionMetadata(key, label, {
           order,
           depth,
@@ -773,6 +835,7 @@ function createFormatter(config) {
           type,
           elements,
           navElements,
+          hasStandaloneContent,
         });
       stack.push({ key, level });
       order += 1;
@@ -1059,7 +1122,11 @@ function createFormatter(config) {
     const visited = new Set();
     while (current && current.parentKey && !visited.has(current.parentKey)) {
       const parentKey = current.parentKey;
-      if (filterState.hiddenSections.has(parentKey)) {
+      if (latestSectionVisibility.has(parentKey)) {
+        if (latestSectionVisibility.get(parentKey)) {
+          return true;
+        }
+      } else if (filterState.hiddenSections.has(parentKey)) {
         return true;
       }
       visited.add(parentKey);
@@ -1092,25 +1159,72 @@ function createFormatter(config) {
     const visibleRowCounts = shouldHideEmpty ? countVisibleRowsBySection() : new Map();
     ensureTocObserver();
     refreshNavigationElements();
-      sectionRegistry.forEach((entry) => {
-        const elements = entry.elements ? Array.from(entry.elements).filter(Boolean) : [];
-        const navElements = entry.navElements ? Array.from(entry.navElements).filter(Boolean) : [];
-        if (!elements.length) {
-          if (!navElements.length) {
-            return;
-          }
-        }
-        const manuallyHidden = filterState.hiddenSections.has(entry.key);
-        const ancestorHidden = sectionHasHiddenAncestor(entry.key);
-        let hidden = manuallyHidden || ancestorHidden;
-        if (!hidden && shouldHideEmpty && entry.type === 'combo') {
-          const visibleRows = visibleRowCounts.get(entry.key) || 0;
-          hidden = visibleRows === 0;
-        }
-        const targets = elements.concat(navElements);
-        targets.forEach((element) => setElementFilterHidden(element, hidden));
-      });
+    const sections = Array.from(sectionRegistry.values());
+    if (!sections.length) {
+      latestSectionVisibility = new Map();
+      return;
     }
+
+    const childrenByParent = new Map();
+    sections.forEach((entry) => {
+      if (entry.parentKey) {
+        if (!childrenByParent.has(entry.parentKey)) {
+          childrenByParent.set(entry.parentKey, []);
+        }
+        childrenByParent.get(entry.parentKey).push(entry);
+      }
+    });
+
+    const sectionsByDepth = [...sections].sort(
+      (left, right) => (left.depth || 0) - (right.depth || 0),
+    );
+
+    const baseHidden = new Map();
+    sectionsByDepth.forEach((entry) => {
+      let hidden = filterState.hiddenSections.has(entry.key);
+      if (!hidden && shouldHideEmpty && entry.type === 'combo') {
+        const visibleRows = visibleRowCounts.get(entry.key) || 0;
+        hidden = visibleRows === 0;
+      }
+      baseHidden.set(entry.key, hidden);
+    });
+
+    const effectiveHidden = new Map();
+    sectionsByDepth.forEach((entry) => {
+      const parentHidden = entry.parentKey ? effectiveHidden.get(entry.parentKey) : false;
+      effectiveHidden.set(entry.key, baseHidden.get(entry.key) || Boolean(parentHidden));
+    });
+
+    [...sectionsByDepth].reverse().forEach((entry) => {
+      if (effectiveHidden.get(entry.key)) {
+        return;
+      }
+      const children = childrenByParent.get(entry.key) || [];
+      if (!children.length) {
+        return;
+      }
+      if (entry.hasStandaloneContent) {
+        return;
+      }
+      const allChildrenHidden = children.every((child) => effectiveHidden.get(child.key));
+      if (allChildrenHidden) {
+        effectiveHidden.set(entry.key, true);
+      }
+    });
+
+    latestSectionVisibility = effectiveHidden;
+
+    sections.forEach((entry) => {
+      const elements = entry.elements ? Array.from(entry.elements).filter(Boolean) : [];
+      const navElements = entry.navElements ? Array.from(entry.navElements).filter(Boolean) : [];
+      if (!elements.length && !navElements.length) {
+        return;
+      }
+      const hidden = effectiveHidden.get(entry.key);
+      const targets = elements.concat(navElements);
+      targets.forEach((element) => setElementFilterHidden(element, hidden));
+    });
+  }
 
   function applyFilters() {
     if (!tableMetadataList.length) {
@@ -1229,6 +1343,17 @@ function createFormatter(config) {
   }
 
   function resetFilters() {
+    if (defaultPresetValue) {
+      applyPresetFromValue(defaultPresetValue);
+      if (filterInterface && filterInterface.presetSelect) {
+        filterInterface.presetSelect.value = defaultPresetValue;
+        filterInterface.selectedPresetValue = defaultPresetValue;
+        if (filterInterface.deletePresetButton) {
+          filterInterface.deletePresetButton.disabled = true;
+        }
+      }
+      return;
+    }
     filterState = createDefaultFilterState();
     persistFilterState();
     applyColumnVisibility();
@@ -1393,9 +1518,7 @@ function createFormatter(config) {
       details.className = 'combo-filter-condition';
       const summary = document.createElement('summary');
       summary.textContent = column.label;
-      if (column.description) {
-        summary.title = column.description;
-      }
+      applyTooltip(summary, column.description);
       details.appendChild(summary);
 
     const body = document.createElement('div');
@@ -1471,9 +1594,7 @@ function createFormatter(config) {
       details.className = 'combo-filter-condition';
       const summary = document.createElement('summary');
       summary.textContent = column.label;
-      if (column.description) {
-        summary.title = column.description;
-      }
+      applyTooltip(summary, column.description);
       details.appendChild(summary);
 
     const body = document.createElement('div');
@@ -1547,9 +1668,7 @@ function createFormatter(config) {
       details.className = 'combo-filter-condition';
       const summary = document.createElement('summary');
       summary.textContent = column.label;
-      if (column.description) {
-        summary.title = column.description;
-      }
+      applyTooltip(summary, column.description);
       details.appendChild(summary);
 
     const body = document.createElement('div');
@@ -1706,9 +1825,7 @@ function createFormatter(config) {
       } else {
           columns.forEach((column) => {
             const label = document.createElement('label');
-            if (column.description) {
-              label.title = column.description;
-            }
+            applyTooltip(label, column.description);
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.checked = !filterState.hiddenColumns.has(column.key);
@@ -3080,21 +3197,27 @@ body.combo-filter-open {
 
         if (config.sortDisabled) {
           header.removeAttribute('aria-sort');
-          header.removeAttribute('title');
+          applyTooltip(header, buildTooltip(config.description));
           return;
         }
 
         header.setAttribute('aria-sort', 'none');
-        header.setAttribute('title', 'Sort ascending');
+        applyTooltip(header, buildTooltip(config.description, 'Click to sort'));
       });
 
       const activeHeader = headers[columnIndex];
       if (activeHeader) {
         const ascending = order === 'asc';
+        const activeConfig = columnConfigs[columnIndex] || {};
         activeHeader.classList.add(ascending ? 'headerSortUp' : 'headerSortDown');
         activeHeader.setAttribute('aria-sort', ascending ? 'ascending' : 'descending');
         activeHeader.dataset.sortOrder = order;
-        activeHeader.setAttribute('title', ascending ? 'Sort descending' : 'Sort ascending');
+        const toggleHint = activeConfig.sortDisabled
+          ? ''
+          : ascending
+          ? 'Sort descending'
+          : 'Sort ascending';
+        applyTooltip(activeHeader, buildTooltip(activeConfig.description, toggleHint));
       }
     };
 
@@ -3638,12 +3761,8 @@ body.combo-filter-open {
             th.dataset.sortInitialOrder = columnConfig.sort.initialOrder;
           }
         }
-        if (columnConfig.description) {
-          const hint = columnConfig.sortDisabled ? '' : ' (click to sort)';
-          th.setAttribute('title', `${columnConfig.description}${hint}`.trim());
-        } else {
-          th.setAttribute('title', 'Sort ascending');
-        }
+        const sortHint = columnConfig.sortDisabled ? '' : 'Click to sort';
+        applyTooltip(th, buildTooltip(columnConfig.description, sortHint));
         if (columnConfig.key) {
           th.dataset.columnKey = columnConfig.key;
         }
@@ -3903,6 +4022,7 @@ body.combo-filter-open {
         const resolvedDefinitions = tableDefinitions || {};
         builtInPresets = normalisePresetDefinitions(presetDefinitions);
         const defaultPreset = builtInPresets.find((preset) => preset.defaultReset);
+        defaultPresetValue = defaultPreset ? `built-in:${defaultPreset.key}` : '';
         if (defaultPreset) {
           resetBaselineState = serialiseFilterState(defaultPreset.state || createDefaultFilterState());
           if (!hasStoredFilterState) {
