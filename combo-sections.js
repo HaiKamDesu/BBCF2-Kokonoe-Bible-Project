@@ -3005,6 +3005,10 @@ body.combo-filter-open {
       return csvUrl;
     }
 
+    if (!/^https?:\/\//i.test(csvUrl)) {
+      return csvUrl;
+    }
+
     try {
       const url = new URL(csvUrl);
       const isGoogleSheet =

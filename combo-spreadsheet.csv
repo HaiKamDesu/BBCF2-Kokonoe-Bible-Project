@@ -1,0 +1,25 @@
+Verified,Situation,Position,Type,Starters,Route,Damage,Heat Gain,Minimum Heat,Graviton Cost,Graviton Gain,Label,Extra Notes,Video Example,Ending Situation,Minimum OD,Is Counter Hit,Is Overdrive Combo,Has Overdrive Cancel,Corner Carry,Has Rapid,Is Optimal,Difficulty,Does not work on,From
+,Neutral,Midscreen,Neutral,Any,5A > 5B > 5C > 2C > 7D > 5B > 6A > 5B > 5C > 236A |> 66~5C > 236A > 5C > 22B,2618,,,1,,Beginner Corner Carry,,,5C Ender,None,No,No,No,,No,No,1/5,,BBCF Koko Resources.docx
+,Neutral,Corner,Neutral,Any,5A > 5B > 5C > 3C > 236A > 5B > 6A > jC > j3D > jB(1) > jC > j214A/B/C |> 22B  ,2206,,,1,,Beginner Corner j.3D Fireball Setup,,,j.3D Fireball Oki,None,No,No,No,,No,No,1/5,,BBCF Koko Resources.docx
+,j.3D Fireball Oki,Corner,Neutral,6B,6B > 5C > 3C > 236A > 5B > 6A >  jC > j3D > jB(1) > jC > j214A,,,,1,,Beginner Overhead j.3D Fireball Option,,,j.3D Fireball Oki,None,No,No,No,,No,No,1/5,,BBCF Koko Resources.docx
+,j.3D Fireball Oki,Corner,Neutral,2B,2B > 5B > 5C > 3C > 236A > 5B > 6A > jC > j3D > jB(1) > jC > j214A,,,,1,,Beginner Low j.3D Fireball Option,,,j.3D Fireball Oki,None,No,No,No,,No,No,1/5,,BBCF Koko Resources.docx
+,j.3D Fireball Oki,Corner,Neutral,22C,22C > (fireball hits) > 5B > 5C > 2C] > 6C > j7D > j236B > jB(1) > j236D |> 66~6B > 5C > 214X,,,,2,,Beginner Crossup j.3D Fireball Option,,,5C Ender,None,No,No,No,,No,No,1/5,,BBCF Koko Resources.docx
+,j.3D Fireball Oki,Corner,Neutral,Throw,BC > 236D > 22B > 5B > 5C > (22B hits) > 6B > 5C > 3C(1) > 214A,,,,1,,Beginner Throw j.3D Fireball Option,,,5C Ender,None,No,No,No,,No,No,1/5,,BBCF Koko Resources.docx
+,Neutral,Anywhere,Anti Air,6A,6A > jB > jB > j2C > jD > jB(1) > j236B > jB(1) > j236D |> 22B > 5AA > 6[B] > 5C > 236[A],3286,,,2,,Beginner Anti Air Route,,,5C Ender,None,No,No,No,,No,No,1/5,,BBCF Koko Resources.docx
+,Neutral,Anywhere,Anti Air,j.B,jB(1) > jC > j9D > j236D |> 66~5B > 6A > 6C > 5B > 5C > 3C(1) > 4D > 5C > 236A,,,,3,,Beginner Anti Air j.B Route,,,5C Ender,None,No,No,No,,No,No,1/5,,BBCF Koko Resources.docx
+,Neutral,Midscreen,Neutral,Throw,BC > 8D > 236B > jB(1) > j236D |> 6B > 5C > 3C(1) > 214X,,,,2,,Beginner Throw Route,,,5C Ender,None,No,No,No,,No,No,1/5,,BBCF Koko Resources.docx
+,Neutral,Anywhere,Neutral,"5C, 2C, 3C",(5C/2C) > 3C > 236[A] > 5A > 5B > 6A > 6C > j8D > j236B > jB(1) > j236D |> 22B > 2C > 6B > 5C > 3C(1) > 214X,,,,2,,High Damage Route,,,5C Ender,None,No,No,No,,No,No,4/5,,BBCF Koko Resources.docx
+,Neutral,Midscreen,Neutral,"5A, 2A",5A > 5B > 5C > 2C > 7D > 5B > 6A > 5B > 5C > 236A |> 66~5C > 236A > 5C > 22B,2618,17,,1,,,,,5C Ender,None,No,No,No,,No,No,2/5,"Noel, Valkenhayn",BBCF Koko Resources.docx
+,Neutral,"Midscreen, Corner",Neutral,"5A, 2A",5A > 5B > 5C > 2C > 7D > 5B > 5C > 236A > 66~6C > j214X > j236D |> 66 > 6B > 5C > 3C(1) > 22A > 5C > 214X,2822,20,,2,,,"If the opponent techs when hitting the wall, the fireball is hitting too much (4th hit is the one that launches).
+The j214B > j236D can be a bit tricky, you must input activate later than it seems.
+When too far to reach corner with the fireball launch, you can set-up midscreen oki by using the following;
+236D > 9D > 22C > 22B
+Use B fireball for most of the cast
+Use C fireball for;
+Amane, Carl, Hibiki, Mai
+Makoto requires 6C >~ j214C
+Rachel requires 6C >~ j214A
+This route does not work on Noel, or Valkenhayn",,5C Ender,None,No,No,No,,No,No,2/5,,BBCF Koko Resources.docx
+,Neutral,,Anti Air,5A,5A > jA (4) > jA(1) > jB(1) > j2C > j2D > jB(1) > j2C > j236[D] > jB(1) |> ]D[ + 22B > 5B > 214B > 5C > 3C > 236[A] > 2A > 6B > 5C > IAD,,,,2,,,"Sets up bunker bomb oki / tech trap
+Catches rolls, allows IAD |> 22B safely while the bomb is exploding.",,,,,,,,,,,,
+,Neutral,,Crouching,5A,5A > 5B > 2C > 6C >~ j9B(1) |> 5B > 5C > 3C(1) > 22A > 6B > 5C > 236A >66~5C > 22B,,,,,,,,,,,,,,,,,,,
