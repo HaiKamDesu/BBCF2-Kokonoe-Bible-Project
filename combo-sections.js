@@ -122,8 +122,16 @@ function createFormatter(config) {
   const EXPAND_ICON_MASK =
     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyMCAyMCc+PHBhdGggZmlsbD0nd2hpdGUnIGQ9J003IDVsNiA1LTYgNXonLz48L3N2Zz4=';
   const COMBO_SECTIONS_ROOT_ID = 'combo-sections-root';
+  const DATABASE_ROOT_ID = 'combo-database-root';
+  const VIEW_MODES = { GUIDE: 'guide', DATABASE: 'database' };
 
   let comboRoot = null;
+  let guideRoot = null;
+  let databaseRoot = null;
+  let currentViewMode = VIEW_MODES.GUIDE;
+  let cachedSections = [];
+  let cachedFormatText = null;
+  let cachedTableDefinitions = {};
   let hasInitialised = false;
   const FILTER_STATE_STORAGE_KEY = 'comboFilters.state';
   const CUSTOM_PRESETS_STORAGE_KEY = 'comboFilters.customPresets';
@@ -1453,15 +1461,14 @@ function createFormatter(config) {
     }
     const select = filterInterface.presetSelect;
     const previousValue = filterInterface.selectedPresetValue || '';
+    const desiredValue = previousValue || defaultPresetValue || '';
     select.innerHTML = '';
 
     const placeholder = document.createElement('option');
     placeholder.value = '';
     placeholder.textContent = 'Choose a preset';
     placeholder.disabled = true;
-    if (!previousValue) {
-      placeholder.selected = true;
-    }
+    placeholder.selected = !desiredValue;
     select.appendChild(placeholder);
 
       if (builtInPresets.length) {
@@ -1494,17 +1501,13 @@ function createFormatter(config) {
         select.appendChild(customGroup);
       }
 
-      if (previousValue) {
-        select.value = previousValue;
-        if (select.value !== previousValue) {
-          select.value = '';
-        }
-      } else {
-        select.value = '';
-      }
+      const resolvedValue = desiredValue && select.querySelector(`option[value="${desiredValue}"]`)
+        ? desiredValue
+        : '';
 
-      filterInterface.selectedPresetValue = select.value;
-      placeholder.selected = select.value === '';
+      select.value = resolvedValue;
+      filterInterface.selectedPresetValue = resolvedValue;
+      placeholder.selected = resolvedValue === '';
 
       if (filterInterface.deletePresetButton) {
         filterInterface.deletePresetButton.disabled = !(
@@ -2602,7 +2605,100 @@ body.combo-filter-open {
   .citizen-section-heading[role="button"]:focus-visible {
     outline: 2px solid currentColor;
     outline-offset: 2px;
-}
+  }
+
+  #view-toggle {
+    display: flex;
+    justify-content: center;
+  }
+
+  .view-toggle {
+    margin: 1rem auto 1.1rem;
+    display: inline-flex;
+    align-items: stretch;
+    width: min(100%, 22rem);
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.25));
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--color-surface-2, rgba(14, 17, 25, 0.82));
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.25);
+  }
+
+  .view-toggle__button {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: 0.6rem 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    flex: 1 1 0;
+    text-align: center;
+    transition: background 150ms ease-in-out, color 150ms ease-in-out;
+  }
+
+  .view-toggle__button + .view-toggle__button {
+    border-left: 1px solid var(--color-border, rgba(255, 255, 255, 0.15));
+  }
+
+  .view-toggle__button:hover:not(.view-toggle__button--active) {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .view-toggle__button--active {
+    background: var(--color-progressive, #ff6b6b);
+    color: #fff;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+  }
+
+  #database-view-root {
+    margin: 1rem 0 0;
+    width: 100%;
+  }
+
+  #database-view-root[hidden] {
+    display: none !important;
+  }
+
+  body.database-view-active .citizen-page-sidebar {
+    display: none !important;
+  }
+
+  body.database-view-active #page-sections-root {
+    display: none !important;
+  }
+
+  body.database-view-active #database-view-root {
+    display: block;
+  }
+
+  body.database-view-active #combo-database-root {
+    width: 100%;
+  }
+
+  body.database-view-active #combo-database-root .wikitable {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .combo-section.combo-section--database .combo-section__header {
+    cursor: default;
+  }
+
+  .combo-section--database .combo-section__indicator {
+    display: none;
+  }
+
+  .combo-section--database {
+    margin: 0;
+    padding: 0;
+  }
+
+  .combo-section--database .combo-section__content {
+    margin-top: 0.5rem;
+  }
 `;
 
     if (document.head) {
@@ -3952,6 +4048,61 @@ body.combo-filter-open {
     return sectionContainer;
   };
 
+  const createDatabaseSectionConfig = (sections) => {
+    const combinedRows = [];
+
+    sections.forEach((section) => {
+      (section.rows || []).forEach((row) => {
+        if (!Array.isArray(row)) {
+          return;
+        }
+        combinedRows.push([...row]);
+      });
+    });
+
+    return {
+      anchor: 'Combo_Database',
+      headline_id: 'Combo_Database',
+      descriptions: [],
+      rows: combinedRows,
+      table: { type: 'database' },
+    };
+  };
+
+  const createDatabaseSectionElement = (
+    section,
+    formatText,
+    defaultAutoFormat,
+    tableDefinitions,
+    sectionIndex = 0,
+  ) => {
+    const sectionContainer = document.createElement('div');
+    sectionContainer.className = 'combo-section combo-section--database';
+    sectionContainer.dataset.sectionIndex = String(sectionIndex);
+    const sectionLabel = resolveSectionLabel(section, sectionIndex);
+
+    const baseId = (section && (section.headline_id || section.anchor)) || 'combo-database';
+    const sectionKey = String(baseId);
+    sectionContainer.dataset.sectionKey = sectionKey;
+    registerSectionMetadata(sectionKey, sectionLabel, {
+      sectionIndex,
+      type: 'combo',
+      elements: [sectionContainer],
+      hasStandaloneContent: true,
+    });
+
+    const table = createTable(section, formatText, defaultAutoFormat, tableDefinitions, sectionIndex);
+    if (table) {
+      const metadata = tableMetadataMap.get(table);
+      if (metadata) {
+        metadata.sectionKey = sectionKey;
+      }
+      sectionContainer.appendChild(table);
+    }
+
+    return sectionContainer;
+  };
+
   const initialiseTableSorter = () => {
     try {
       if (window.jQuery && window.jQuery.fn && typeof window.jQuery.fn.tablesorter === 'function' && comboRoot) {
@@ -3964,15 +4115,148 @@ body.combo-filter-open {
     }
   };
 
+  const finaliseRender = () => {
+    finaliseColumnRegistry();
+    pruneFilterState();
+    ensureFilterInterface();
+    renderFilterControls();
+    applyColumnVisibility();
+    applyFilters();
+    updateFilterButtonState();
+    initialiseTableSorter();
+  };
+
+  const renderGuideSections = () => {
+    if (!guideRoot || !cachedSections.length || !cachedFormatText) {
+      return;
+    }
+
+    comboRoot = guideRoot;
+    resetColumnMetadata();
+    guideRoot.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+    cachedSections.forEach((section, index) => {
+      const defaultAutoFormat = !(
+        section && (section.auto_format === false || section.auto_format === 'none')
+      );
+      fragment.appendChild(
+        createSection(section, cachedFormatText, defaultAutoFormat, cachedTableDefinitions, index),
+      );
+    });
+    guideRoot.appendChild(fragment);
+    registerPageSectionsFromDom();
+    finaliseRender();
+  };
+
+  const renderDatabaseView = () => {
+    if (!databaseRoot || !cachedSections.length || !cachedFormatText) {
+      return;
+    }
+
+    comboRoot = databaseRoot;
+    resetColumnMetadata();
+    databaseRoot.innerHTML = '';
+    const databaseSection = createDatabaseSectionConfig(cachedSections);
+    const sectionElement = createDatabaseSectionElement(
+      databaseSection,
+      cachedFormatText,
+      true,
+      cachedTableDefinitions,
+    );
+    databaseRoot.appendChild(sectionElement);
+    finaliseRender();
+  };
+
+  const renderCurrentView = () => {
+    if (currentViewMode === VIEW_MODES.DATABASE) {
+      renderDatabaseView();
+    } else {
+      renderGuideSections();
+    }
+  };
+
+  const updateViewToggleState = () => {
+    const toggle = document.getElementById('view-toggle');
+    const pageSections = document.getElementById('page-sections-root');
+    const databaseContainer = document.getElementById('database-view-root');
+    const hasDatabaseTarget = Boolean(databaseRoot);
+
+    if (!hasDatabaseTarget && currentViewMode === VIEW_MODES.DATABASE) {
+      currentViewMode = VIEW_MODES.GUIDE;
+    }
+
+    if (toggle) {
+      toggle.querySelectorAll('[data-view-mode]').forEach((button) => {
+        const mode = button.dataset.viewMode === VIEW_MODES.DATABASE ? VIEW_MODES.DATABASE : VIEW_MODES.GUIDE;
+        const isActive = mode === currentViewMode;
+        button.classList.toggle('view-toggle__button--active', isActive);
+        button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        if (mode === VIEW_MODES.DATABASE && !hasDatabaseTarget) {
+          button.setAttribute('disabled', 'true');
+        } else {
+          button.removeAttribute('disabled');
+        }
+      });
+    }
+
+    if (pageSections) {
+      if (currentViewMode === VIEW_MODES.DATABASE) {
+        pageSections.setAttribute('hidden', '');
+      } else {
+        pageSections.removeAttribute('hidden');
+      }
+    }
+
+    if (databaseContainer) {
+      if (currentViewMode === VIEW_MODES.DATABASE) {
+        databaseContainer.removeAttribute('hidden');
+      } else {
+        databaseContainer.setAttribute('hidden', '');
+      }
+    }
+
+    if (typeof document !== 'undefined' && document.body) {
+      document.body.classList.toggle('database-view-active', currentViewMode === VIEW_MODES.DATABASE);
+    }
+  };
+
+  const setViewMode = (mode, { skipRender } = {}) => {
+    const resolvedMode = mode === VIEW_MODES.DATABASE && databaseRoot ? VIEW_MODES.DATABASE : VIEW_MODES.GUIDE;
+    currentViewMode = resolvedMode;
+    updateViewToggleState();
+    if (!skipRender && cachedSections.length && cachedFormatText) {
+      renderCurrentView();
+    }
+  };
+
+  const initialiseViewToggle = () => {
+    const toggle = document.getElementById('view-toggle');
+    if (!toggle) {
+      return;
+    }
+
+    toggle.querySelectorAll('[data-view-mode]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const mode = button.dataset.viewMode === VIEW_MODES.DATABASE ? VIEW_MODES.DATABASE : VIEW_MODES.GUIDE;
+        setViewMode(mode);
+      });
+    });
+
+    updateViewToggleState();
+  };
+
   const initialise = (rootElement) => {
     if (!rootElement || hasInitialised) {
       return;
     }
 
-    comboRoot = rootElement;
+    guideRoot = rootElement;
+    databaseRoot = document.getElementById(DATABASE_ROOT_ID);
+    comboRoot = guideRoot;
     hasInitialised = true;
 
     ensureStyles();
+    initialiseViewToggle();
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initialiseCitizenSectionHeadings, { once: true });
@@ -4031,30 +4315,10 @@ body.combo-filter-open {
           }
         }
 
-        if (!comboRoot) {
-          throw new Error('Combo sections root element is missing.');
-        }
-        resetColumnMetadata();
-        comboRoot.innerHTML = '';
-        const fragment = document.createDocumentFragment();
-        resolvedSections.forEach((section, index) => {
-          const defaultAutoFormat = !(
-            section && (section.auto_format === false || section.auto_format === 'none')
-          );
-          fragment.appendChild(
-            createSection(section, formatText, defaultAutoFormat, resolvedDefinitions, index),
-          );
-        });
-        comboRoot.appendChild(fragment);
-        registerPageSectionsFromDom();
-        finaliseColumnRegistry();
-        pruneFilterState();
-        ensureFilterInterface();
-        renderFilterControls();
-        applyColumnVisibility();
-        applyFilters();
-        updateFilterButtonState();
-        initialiseTableSorter();
+        cachedSections = resolvedSections;
+        cachedFormatText = formatText;
+        cachedTableDefinitions = resolvedDefinitions;
+        setViewMode(currentViewMode);
       })
       .catch((error) => {
         console.error(error);

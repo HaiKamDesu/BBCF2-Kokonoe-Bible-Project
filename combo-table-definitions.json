@@ -142,5 +142,8 @@
   },
   "standard": {
     "extends": "default"
+  },
+  "database": {
+    "extends": "default"
   }
 }
