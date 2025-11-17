@@ -3104,17 +3104,17 @@ body.combo-filter-open {
     return fallbackType;
   };
 
-  const resolveBaseColumns = (section, tableDefinitions, defaultTableType) => {
-    const tableType = getSectionTableType(section, defaultTableType);
-    const tableDefinition = resolveDefinitionForType(tableDefinitions || {}, tableType);
-    if (Array.isArray(section.columns)) {
-      return section.columns;
-    }
-    if (Array.isArray(tableDefinition.columns)) {
-      return tableDefinition.columns;
-    }
-    return [];
-  };
+    const resolveBaseColumns = (section, tableDefinitions, defaultTableType) => {
+      const tableType = getSectionTableType(section, defaultTableType);
+      const tableDefinition = resolveDefinitionForType(tableDefinitions || {}, tableType) || {};
+      if (section && Array.isArray(section.columns)) {
+        return section.columns;
+      }
+      if (Array.isArray(tableDefinition.columns)) {
+        return tableDefinition.columns;
+      }
+      return [];
+    };
 
   const mapSheetRowToValues = (rowObject, headers) =>
     headers.map((header) => {
@@ -4560,6 +4560,18 @@ body.combo-filter-open {
     updateViewToggleState();
   };
 
+  const displayLoadError = (error) => {
+    const detail = error && (error.message || error);
+    const message = detail ? `Unable to load combo tables. (${detail})` : 'Unable to load combo tables.';
+    console.error('Failed to initialise combo tables', error);
+    if (comboRoot) {
+      comboRoot.textContent = message;
+    }
+    if (databaseRoot) {
+      databaseRoot.textContent = message;
+    }
+  };
+
   const initialise = (rootElement) => {
     if (!rootElement || hasInitialised) {
       return;
@@ -4667,13 +4679,7 @@ body.combo-filter-open {
         setViewMode(currentViewMode);
       })
       .catch((error) => {
-        console.error(error);
-        if (comboRoot) {
-          comboRoot.textContent = 'Unable to load combo tables.';
-        }
-        if (databaseRoot) {
-          databaseRoot.textContent = 'Unable to load combo tables.';
-        }
+        displayLoadError(error);
       });
   };
 
