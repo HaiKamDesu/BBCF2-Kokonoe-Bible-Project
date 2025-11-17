@@ -40,3 +40,23 @@ HTTPS is disabled by default to avoid certificate trust prompts. If you prefer H
 ## Deployment
 
 The `index.html` and `dustloop-assets/` directories at the repository root remain ready for GitHub Pages hosting. Any updates to those files automatically flow into the Visual Studio projects through linked items, so you only edit the files once.
+
+## Loading combo data from a CSV file
+
+The combo tables now read rows from the bundled `combo-spreadsheet.csv` instead of downloading them at runtime. Replace that file with an updated export from your sheet whenever you want to refresh the data.
+
+1. Export your sheet as CSV and overwrite `combo-spreadsheet.csv` at the repo root.
+2. (Optional) If you move or rename the file, update `combo-spreadsheet-source.json`:
+
+   ```json
+   {
+     "csvUrl": "combo-spreadsheet.csv",
+     "sectionColumn": "Situation",
+     "tableType": "standard"
+   }
+   ```
+
+   - `sectionColumn` tells the page which column assigns each combo to a section. If a row references a new section name, the page will create that section automatically using default formatting.
+   - `tableType` controls which table definition the generated columns inherit from (see `combo-table-definitions.json`).
+
+Any column header that matches a column defined in the chosen table definition will reuse its formatting and filtering. Headers that do not match fall back to a default text column, so you can add new columns without editing the page configuration. If you still prefer a remote CSV (e.g., Google Sheets), you can set `csvUrl` to that export URL; same-origin files are now used by default.

@@ -29,6 +29,12 @@
     <None Include="..\\..\\combo-sections.json">
       <Link>wwwroot\\combo-sections.json</Link>
     </None>
+    <None Include="..\\..\\combo-spreadsheet-source.json">
+      <Link>wwwroot\\combo-spreadsheet-source.json</Link>
+    </None>
+    <None Include="..\\..\\combo-spreadsheet.csv">
+      <Link>wwwroot\\combo-spreadsheet.csv</Link>
+    </None>
     <None Include="..\\..\\combo-table-definitions.json">
       <Link>wwwroot\\combo-table-definitions.json</Link>
     </None>

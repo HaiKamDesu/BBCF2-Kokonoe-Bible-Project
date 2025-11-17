@@ -958,6 +958,9 @@
     if (contentConfig.tableDefinitions) {
       dataset.tableDefinitions = contentConfig.tableDefinitions;
     }
+    if (contentConfig.spreadsheetSource) {
+      dataset.spreadsheetSource = contentConfig.spreadsheetSource;
+    }
 
     applyDataset(combosRoot, dataset);
     fragment.appendChild(combosRoot);

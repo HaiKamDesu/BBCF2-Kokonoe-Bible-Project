@@ -2827,26 +2827,72 @@ body.combo-filter-open {
       formattingSource: comboRoot.dataset.formattingRules || 'combo-formatting-rules.json',
       tableDefinitionsSource: comboRoot.dataset.tableDefinitions || 'combo-table-definitions.json',
       presetDefinitionsSource: comboRoot.dataset.presetDefinitions || 'combo-filter-presets.json',
+      spreadsheetSource: comboRoot.dataset.spreadsheetSource || 'combo-spreadsheet-source.json',
     });
+
+  const buildCorsProxyUrl = (url) => {
+    try {
+      const baseOrigin =
+        typeof window !== 'undefined' && window.location
+          ? new URL(window.location.href).origin
+          : 'http://localhost';
+      const parsed = new URL(url, baseOrigin);
+      if (parsed.origin === baseOrigin || /corsproxy\.io$/.test(parsed.hostname)) {
+        return null;
+      }
+
+      return `https://corsproxy.io/?${encodeURIComponent(parsed.href)}`;
+    } catch (error) {
+      console.warn('Unable to build CORS proxy URL', error);
+      return null;
+    }
+  };
+
+  const fetchWithCorsFallback = (url, parseResponse, { optional } = {}) => {
+    const attemptFetch = (target) =>
+      fetch(target).then((response) => {
+        if (!response.ok) {
+          if (optional) {
+            return null;
+          }
+          throw new Error(`Failed to fetch ${target}: ${response.status}`);
+        }
+        return parseResponse(response);
+      });
+
+    return attemptFetch(url).catch((error) => {
+      const proxyUrl = buildCorsProxyUrl(url);
+      if (proxyUrl) {
+        console.warn(`Retrying ${url} via CORS proxy`, error);
+        return attemptFetch(proxyUrl).catch((proxyError) => {
+          if (optional) {
+            return null;
+          }
+          throw proxyError;
+        });
+      }
+
+      if (optional) {
+        return null;
+      }
+
+      throw error;
+    });
+  };
 
   const fetchJson = (url, { optional } = {}) =>
-    fetch(url).then((response) => {
-      if (!response.ok) {
-        if (optional) {
-          return null;
-        }
-        throw new Error(`Failed to fetch ${url}: ${response.status}`);
-      }
-      return response.json();
-    });
+    fetchWithCorsFallback(
+      url,
+      (response) => response.json(),
+      { optional },
+    );
 
-  const fetchText = (url) =>
-    fetch(url).then((response) => {
-      if (!response.ok) {
-        throw new Error(`Failed to fetch ${url}: ${response.status}`);
-      }
-      return response.text();
-    });
+  const fetchText = (url, { optional } = {}) =>
+    fetchWithCorsFallback(
+      url,
+      (response) => response.text(),
+      { optional },
+    );
 
   const DESCRIPTION_SOURCE_KEYS = ['descriptions', 'descriptions_html'];
 
@@ -2876,6 +2922,275 @@ body.combo-filter-open {
     });
 
     return sources;
+  };
+
+  const parseCsvLine = (line) => {
+    const values = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i += 1) {
+      const char = line[i];
+      if (char === '"') {
+        if (inQuotes && line[i + 1] === '"') {
+          current += '"';
+          i += 1;
+        } else {
+          inQuotes = !inQuotes;
+        }
+      } else if (char === ',' && !inQuotes) {
+        values.push(current);
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    values.push(current);
+    return values;
+  };
+
+  const parseCsv = (csvText) => {
+    if (typeof csvText !== 'string') {
+      return { headers: [], rows: [] };
+    }
+
+    const normalised = csvText.replace(/\r\n?/g, '\n').replace(/^\uFEFF/, '');
+    const rows = [];
+    let currentRow = [];
+    let currentValue = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < normalised.length; i += 1) {
+      const char = normalised[i];
+      if (char === '"') {
+        if (inQuotes && normalised[i + 1] === '"') {
+          currentValue += '"';
+          i += 1;
+        } else {
+          inQuotes = !inQuotes;
+        }
+      } else if (char === ',' && !inQuotes) {
+        currentRow.push(currentValue);
+        currentValue = '';
+      } else if (char === '\n' && !inQuotes) {
+        currentRow.push(currentValue);
+        rows.push(currentRow);
+        currentRow = [];
+        currentValue = '';
+      } else {
+        currentValue += char;
+      }
+    }
+
+    if (currentValue.length || currentRow.length) {
+      currentRow.push(currentValue);
+      rows.push(currentRow);
+    }
+
+    const trimmedRows = rows
+      .map((row) => row.map((value) => value.trimEnd()))
+      .filter((row) => row.some((value) => value !== ''));
+
+    if (!trimmedRows.length) {
+      return { headers: [], rows: [] };
+    }
+
+    const [headerRow, ...dataRows] = trimmedRows;
+    const headers = headerRow.map((header) => header.trim());
+
+    return { headers, rows: dataRows };
+  };
+
+  const normaliseSpreadsheetCsvUrl = (csvUrl) => {
+    if (typeof csvUrl !== 'string') {
+      return csvUrl;
+    }
+
+    if (!/^https?:\/\//i.test(csvUrl)) {
+      return csvUrl;
+    }
+
+    try {
+      const url = new URL(csvUrl);
+      const isGoogleSheet =
+        url.hostname === 'docs.google.com' && url.pathname.startsWith('/spreadsheets/d/');
+      if (!isGoogleSheet) {
+        return csvUrl;
+      }
+
+      const pathSegments = url.pathname.split('/').filter(Boolean);
+      const idIndex = pathSegments.indexOf('d') + 1;
+      const spreadsheetId = pathSegments[idIndex];
+      if (!spreadsheetId) {
+        return csvUrl;
+      }
+      const hashParams = new URLSearchParams(url.hash.replace(/^#/, ''));
+      const searchParams = url.searchParams || new URLSearchParams();
+      const gid = hashParams.get('gid') || searchParams.get('gid');
+
+      const exportParams = new URLSearchParams();
+      exportParams.set('format', searchParams.get('format') || 'csv');
+      if (gid) {
+        exportParams.set('gid', gid);
+      }
+
+      return `${url.origin}/spreadsheets/d/${spreadsheetId}/export?${exportParams.toString()}`;
+    } catch (error) {
+      console.warn('Unable to normalise spreadsheet URL', error);
+      return csvUrl;
+    }
+  };
+
+  const buildColumnLabel = (column) => {
+    if (!column) {
+      return '';
+    }
+    if (typeof column.text === 'string' && column.text.trim()) {
+      return column.text.trim();
+    }
+    if (typeof column.label === 'string' && column.label.trim()) {
+      return column.label.trim();
+    }
+    if (column.header && typeof column.header.text === 'string' && column.header.text.trim()) {
+      return column.header.text.trim();
+    }
+    if (typeof column.html === 'string' && column.html.trim()) {
+      return extractTextContent(column.html).trim();
+    }
+    if (typeof column === 'string') {
+      return column.trim();
+    }
+    return '';
+  };
+
+  const buildColumnLookup = (columns) => {
+    const lookup = new Map();
+    (columns || []).forEach((column) => {
+      const label = buildColumnLabel(column).toLowerCase();
+      if (label) {
+        lookup.set(label, column);
+      }
+    });
+    return lookup;
+  };
+
+  const createDefaultColumnDefinition = (header) => ({
+    text: header,
+    type: 'string',
+    filter: { enabled: true },
+    description: `Unformatted column sourced from "${header}"`,
+  });
+
+  const buildColumnsFromHeaders = (headers, baseColumns) => {
+    const lookup = buildColumnLookup(baseColumns);
+    return headers.map((header) => {
+      const match = lookup.get(String(header || '').trim().toLowerCase());
+      if (match) {
+        return match;
+      }
+      return createDefaultColumnDefinition(header);
+    });
+  };
+
+  const getSectionTableType = (section, fallbackType = 'default') => {
+    if (!section || typeof section !== 'object') {
+      return fallbackType;
+    }
+    if (typeof section.table === 'string') {
+      return section.table;
+    }
+    if (section.table && typeof section.table === 'object' && section.table.type) {
+      return section.table.type;
+    }
+    return fallbackType;
+  };
+
+    const resolveBaseColumns = (section, tableDefinitions, defaultTableType) => {
+      const tableType = getSectionTableType(section, defaultTableType);
+      const tableDefinition = resolveDefinitionForType(tableDefinitions || {}, tableType) || {};
+      if (section && Array.isArray(section.columns)) {
+        return section.columns;
+      }
+      if (Array.isArray(tableDefinition.columns)) {
+        return tableDefinition.columns;
+      }
+      return [];
+    };
+
+  const mapSheetRowToValues = (rowObject, headers) =>
+    headers.map((header) => {
+      const value = rowObject[header];
+      return value != null ? value : '';
+    });
+
+  const buildSlug = (value) =>
+    String(value || '')
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+
+  const applySpreadsheetRows = (sections, tableDefinitions, spreadsheetConfig) => {
+    if (!spreadsheetConfig || typeof spreadsheetConfig !== 'object') {
+      return sections;
+    }
+
+    const { sectionColumn = 'Situation', tableType = 'standard' } = spreadsheetConfig;
+    const entries = Array.isArray(spreadsheetConfig.entries) ? spreadsheetConfig.entries : [];
+    const headers = Array.isArray(spreadsheetConfig.headers) ? spreadsheetConfig.headers : [];
+    const records = entries.map((row) => {
+      const record = {};
+      headers.forEach((header, index) => {
+        record[header] = row[index];
+      });
+      return record;
+    });
+
+    if (!records.length || !headers.length) {
+      return sections;
+    }
+
+    const sectionsWithIndex = new Map();
+    (sections || []).forEach((section, index) => {
+      sectionsWithIndex.set(resolveSectionLabel(section, index).toLowerCase(), { section, index });
+    });
+
+    const baseColumns = resolveBaseColumns(null, tableDefinitions, tableType);
+    const columns = buildColumnsFromHeaders(headers, baseColumns);
+
+    const rowsBySection = new Map();
+    records.forEach((record) => {
+      const sectionName = String(record[sectionColumn] || 'Unsorted').trim();
+      if (!rowsBySection.has(sectionName)) {
+        rowsBySection.set(sectionName, []);
+      }
+      rowsBySection.get(sectionName).push(mapSheetRowToValues(record, headers));
+    });
+
+    const outputSections = Array.from(sections || []);
+
+    rowsBySection.forEach((rows, name) => {
+      const existing = sectionsWithIndex.get(name.toLowerCase());
+      if (existing) {
+        const target = outputSections[existing.index];
+        const existingRows = Array.isArray(target.rows) ? target.rows : [];
+        target.columns = columns;
+        target.rows = existingRows.concat(rows);
+        if (!target.table) {
+          target.table = { type: tableType };
+        }
+      } else {
+        outputSections.push({
+          anchor: buildSlug(name) || undefined,
+          headline_id: buildSlug(name) || undefined,
+          title: { text: name, wrap: 'b' },
+          rows: rows,
+          columns,
+          table: { type: tableType },
+        });
+      }
+    });
+
+    return outputSections;
   };
 
   const applyDescriptionSources = (sections, htmlMap) => {
@@ -4245,6 +4560,18 @@ body.combo-filter-open {
     updateViewToggleState();
   };
 
+  const displayLoadError = (error) => {
+    const detail = error && (error.message || error);
+    const message = detail ? `Unable to load combo tables. (${detail})` : 'Unable to load combo tables.';
+    console.error('Failed to initialise combo tables', error);
+    if (comboRoot) {
+      comboRoot.textContent = message;
+    }
+    if (databaseRoot) {
+      databaseRoot.textContent = message;
+    }
+  };
+
   const initialise = (rootElement) => {
     if (!rootElement || hasInitialised) {
       return;
@@ -4264,7 +4591,13 @@ body.combo-filter-open {
       initialiseCitizenSectionHeadings();
     }
 
-    const { source, formattingSource, tableDefinitionsSource, presetDefinitionsSource } = getSources();
+    const {
+      source,
+      formattingSource,
+      tableDefinitionsSource,
+      presetDefinitionsSource,
+      spreadsheetSource,
+    } = getSources();
 
     Promise.all([
       fetchJson(source),
@@ -4280,8 +4613,12 @@ body.combo-filter-open {
         console.warn('Unable to load preset definitions', error);
         return null;
       }),
+      fetchJson(spreadsheetSource, { optional: true }).catch((error) => {
+        console.warn('Unable to load spreadsheet configuration', error);
+        return null;
+      }),
     ])
-      .then(async ([sections, formattingConfig, tableDefinitions, presetDefinitions]) => {
+      .then(async ([sections, formattingConfig, tableDefinitions, presetDefinitions, spreadsheetConfig]) => {
         if (!Array.isArray(sections)) {
           throw new Error('Invalid combo sections configuration.');
         }
@@ -4301,7 +4638,28 @@ body.combo-filter-open {
           ),
         );
 
-        const resolvedSections = applyDescriptionSources(sections, htmlMap);
+        let resolvedSpreadsheetConfig = spreadsheetConfig;
+        if (
+          spreadsheetConfig &&
+          typeof spreadsheetConfig === 'object' &&
+          spreadsheetConfig.csvUrl &&
+          !Array.isArray(spreadsheetConfig.entries)
+        ) {
+          const csvUrl = normaliseSpreadsheetCsvUrl(spreadsheetConfig.csvUrl);
+          const { headers, rows } = await fetchText(csvUrl)
+            .then((csv) => parseCsv(csv))
+            .catch((error) => {
+              console.warn('Unable to load spreadsheet rows', error);
+              return { headers: [], rows: [] };
+            });
+          resolvedSpreadsheetConfig = Object.assign({}, spreadsheetConfig, { headers, entries: rows, csvUrl });
+        }
+
+        const resolvedSections = applySpreadsheetRows(
+          applyDescriptionSources(sections, htmlMap),
+          tableDefinitions,
+          resolvedSpreadsheetConfig,
+        );
         const formatText = createFormatter(formattingConfig || { rules: [] });
         const resolvedDefinitions = tableDefinitions || {};
         builtInPresets = normalisePresetDefinitions(presetDefinitions);
@@ -4321,10 +4679,7 @@ body.combo-filter-open {
         setViewMode(currentViewMode);
       })
       .catch((error) => {
-        console.error(error);
-        if (comboRoot) {
-          comboRoot.textContent = 'Unable to load combo tables.';
-        }
+        displayLoadError(error);
       });
   };
 

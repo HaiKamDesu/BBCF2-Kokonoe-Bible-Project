@@ -63,7 +63,8 @@
       "mode": "combo-list",
       "rootId": "combo-sections-root",
       "source": "combo-sections.json",
-      "tableDefinitions": "combo-table-definitions.json"
+      "tableDefinitions": "combo-table-definitions.json",
+      "spreadsheetSource": "combo-spreadsheet-source.json"
     }
   },
   {
