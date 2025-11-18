@@ -2268,6 +2268,7 @@ function createFormatter(config) {
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-gutter: stable both-edges;
+  position: relative;
 }
 
 .combo-table-scroll--top {
@@ -2275,9 +2276,15 @@ function createFormatter(config) {
   top: var(--height-sticky-header, 0px);
   z-index: 15;
   padding: 0;
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.35rem;
   height: var(--combo-table-scrollbar-height, 12px);
-  background: var(--color-surface-2, rgba(14, 17, 25, 0.92));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.03)
+  );
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
 .combo-table-scroll__spacer {
@@ -2310,6 +2317,10 @@ function createFormatter(config) {
 
 .combo-table-scroll::-webkit-scrollbar {
   height: 0.75rem;
+}
+
+.combo-table-scroll::-webkit-scrollbar:vertical {
+  display: none;
 }
 
 .combo-table-scroll::-webkit-scrollbar-thumb {
@@ -4304,7 +4315,7 @@ body.combo-filter-open {
     return Number.isFinite(numeric) ? numeric : 0;
   };
 
-  const applyScrollbarMeasurements = (wrapper, topScroll, mainScroll) => {
+  const applyScrollbarMeasurements = (wrapper, topScroll, mainScroll, table) => {
     if (!wrapper || !topScroll || !mainScroll) {
       return;
     }
@@ -4321,6 +4332,10 @@ body.combo-filter-open {
       wrapper.style.setProperty('--combo-table-header-offset', headerValue);
       topScroll.style.setProperty('--combo-table-header-offset', headerValue);
       mainScroll.style.setProperty('--combo-table-header-offset', headerValue);
+      if (table) {
+        table.style.setProperty('--combo-table-scrollbar-height', value);
+        table.style.setProperty('--combo-table-header-offset', headerValue);
+      }
     };
 
     update();
@@ -4580,13 +4595,13 @@ body.combo-filter-open {
     wrapper.appendChild(scrollContainer);
 
     const refreshSpacerWidth = syncHorizontalScrollbars(table, topScroll, scrollContainer);
-    applyScrollbarMeasurements(wrapper, topScroll, scrollContainer);
+    applyScrollbarMeasurements(wrapper, topScroll, scrollContainer, table);
 
     const refreshScrollState = () => {
       if (typeof refreshSpacerWidth === 'function') {
         refreshSpacerWidth();
       }
-      applyScrollbarMeasurements(wrapper, topScroll, scrollContainer);
+      applyScrollbarMeasurements(wrapper, topScroll, scrollContainer, table);
     };
 
     return { table, wrapper, refreshScrollState };
