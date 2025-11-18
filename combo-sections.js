@@ -2843,18 +2843,65 @@ body.combo-filter-open {
     padding: 0;
   }
 
-  .combo-section--database .combo-section__content {
-    margin-top: 0.5rem;
+    .combo-section--database .combo-section__content {
+      margin-top: 0.5rem;
+      margin-left: 0 !important;   /* <– kill the 3rem indent in DB view */
+      margin-right: 0 !important;
+    }
+
+    body.database-view-active .citizen-body-container {
+      /* Drop the normal content + sidebar layout */
+      display: block;
+      max-width: none !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    
+    body.database-view-active .citizen-page-container {
+      padding: 0 !important;
+    }
+
+
+  body.database-view-active .citizen-body {
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
-      /* Hide vertical scrollbar UI for this page */
-body {
-  scrollbar-width: none;                /* Firefox */
-}
+  body.database-view-active #mw-content-text,
+  body.database-view-active .mw-body-content,
+  body.database-view-active .mw-content-ltr {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 
-body::-webkit-scrollbar {
-  width: 0 !important;                  /* Chrome / Edge / Safari */
-}
+  body.database-view-active #database-view-root {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  body.database-view-active #combo-database-root,
+  body.database-view-active #combo-database-root .combo-section.combo-section--database,
+  body.database-view-active #combo-database-root .combo-section--database .combo-section__content {
+    width: 100% !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  body.database-view-active #combo-database-root .combo-table-wrapper,
+  body.database-view-active #combo-database-root .combo-table-scroll {
+    width: 100% !important;
+  }
+
 `;
 
     if (document.head) {
