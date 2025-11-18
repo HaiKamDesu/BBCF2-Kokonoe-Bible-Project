@@ -2093,7 +2093,7 @@ function createFormatter(config) {
 
     const style = document.createElement('style');
     style.id = 'combo-section-styles';
-    style.textContent = `
+      style.textContent = `
 .citizen-section-heading[role="button"],
 .citizen-subsection-heading[role="button"],
 .combo-section__header {
@@ -2257,56 +2257,114 @@ function createFormatter(config) {
   white-space: normal;
 }
 
-.combo-table-wrapper {
-  position: relative;
-  width: 100%;
-  --combo-table-scrollbar-height: 12px;
-}
+  .combo-table-wrapper {
+    position: relative;
+    width: 100%;
+    --combo-table-scrollbar-height: 12px;
+  }
 
+  /* Base wrapper for both scroll areas */
 .combo-table-scroll {
   width: 100%;
-  overflow-x: auto;
-  overflow-y: visible;
-  scrollbar-gutter: stable;
+  scrollbar-gutter: stable both-edges;
+  position: relative;
 }
 
+/* TOP BAR: custom X scrollbar only, no vertical scroll */
 .combo-table-scroll--top {
+  scrollbar-color: #494d63 #252933;
+  overflow-x: auto;
+  overflow-y: hidden;
   position: sticky;
-  top: var(--height-sticky-header, 0px);
-  z-index: 15;
+  top: var(--combo-table-scrollbar-offset, var(--height-sticky-header, 0px));
+  z-index: 30;
   padding: 0;
-  margin: 0 0 0.25rem;
-  height: var(--combo-table-scrollbar-height, 12px);
-  background: var(--color-surface-2, rgba(14, 17, 25, 0.92));
+  margin: 0 0 0rem;
+  height: 15px;
+}
+
+/* MAIN SCROLL: table lives here – horizontal scroll only */
+.combo-table-scroll--main {
+  overflow-x: auto;
+  /* clip = like hidden, but not a scroll container vertically,
+     so there is never a Y scrollbar on this element */
+  overflow-y: clip;
+  margin-bottom: 0.25rem;
 }
 
 .combo-table-scroll__spacer {
   height: 1px;
 }
 
-.combo-table-scroll--main {
-  margin-bottom: 0.25rem;
-}
-
+/* Ensure the *table itself* is never a scroll container */
 .combo-table-scroll table {
   width: max-content;
   min-width: 100%;
   table-layout: auto;
+
+  /* Kill any Citizen/Dustloop overrides on tables */
+  display: table !important;
+  max-height: none !important;
+  overflow-y: visible !important;
 }
 
+/* Extra safety for wikitable styling specifically */
+.combo-table-scroll table.wikitable {
+  display: table !important;
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+
+/* Header background inside the real table (non-sticky) */
 .combo-table-scroll table thead th,
 .combo-table-scroll table thead td {
   background: var(--color-surface-2, rgba(14, 17, 25, 0.98));
 }
 
-.combo-table-scroll table thead th {
-  position: sticky;
-  top: calc(var(--height-sticky-header, 0px) + var(--combo-table-scrollbar-height, 12px));
-  z-index: 10;
+/* Do NOT try to use native sticky on thead inside the overflow container */
+.combo-table-scroll table thead {
+  position: static;
 }
+
+/* ===== Floating cloned header ===== */
+
+.combo-table-header-wrapper {
+  position: fixed;          /* Positioned via JS */
+  z-index: 25;              /* Above table content */
+  display: none;            /* Only visible when over its table */
+  pointer-events: none;     /* Wrapper itself doesn’t eat events */
+  overflow: hidden;         /* Clip header to the table/card width */
+  background: var(--color-surface-2, rgba(14, 17, 25, 0.98)); /* Hide table behind */
+}
+
+.combo-table-header-wrapper--active {
+  display: block;
+}
+
+.combo-table-header-table {
+  /* Match main table layout as closely as possible */
+  width: max-content;
+  min-width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;   /* Same as wikitable */
+  pointer-events: auto;        /* Clicking cells (sort arrows) still works */
+  margin: 0;
+}
+
+/* Same background as normal header */
+.combo-table-header-table thead th,
+.combo-table-header-table thead td {
+  background: var(--color-surface-2, rgba(14, 17, 25, 0.98));
+}
+
 
 .combo-table-scroll::-webkit-scrollbar {
   height: 0.75rem;
+}
+
+.combo-table-scroll::-webkit-scrollbar:vertical {
+  display: none;
 }
 
 .combo-table-scroll::-webkit-scrollbar-thumb {
@@ -2317,6 +2375,15 @@ function createFormatter(config) {
 .combo-table-scroll::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.12);
   border-radius: 999px;
+}
+
+/* Hide any vertical scrollbar UI on the main table scroller */
+.combo-table-scroll--main {
+  scrollbar-width: none; /* Firefox: no vertical scrollbar UI */
+}
+
+.combo-table-scroll--main::-webkit-scrollbar:vertical {
+  width: 0 !important;   /* Chrome/Edge/Safari: no vertical bar */
 }
 
 .combo-table__empty-row td {
@@ -2755,14 +2822,12 @@ body.combo-filter-open {
     display: block;
   }
 
-  body.database-view-active #combo-database-root {
-    width: 100%;
-  }
-
   body.database-view-active #combo-database-root .wikitable {
     margin-left: 0;
     margin-right: 0;
-    width: 100%;
+    /* DO NOT force width: 100% here.
+       Let .combo-table-scroll decide the table width (max-content)
+       so horizontal overflow lives in the scroll container we control. */
   }
 
   .combo-section.combo-section--database .combo-section__header {
@@ -2781,6 +2846,15 @@ body.combo-filter-open {
   .combo-section--database .combo-section__content {
     margin-top: 0.5rem;
   }
+
+      /* Hide vertical scrollbar UI for this page */
+body {
+  scrollbar-width: none;                /* Firefox */
+}
+
+body::-webkit-scrollbar {
+  width: 0 !important;                  /* Chrome / Edge / Safari */
+}
 `;
 
     if (document.head) {
@@ -4250,7 +4324,7 @@ body.combo-filter-open {
 
   const syncHorizontalScrollbars = (table, topScroll, mainScroll) => {
     if (!table || !topScroll || !mainScroll) {
-      return;
+      return () => {};
     }
 
     const spacer = topScroll.querySelector('.combo-table-scroll__spacer');
@@ -4287,9 +4361,21 @@ body.combo-filter-open {
     }
 
     topScroll.scrollLeft = mainScroll.scrollLeft;
+
+    return updateSpacerWidth;
   };
 
-  const applyScrollbarMeasurements = (wrapper, topScroll, mainScroll) => {
+  const getRootPixelValue = (variableName) => {
+    if (typeof getComputedStyle !== 'function' || !document || !document.documentElement) {
+      return 0;
+    }
+
+    const value = getComputedStyle(document.documentElement).getPropertyValue(variableName);
+    const numeric = Number.parseFloat(value);
+    return Number.isFinite(numeric) ? numeric : 0;
+  };
+
+  const applyScrollbarMeasurements = (wrapper, topScroll, mainScroll, table) => {
     if (!wrapper || !topScroll || !mainScroll) {
       return;
     }
@@ -4298,9 +4384,18 @@ body.combo-filter-open {
       const scrollbarHeight = Math.max(0, mainScroll.offsetHeight - mainScroll.clientHeight);
       const effectiveHeight = scrollbarHeight || 12;
       const value = `${effectiveHeight}px`;
+      const headerOffset = getRootPixelValue('--height-sticky-header') + effectiveHeight;
+      const headerValue = `${headerOffset}px`;
       wrapper.style.setProperty('--combo-table-scrollbar-height', value);
       topScroll.style.setProperty('--combo-table-scrollbar-height', value);
       mainScroll.style.setProperty('--combo-table-scrollbar-height', value);
+      wrapper.style.setProperty('--combo-table-header-offset', headerValue);
+      topScroll.style.setProperty('--combo-table-header-offset', headerValue);
+      mainScroll.style.setProperty('--combo-table-header-offset', headerValue);
+      if (table) {
+        table.style.setProperty('--combo-table-scrollbar-height', value);
+        table.style.setProperty('--combo-table-header-offset', headerValue);
+      }
     };
 
     update();
@@ -4540,30 +4635,224 @@ body.combo-filter-open {
     tableMetadataMap.set(table, metadata);
     tableMetadataList.push(metadata);
 
-    if (!(window.jQuery && window.jQuery.fn && typeof window.jQuery.fn.tablesorter === 'function')) {
-      enableNativeTableSorting(table, columnConfigs);
-    }
+      if (!(window.jQuery && window.jQuery.fn && typeof window.jQuery.fn.tablesorter === 'function')) {
+          enableNativeTableSorting(table, columnConfigs);
+      }
 
-    const topScroll = document.createElement('div');
-    topScroll.className = 'combo-table-scroll combo-table-scroll--top';
-    const spacer = document.createElement('div');
-    spacer.className = 'combo-table-scroll__spacer';
-    topScroll.appendChild(spacer);
+      // --- Floating header clone (for both Guide view and Database view) ---
+      const originalThead = table.tHead;
+      let headerWrapper = null;
+      let headerTable = null;
 
-    const scrollContainer = document.createElement('div');
-    scrollContainer.className = 'combo-table-scroll combo-table-scroll--main';
-    scrollContainer.appendChild(table);
+      if (originalThead) {
+          headerWrapper = document.createElement('div');
+          headerWrapper.className = 'combo-table-header-wrapper';
 
-    const wrapper = document.createElement('div');
-    wrapper.className = 'combo-table-wrapper';
-    wrapper.appendChild(topScroll);
-    wrapper.appendChild(scrollContainer);
+          headerTable = document.createElement('table');
+          headerTable.className = `${table.className} combo-table-header-table`;
 
-    syncHorizontalScrollbars(table, topScroll, scrollContainer);
-    applyScrollbarMeasurements(wrapper, topScroll, scrollContainer);
+          const clonedThead = originalThead.cloneNode(true);
+          headerTable.appendChild(clonedThead);
+          headerWrapper.appendChild(headerTable);
 
-    return { table, wrapper };
-  };
+          // NEW: forward events from floating header to real header
+          const originalHeaderRow = originalThead.rows && originalThead.rows[0];
+          const clonedHeaderRow = clonedThead.rows && clonedThead.rows[0];
+
+          if (originalHeaderRow && clonedHeaderRow) {
+              const originalCells = Array.from(originalHeaderRow.cells);
+              const clonedCells = Array.from(clonedHeaderRow.cells);
+              const count = Math.min(originalCells.length, clonedCells.length);
+
+              for (let i = 0; i < count; i += 1) {
+                  const baseCell = originalCells[i];
+                  const cloneCell = clonedCells[i];
+
+                  // Make the floating header obviously interactive
+                  cloneCell.style.cursor = baseCell.style.cursor || 'pointer';
+                  cloneCell.setAttribute('tabindex', baseCell.getAttribute('tabindex') || '0');
+                  cloneCell.setAttribute('role', baseCell.getAttribute('role') || 'columnheader');
+
+                  // Click on floating header = click on real header
+                  cloneCell.addEventListener('click', (event) => {
+                      event.preventDefault();
+                      baseCell.click();          // triggers tablesorter *or* enableNativeTableSorting
+                      // Optionally resync floating header immediately:
+                      if (typeof syncFloatingHeader === 'function') {
+                          syncFloatingHeader();
+                      }
+                  });
+
+                  // Keyboard sorting (Enter / Space) on floating header
+                  cloneCell.addEventListener('keydown', (event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault();
+                          baseCell.click();
+                          if (typeof syncFloatingHeader === 'function') {
+                              syncFloatingHeader();
+                          }
+                      }
+                  });
+              }
+          }
+      }
+
+      const topScroll = document.createElement('div');
+      topScroll.className = 'combo-table-scroll combo-table-scroll--top';
+      const spacer = document.createElement('div');
+      spacer.className = 'combo-table-scroll__spacer';
+      topScroll.appendChild(spacer);
+
+      const scrollContainer = document.createElement('div');
+      scrollContainer.className = 'combo-table-scroll combo-table-scroll--main';
+      scrollContainer.appendChild(table);
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'combo-table-wrapper';
+      wrapper.appendChild(topScroll);
+      if (headerWrapper) {
+          wrapper.appendChild(headerWrapper);
+      }
+      wrapper.appendChild(scrollContainer);
+
+
+        const refreshSpacerWidth = syncHorizontalScrollbars(table, topScroll, scrollContainer);
+        applyScrollbarMeasurements(wrapper, topScroll, scrollContainer, table);
+
+        // Keep the floating header positioned, visible, and width-synced
+      const syncFloatingHeader = () => {
+          if (!headerWrapper || !headerTable || !originalThead) {
+              return;
+          }
+
+          const wrapperRect = wrapper.getBoundingClientRect();
+          const barRect = topScroll.getBoundingClientRect();
+          const headerRect = originalThead.getBoundingClientRect();
+          const tableRect = table.getBoundingClientRect();
+
+          // The line where the header should "freeze":
+          // aka top of page
+          const headerOffset = 0;
+
+          const headerHeight = headerRect.height || 0;
+
+          // Match wrapper/table horizontal position & width
+          headerWrapper.style.width = `${wrapperRect.width}px`;
+          headerWrapper.style.left = `${wrapperRect.left}px`;
+          headerTable.style.width = `${tableRect.width}px`;
+
+          // NOTE: we do NOT set headerWrapper.style.height here.
+          // Its height is purely the header row height, so no extra dark gap.
+
+          // Only show cloned header when:
+          // 1) the real header has scrolled up to (or past) the freeze line, and
+          // 2) the table still extends below that line (we haven't scrolled past it).
+          const withinVerticalRange =
+              headerRect.top <= headerOffset &&
+              wrapperRect.bottom - headerHeight >= headerOffset;
+
+          if (withinVerticalRange) {
+              headerWrapper.classList.add('combo-table-header-wrapper--active');
+              headerWrapper.style.top = `${headerOffset}px`;
+              // Hide original header so we don't see two at once
+              originalThead.style.visibility = 'hidden';
+          } else {
+              headerWrapper.classList.remove('combo-table-header-wrapper--active');
+              headerWrapper.style.top = '';
+              originalThead.style.visibility = '';
+          }
+
+          // Horizontal sync with the main scroll container
+          const scrollLeft = scrollContainer.scrollLeft;
+          headerTable.style.transform = `translateX(-${scrollLeft}px)`;
+
+          const baseCells = originalThead.querySelectorAll('th,td');
+          const cloneCells = headerTable.querySelectorAll('th,td');
+          const count = Math.min(baseCells.length, cloneCells.length);
+          for (let i = 0; i < count; i += 1) {
+              const baseCell = baseCells[i];
+              const cloneCell = cloneCells[i];
+
+              // Width/height sync
+              const width = baseCell.getBoundingClientRect().width;
+              cloneCell.style.width = `${width}px`;
+              if (headerHeight) {
+                  cloneCell.style.height = `${headerHeight}px`;
+              }
+
+              // NEW: sort-state + accessibility sync
+              // Tablesorter-style classes
+              cloneCell.classList.toggle(
+                  'headerSortUp',
+                  baseCell.classList.contains('headerSortUp'),
+              );
+              cloneCell.classList.toggle(
+                  'headerSortDown',
+                  baseCell.classList.contains('headerSortDown'),
+              );
+
+              // aria-sort
+              const ariaSort = baseCell.getAttribute('aria-sort');
+              if (ariaSort != null) {
+                  cloneCell.setAttribute('aria-sort', ariaSort);
+              } else {
+                  cloneCell.removeAttribute('aria-sort');
+              }
+
+              // data-sortOrder (used by enableNativeTableSorting)
+              if (baseCell.dataset && baseCell.dataset.sortOrder != null) {
+                  cloneCell.dataset.sortOrder = baseCell.dataset.sortOrder;
+              } else if (cloneCell.dataset) {
+                  delete cloneCell.dataset.sortOrder;
+              }
+
+              // Tooltip/title
+              const title = baseCell.getAttribute('title');
+              if (title != null) {
+                  cloneCell.setAttribute('title', title);
+              } else {
+                  cloneCell.removeAttribute('title');
+              }
+          }
+
+
+          const floatingHeaderRect = headerWrapper.getBoundingClientRect();
+
+          // Scrollbar should sit right below frozen header
+          topScroll.style.setProperty(
+              "--combo-table-scrollbar-offset",
+              `${floatingHeaderRect.height}px`
+          );
+      };
+
+        if (headerWrapper && headerTable) {
+            window.addEventListener('scroll', syncFloatingHeader);
+            window.addEventListener('resize', syncFloatingHeader);
+            scrollContainer.addEventListener('scroll', () => {
+                const scrollLeft = scrollContainer.scrollLeft;
+                headerTable.style.transform = `translateX(-${scrollLeft}px)`;
+            });
+            // first paint
+            if (typeof requestAnimationFrame === 'function') {
+                requestAnimationFrame(syncFloatingHeader);
+            } else {
+                syncFloatingHeader();
+            }
+        }
+
+        const refreshScrollState = () => {
+            if (typeof refreshSpacerWidth === 'function') {
+                refreshSpacerWidth();
+            }
+            applyScrollbarMeasurements(wrapper, topScroll, scrollContainer, table);
+            if (headerWrapper && headerTable) {
+                syncFloatingHeader();
+            }
+        };
+
+        return { table, wrapper, refreshScrollState };
+    };
+
 
   const createSection = (section, formatText, defaultAutoFormat, tableDefinitions, index) => {
     const sectionContainer = document.createElement('section');
@@ -4603,27 +4892,43 @@ body.combo-filter-open {
       content.appendChild(descriptions);
     }
 
-    const { table, wrapper } = createTable(section, formatText, defaultAutoFormat, tableDefinitions, index) || {};
+    const { table, wrapper, refreshScrollState } =
+      createTable(section, formatText, defaultAutoFormat, tableDefinitions, index) || {};
     if (table && wrapper) {
       content.appendChild(wrapper);
       const metadata = tableMetadataMap.get(table);
       if (metadata) {
         metadata.sectionKey = sectionKey;
       }
+      if (typeof refreshScrollState === 'function') {
+        refreshScrollState();
+        if (typeof requestAnimationFrame === 'function') {
+          requestAnimationFrame(refreshScrollState);
+        }
+      }
     }
 
-    const setCollapsed = (collapsed) => {
-      if (collapsed) {
-        content.setAttribute('hidden', '');
-        header.setAttribute('aria-expanded', 'false');
-        header.classList.add('combo-section__header--collapsed');
-      } else {
-        content.removeAttribute('hidden');
-        header.setAttribute('aria-expanded', 'true');
-        header.classList.remove('combo-section__header--collapsed');
-      }
-      applyIndicatorState(indicator, collapsed);
-    };
+      const setCollapsed = (collapsed) => {
+          if (collapsed) {
+              content.setAttribute('hidden', '');
+              header.setAttribute('aria-expanded', 'false');
+              header.classList.add('combo-section__header--collapsed');
+          } else {
+              content.removeAttribute('hidden');
+              header.setAttribute('aria-expanded', 'true');
+              header.classList.remove('combo-section__header--collapsed');
+          }
+
+          applyIndicatorState(indicator, collapsed);
+
+          // 🔧 NEW: whenever the section opens or closes, resync scroll + sticky header
+          if (typeof refreshScrollState === 'function') {
+              refreshScrollState();
+              if (typeof requestAnimationFrame === 'function') {
+                  requestAnimationFrame(refreshScrollState);
+              }
+          }
+      };
 
     const toggleCollapsed = () => {
       const collapsed = header.getAttribute('aria-expanded') === 'false';
@@ -4718,7 +5023,7 @@ body.combo-filter-open {
       hasStandaloneContent: true,
     });
 
-    const { table, wrapper } =
+    const { table, wrapper, refreshScrollState } =
       createTable(section, formatText, defaultAutoFormat, tableDefinitions, sectionIndex) || {};
     if (table && wrapper) {
       const metadata = tableMetadataMap.get(table);
@@ -4726,6 +5031,12 @@ body.combo-filter-open {
         metadata.sectionKey = sectionKey;
       }
       sectionContainer.appendChild(wrapper);
+      if (typeof refreshScrollState === 'function') {
+        refreshScrollState();
+        if (typeof requestAnimationFrame === 'function') {
+          requestAnimationFrame(refreshScrollState);
+        }
+      }
     }
 
     return sectionContainer;
