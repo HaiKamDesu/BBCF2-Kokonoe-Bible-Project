@@ -6,9 +6,27 @@
     "defaultReset": true,
     "state": {
       "hideEmptySections": false,
-      "hiddenColumns": ["example"],
-      "hiddenSections": [],
-      "columnConditions": {}
+      "hiddenColumns": [
+        "ID",
+        "Verified",
+        "Meter Gain",
+        "Minimum Meter",
+        "Graviton Cost",
+        "Graviton Gain",
+        "Extra Notes",
+        "Minimum OD",
+        "Is Counter Hit",
+        "Is Overdrive Combo",
+        "Has Overdrive Cancel",
+        "Corner Carry",
+        "Has Rapid",
+        "Is Optimal",
+        "Does not work on",
+        "From" ],
+      "hiddenSections":[],
+      "columnConditions":
+        {
+        }
     }
   },
   {
@@ -20,7 +38,7 @@
       "hiddenColumns": [],
       "hiddenSections": [],
       "columnConditions": {
-        "is-overdrive-only": {
+        "is-overdrive-combo": {
           "type": "enum",
           "mode": "include",
           "values": ["yes", "true", "1", "✔", "✓"]
@@ -54,7 +72,7 @@
       "hiddenColumns": [],
       "hiddenSections": [],
       "columnConditions": {
-        "has-odc": {
+        "has-overdrive-cancel": {
           "type": "enum",
           "mode": "include",
           "values": ["yes", "true", "1", "✔", "✓"]

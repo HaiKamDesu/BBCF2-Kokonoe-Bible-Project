@@ -38,6 +38,9 @@
     <None Include="..\\..\\combo-table-definitions.json">
       <Link>wwwroot\\combo-table-definitions.json</Link>
     </None>
+	  <None Include="..\\..\\combo-filter-presets.json">
+		  <Link>wwwroot\\combo-filter-presets.json</Link>
+	  </None>
     <None Include="..\\..\\dustloop-assets\\**\\*">
       <Link>wwwroot\\dustloop-assets\\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </None>

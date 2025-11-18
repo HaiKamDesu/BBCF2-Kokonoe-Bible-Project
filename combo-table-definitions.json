@@ -7,8 +7,23 @@
     },
     "columns": [
       {
-        "text": "Position",
+        "text": "ID",
         "type": "int",
+        "description": "The combo ID within the database (ignore, you don't care about this one)"
+      },
+      {
+        "text": "Verified",
+        "type": "enum",
+        "description": "If all the combo's properties were verified as of the latest BBCF2 release."
+      },
+      {
+        "text": "Situation",
+        "type": "enum",
+        "description": "The situation or group within which this combo will hit."
+      },
+      {
+        "text": "Position",
+        "type": "enum",
         "description": "Valid starting screen position for the combo. Midscreen/Back to corner/Corner/Any"
       },
       {
@@ -40,7 +55,7 @@
         "description": "The final damage of the combo (assuming no Active Flow/Counterhit or any buffs)"
       },
       {
-        "text": "Heat Gain",
+        "text": "Meter Gain",
         "color": "#FF6B6B",
         "header": {
           "align": "center"
@@ -53,7 +68,7 @@
         "description": "Meter gain for the combo"
       },
       {
-        "text": "Minimum Heat",
+        "text": "Minimum Meter",
         "color": "#FF6B6B",
         "header": {
           "align": "center"
@@ -83,12 +98,17 @@
         "description": "How many gravitons you recover from this combo"
       },
       {
-        "text": "Notes",
+        "text": "Label",
         "type": "string",
         "description": "A simple label for the combo"
       },
       {
-        "text": "Example",
+        "text": "Extra Notes",
+        "type": "string",
+        "description": "Any extra explanation you need about the combo."
+      },
+      {
+        "text": "Video Example",
         "header": {
           "align": "center"
         },
@@ -99,13 +119,13 @@
         "description": "A video example of the combo being done."
       },
       {
-        "text": "End Situation",
-        "type": "string",
+        "text": "Ending Situation",
+        "type": "enum",
         "description": "The situations you can get into once you pull off this combo, meaning setups/specific oki/etc. Can be one or more."
       },
       {
-        "text": "Minimum OD Time",
-        "type": "int",
+        "text": "Minimum OD",
+        "type": "enum",
         "description": "Minimum OD timer for the combo."
       },
       {
@@ -114,12 +134,12 @@
         "description": "If the starter has to land as counter hit."
       },
       {
-        "text": "Is Overdrive Only",
+        "text": "Is Overdrive Combo",
         "type": "enum",
         "description": "If the start has to land while you're already in overdrive."
       },
       {
-        "text": "Has ODC",
+        "text": "Has Overdrive Cancel",
         "type": "enum",
         "description": "Whether the combo contains an overdrive cancel or not."
       },
@@ -137,6 +157,21 @@
         "text": "Is Optimal",
         "type": "enum",
         "description": "An ambiguous check of the community, this being set to true means it is what is believed to be your optimal combo for the situation you got into."
+      },
+      {
+        "text": "Difficulty",
+        "type": "enum",
+        "description": "A 5 star system determining how hard of a combo to pull off this is."
+      },
+      {
+        "text": "Does not work on",
+        "type": "enum",
+        "description": "Characters that this combo will not work on."
+      },
+      {
+        "text": "From",
+        "type": "string",
+        "description": "The source from which this combo was taken/copied from."
       }
     ],
     "columnWidths": {
