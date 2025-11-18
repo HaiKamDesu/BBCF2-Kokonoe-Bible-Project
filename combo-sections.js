@@ -4828,18 +4828,27 @@ body::-webkit-scrollbar {
       }
     }
 
-    const setCollapsed = (collapsed) => {
-      if (collapsed) {
-        content.setAttribute('hidden', '');
-        header.setAttribute('aria-expanded', 'false');
-        header.classList.add('combo-section__header--collapsed');
-      } else {
-        content.removeAttribute('hidden');
-        header.setAttribute('aria-expanded', 'true');
-        header.classList.remove('combo-section__header--collapsed');
-      }
-      applyIndicatorState(indicator, collapsed);
-    };
+      const setCollapsed = (collapsed) => {
+          if (collapsed) {
+              content.setAttribute('hidden', '');
+              header.setAttribute('aria-expanded', 'false');
+              header.classList.add('combo-section__header--collapsed');
+          } else {
+              content.removeAttribute('hidden');
+              header.setAttribute('aria-expanded', 'true');
+              header.classList.remove('combo-section__header--collapsed');
+          }
+
+          applyIndicatorState(indicator, collapsed);
+
+          // 🔧 NEW: whenever the section opens or closes, resync scroll + sticky header
+          if (typeof refreshScrollState === 'function') {
+              refreshScrollState();
+              if (typeof requestAnimationFrame === 'function') {
+                  requestAnimationFrame(refreshScrollState);
+              }
+          }
+      };
 
     const toggleCollapsed = () => {
       const collapsed = header.getAttribute('aria-expanded') === 'false';
